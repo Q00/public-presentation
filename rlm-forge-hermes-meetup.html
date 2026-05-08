@@ -1,0 +1,1087 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RLM-FORGE — Hermes Meetup</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg:        #f4f4f6;
+    --surface:   #ffffff;
+    --ink:       #08080a;
+    --ink-2:     #2c2c33;
+    --ink-3:     #6c6c75;
+    --ink-4:     #a8a8b0;
+    --rule:      #e2e2e7;
+    --accent:    #1230ff;
+    --accent-bg: #e7eaff;
+    --warn:      #d4341a;
+    --warn-bg:   #fdebe7;
+    --good:      #0a8754;
+    --good-bg:   #e3f3ec;
+    --memory:    #6e3bd9;
+    --memory-bg: #efe7ff;
+    --hermes:    #d97706;
+    --hermes-bg: #fef3c7;
+
+    --sans: "Bricolage Grotesque", -apple-system, system-ui, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-variation-settings: "wght" 400, "wdth" 100;
+    height: 100%;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body::before {
+    content: "";
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image:
+      linear-gradient(rgba(8,8,10,.022) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(8,8,10,.022) 1px, transparent 1px);
+    background-size: 96px 96px;
+  }
+
+  .deck { position: relative; width: 100vw; height: 100vh; z-index: 1; }
+
+  .slide {
+    position: absolute; inset: 0;
+    padding: 6vh 5vw 6vh;
+    display: none;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow: hidden;
+  }
+  .slide-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: safe center;
+    min-height: 0;
+    padding-top: 28px;
+  }
+  .slide.active { display: flex; animation: rise .55s cubic-bezier(.2,.7,.2,1) both; }
+  .slide.cover.active { display: grid; }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .slide.active > * { animation: lift .7s cubic-bezier(.2,.7,.2,1) both; }
+  .slide.active > *:nth-child(1) { animation-delay: .04s; }
+  .slide.active > *:nth-child(2) { animation-delay: .14s; }
+  .slide.active > *:nth-child(3) { animation-delay: .24s; }
+  .slide.active > *:nth-child(4) { animation-delay: .34s; }
+  @keyframes lift {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ───── shared type ───── */
+  .tag {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: .24em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: flex; align-items: center; gap: 14px;
+    margin: 0 0 18px;
+  }
+  .tag::before { content: ""; width: 28px; height: 1px; background: var(--accent); }
+  .tag .num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-3);
+    font-weight: 500;
+  }
+
+  h1.display, h2.display {
+    font-family: var(--sans);
+    font-variation-settings: "wght" 600, "wdth" 100, "opsz" 96;
+    color: var(--ink);
+    letter-spacing: -0.04em;
+    margin: 0;
+    line-height: 0.96;
+  }
+  h1.display {
+    font-size: clamp(40px, 4.2vw, 64px);
+    line-height: 1.04;
+  }
+  h2.display {
+    font-size: clamp(28px, 3.0vw, 48px);
+    line-height: 1.1;
+  }
+  .accent { color: var(--accent); }
+  .mem-c  { color: var(--memory); }
+  .warn-c { color: var(--warn); }
+  .good-c { color: var(--good); }
+  .hermes-c { color: var(--hermes); }
+  .mono { font-family: var(--mono); }
+
+  .h-spacer { height: 32px; }
+  .h-spacer-sm { height: 18px; }
+
+  /* ───── slide 1 — cover ───── */
+  .slide.cover {
+    grid-template-rows: auto 1fr auto;
+    padding: 7vh 7vw;
+  }
+  .cover-head {
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid var(--ink);
+    padding-top: 16px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+  .cover-head .mark { display: inline-flex; align-items: center; gap: 12px; }
+  .cover-head .mark .dot {
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: blink 2.4s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: .25; } }
+
+  .cover-body {
+    display: grid;
+    grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
+    gap: 4.5vw;
+    align-items: center;
+  }
+  .cover-art {
+    display: flex; align-items: center; justify-content: center;
+  }
+  .cover-art img {
+    width: 100%;
+    max-width: 580px;
+    height: auto;
+    display: block;
+    border: 1.5px solid var(--ink);
+    box-shadow: 10px 10px 0 var(--ink);
+  }
+  .cover-title { align-self: center; max-width: 1340px; }
+  .cover-title .kicker {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: .28em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 36px;
+    font-weight: 500;
+  }
+  .cover-title .sub {
+    margin-top: 36px;
+    font-size: clamp(20px, 1.7vw, 26px);
+    color: var(--ink-2);
+    line-height: 1.4;
+    max-width: 30ch;
+  }
+
+  .cover-foot {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 16px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    gap: 24px;
+  }
+  .foot-left { display: flex; flex-direction: column; gap: 6px; }
+  .cover-foot .vol {
+    font-family: var(--sans);
+    font-size: 18px;
+    letter-spacing: -.01em;
+    color: var(--ink);
+    text-transform: none;
+    font-weight: 500;
+  }
+  .qr-block {
+    display: flex; align-items: center; gap: 14px;
+  }
+  .qr-block img {
+    width: 72px; height: 72px;
+    border: 1.5px solid var(--ink);
+    background: var(--surface);
+    padding: 4px;
+    display: block;
+  }
+  .qr-text {
+    text-align: right;
+    line-height: 1.5;
+  }
+  .qr-text .url {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 500;
+  }
+  .qr-text .who {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-3);
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  /* ───── slide 2 — 3 layers + memory ───── */
+  .arch {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
+    gap: 56px;
+    align-items: stretch;
+  }
+  .stack { display: flex; flex-direction: column; gap: 14px; }
+
+  .layer {
+    border: 1.5px solid var(--ink);
+    background: var(--surface);
+    padding: 38px 42px;
+    display: flex; align-items: baseline; justify-content: space-between;
+  }
+  .layer .name {
+    font-size: clamp(34px, 3.4vw, 50px);
+    font-weight: 700;
+    letter-spacing: -.02em;
+  }
+  .layer .role {
+    font-family: var(--mono);
+    font-size: 16px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    font-weight: 600;
+  }
+  .layer.outer { background: var(--accent-bg); }
+  .layer.outer .role { color: var(--accent); }
+  .layer.inner { border-right-width: 6px; border-right-color: var(--memory); }
+  .layer.gate { background: var(--ink); color: var(--surface); }
+  .layer.gate .name { color: var(--surface); }
+  .layer.gate .role { color: #c8c8d0; }
+
+  .arrow {
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 13.5px;
+    letter-spacing: .26em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    font-weight: 600;
+  }
+  .arrow::before, .arrow::after {
+    content: "──────";
+    color: var(--ink-4);
+    margin: 0 14px;
+  }
+
+  .mem-axis {
+    background: var(--memory-bg);
+    border: 1.5px solid var(--memory);
+    padding: 36px;
+    display: flex; flex-direction: column; gap: 22px;
+    position: relative;
+  }
+  .mem-axis .cap {
+    position: absolute;
+    top: -13px; left: 24px;
+    background: var(--bg);
+    padding: 0 14px;
+    font-family: var(--mono);
+    font-size: 14px;
+    letter-spacing: .24em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--memory);
+  }
+  .mem-card {
+    background: var(--surface);
+    border: 1px solid var(--memory);
+    padding: 28px 30px;
+  }
+  .mem-card .who {
+    font-family: var(--mono);
+    font-size: 15px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--memory);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .mem-card .name {
+    font-size: clamp(24px, 2.0vw, 30px);
+    font-weight: 700;
+    letter-spacing: -.01em;
+  }
+  .mem-rule {
+    margin-top: auto;
+    text-align: center;
+    font-size: clamp(22px, 1.8vw, 28px);
+    line-height: 1.4;
+    color: var(--ink);
+    padding: 22px 8px 6px;
+    font-weight: 600;
+  }
+  .mem-rule b { color: var(--memory); font-weight: 700; }
+
+  /* ───── slide 3 — Hermes role ───── */
+  .hermes-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: 48px;
+    align-items: center;
+  }
+
+  .fn-diagram {
+    display: flex; flex-direction: column; align-items: stretch;
+    gap: 6px;
+  }
+  .caller-box {
+    background: var(--accent-bg);
+    border: 1.5px solid var(--accent);
+    padding: 18px 26px;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 16.5px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .caller-box .sub {
+    display: block;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--accent);
+    margin-top: 8px;
+    letter-spacing: .1em;
+    text-transform: none;
+    font-weight: 500;
+  }
+  .pipe {
+    align-self: center;
+    width: 2px;
+    height: 14px;
+    background: var(--ink-4);
+  }
+  .envelope {
+    border: 1.5px dashed var(--ink-3);
+    background: var(--surface);
+    padding: 18px 26px;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 17px;
+    color: var(--ink-2);
+    line-height: 1.6;
+    position: relative;
+    font-weight: 500;
+  }
+  .envelope .cap {
+    position: absolute;
+    top: -10px; left: 18px;
+    background: var(--bg);
+    padding: 0 12px;
+    font-size: 12.5px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    font-weight: 600;
+  }
+  .envelope .cap.in  { color: var(--accent); }
+  .envelope .cap.out { color: var(--good); }
+
+  .hermes-box {
+    background: var(--ink);
+    color: var(--surface);
+    border: 1.5px solid var(--ink);
+    padding: 32px 32px 28px;
+    box-shadow: 12px 12px 0 var(--hermes);
+    text-align: center;
+  }
+  .hermes-box .glyph {
+    font-family: var(--mono);
+    font-size: 14.5px;
+    color: var(--hermes);
+    letter-spacing: .26em;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .hermes-box .name {
+    font-size: clamp(46px, 4.4vw, 66px);
+    font-weight: 700;
+    letter-spacing: -.04em;
+    line-height: 1;
+    margin: 0 0 12px;
+  }
+  .hermes-box .desc {
+    font-family: var(--mono);
+    font-size: 15px;
+    color: var(--ink-4);
+    margin-bottom: 18px;
+    letter-spacing: .04em;
+  }
+  .providers {
+    display: flex; gap: 8px; justify-content: center;
+    margin: 4px 0 8px;
+    flex-wrap: wrap;
+  }
+  .providers .p {
+    border: 1px solid var(--hermes);
+    background: rgba(217,119,6,.14);
+    color: var(--hermes-bg);
+    padding: 10px 16px;
+    font-family: var(--mono);
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .providers-note {
+    font-family: var(--mono);
+    font-size: 14.5px;
+    letter-spacing: .14em;
+    color: var(--hermes);
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-top: 10px;
+  }
+
+  /* RIGHT side — Hermes roles */
+  .hermes-side { display: flex; flex-direction: column; gap: 4px; }
+
+  .roles-head {
+    font-family: var(--mono);
+    font-size: 15px;
+    letter-spacing: .24em;
+    text-transform: uppercase;
+    color: var(--hermes);
+    font-weight: 700;
+    margin-bottom: 8px;
+    padding-bottom: 14px;
+    border-bottom: 1.5px solid var(--ink);
+  }
+
+  .role-row {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 20px;
+    align-items: start;
+    padding: 18px 6px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .role-row:last-child { border-bottom: none; }
+  .role-row.mem {
+    background: var(--hermes-bg);
+    border: 1.5px solid var(--hermes);
+    margin-top: 10px;
+    padding: 22px 22px;
+    border-radius: 0;
+  }
+  .role-row.mem + .role-row { border-top: none; }
+  .role-num {
+    width: 40px; height: 40px;
+    background: var(--ink);
+    color: var(--surface);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono);
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 50%;
+  }
+  .role-row.mem .role-num { background: var(--hermes); }
+  .role-name {
+    font-size: clamp(22px, 1.8vw, 27px);
+    font-weight: 700;
+    letter-spacing: -.01em;
+    margin-bottom: 7px;
+  }
+  .role-desc {
+    font-size: 17.5px;
+    color: var(--ink-2);
+    line-height: 1.55;
+  }
+  .role-desc.mono-desc {
+    font-family: var(--mono);
+    font-size: 16px;
+    color: var(--ink-2);
+  }
+  .role-desc strong { color: var(--ink); font-weight: 700; }
+
+  /* ───── slide 4 — bug-catching flow ───── */
+  .flowline {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    margin: 8px 0 0;
+  }
+  .stage {
+    background: var(--surface);
+    border: 1.5px solid var(--ink);
+    border-right: none;
+    padding: 30px 26px 26px;
+    position: relative;
+    min-height: 220px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .stage:last-child { border-right: 1.5px solid var(--ink); }
+  .stage .badge {
+    position: absolute;
+    top: -16px; left: 16px;
+    width: 32px; height: 32px;
+    background: var(--ink);
+    color: var(--surface);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono);
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .stage::after {
+    content: "";
+    position: absolute;
+    right: -11px; top: 50%;
+    width: 20px; height: 20px;
+    background: var(--bg);
+    border-top: 1.5px solid var(--ink);
+    border-right: 1.5px solid var(--ink);
+    transform: translateY(-50%) rotate(45deg);
+    z-index: 2;
+  }
+  .stage:last-child::after { display: none; }
+  .stage .lbl {
+    font-family: var(--mono);
+    font-size: 14px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    font-weight: 600;
+  }
+  .stage .name {
+    font-size: clamp(24px, 2.1vw, 32px);
+    font-weight: 700;
+    letter-spacing: -.012em;
+    margin-top: 6px;
+    line-height: 1.15;
+  }
+  .stage .detail {
+    font-family: var(--mono);
+    font-size: 16.5px;
+    color: var(--ink-2);
+    line-height: 1.5;
+    margin-top: 10px;
+  }
+  .stage.bug { background: var(--warn-bg); border-color: var(--warn); }
+  .stage.bug .badge { background: var(--warn); }
+  .stage.bug::after { border-color: var(--warn); }
+  .stage.bug .lbl { color: var(--warn); }
+  .stage.bug .name { color: var(--warn); }
+
+  .chunk-row {
+    display: flex; gap: 4px; margin-top: 4px;
+  }
+  .chunk {
+    flex: 1;
+    border: 1px solid var(--good);
+    background: var(--good-bg);
+    color: var(--good);
+    text-align: center;
+    padding: 11px 0;
+    font-family: var(--mono);
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .cite-row {
+    display: flex; gap: 4px; margin-top: 4px; flex-wrap: wrap;
+  }
+  .cite {
+    border: 1px solid var(--good);
+    background: var(--good-bg);
+    color: var(--good);
+    padding: 8px 11px;
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .cite.miss {
+    border-style: dashed;
+    border-color: var(--warn);
+    background: var(--warn-bg);
+    color: var(--warn);
+  }
+  .cite.miss::before { content: "× "; font-weight: 700; }
+
+  .verdict-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+    margin-top: 32px;
+  }
+  .verdict {
+    border: 1.5px solid;
+    padding: 28px 34px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 32px;
+    align-items: center;
+  }
+  .vleft { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  .vhead {
+    display: flex; align-items: baseline; gap: 16px;
+    flex-wrap: wrap;
+  }
+  .verdict.bad { border-color: var(--warn); background: var(--warn-bg); }
+  .verdict.good { border-color: var(--good); background: var(--good-bg); }
+  .verdict .vlabel {
+    font-family: var(--mono);
+    font-size: 15px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .verdict.bad .vlabel { color: var(--warn); }
+  .verdict.good .vlabel { color: var(--good); }
+  .verdict .vname {
+    font-size: clamp(22px, 1.8vw, 28px);
+    font-weight: 600;
+    letter-spacing: -.01em;
+    line-height: 1.2;
+  }
+  .verdict .meta {
+    display: block;
+    font-family: var(--mono);
+    font-size: 14.5px;
+    color: var(--ink-3);
+    font-weight: 500;
+  }
+  .verdict .vrate {
+    font-family: var(--mono);
+    font-size: clamp(34px, 3.0vw, 46px);
+    font-weight: 600;
+    letter-spacing: -.02em;
+  }
+  .verdict.bad .vrate { color: var(--warn); }
+  .verdict.good .vrate { color: var(--good); }
+  .verdict .word {
+    font-family: var(--mono);
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: .18em;
+    padding: 4px 12px;
+    border: 1.5px solid currentColor;
+  }
+  .verdict.bad .word { color: var(--warn); }
+  .verdict.good .word { color: var(--good); }
+
+  /* ───── chrome ───── */
+  .topbar {
+    position: fixed;
+    top: 24px; left: 0; right: 0;
+    z-index: 5;
+    display: flex; justify-content: space-between;
+    padding: 0 4vw;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .24em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    pointer-events: none;
+  }
+  .topbar .dot {
+    display: inline-block;
+    width: 7px; height: 7px;
+    background: var(--accent);
+    border-radius: 50%;
+    margin-right: 12px;
+    vertical-align: 1px;
+    animation: blink 2.4s ease-in-out infinite;
+  }
+  .chrome {
+    position: fixed;
+    z-index: 5;
+    bottom: 24px; left: 0; right: 0;
+    display: flex; justify-content: space-between;
+    padding: 0 4vw;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .24em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    pointer-events: none;
+  }
+  .progress {
+    position: fixed; top: 0; left: 0;
+    height: 2px; background: var(--accent);
+    transition: width .45s cubic-bezier(.2,.7,.2,1);
+    z-index: 10;
+  }
+
+  @media (max-width: 1300px) {
+    .cover-body { grid-template-columns: 1fr; gap: 28px; }
+    .cover-art img { max-width: 360px; }
+  }
+  @media (max-width: 1100px) {
+    .arch, .hermes-grid { grid-template-columns: 1fr; }
+    .flowline { grid-template-columns: 1fr 1fr; }
+    .stage { border-right: 1.5px solid var(--ink); }
+    .stage::after { display: none; }
+    .cover-foot { flex-direction: column; align-items: flex-start; gap: 16px; }
+    .qr-text { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+
+<div class="topbar">
+  <span><span class="dot"></span>RLM-FORGE</span>
+  <span>Hermes Meetup</span>
+</div>
+
+<div class="deck" id="deck">
+
+  <!-- ═══════ SLIDE 1 — COVER ═══════ -->
+  <section class="slide cover active">
+    <div class="cover-head">
+      <span class="mark"><span class="dot"></span>Runtime-Hosted RLM</span>
+      <span>Vol. I &nbsp;·&nbsp; № 04</span>
+    </div>
+
+    <div class="cover-body">
+      <div class="cover-art">
+        <img src="assets/rlmf.png" alt="RLM-FORGE — Frontier Recursion Lab" />
+      </div>
+      <div class="cover-title">
+        <div class="kicker">A Field Note · Hermes Meetup</div>
+        <h1 class="display">
+          RLM is not a new model.<br/>
+          It's an <span class="accent">execution contract</span>.
+        </h1>
+        <div class="sub">
+          A contract that runs on top of Hermes,<br/>
+          deterministically enforced.
+        </div>
+      </div>
+    </div>
+
+    <div class="cover-foot">
+      <div class="foot-left">
+        <span>Ouroboros · Hermes · TraceGuard</span>
+        <span class="vol">Recursive inference, made enforceable.</span>
+      </div>
+      <div class="qr-block">
+        <div class="qr-text">
+          <div class="url">github.com/Q00/rlm-forge</div>
+          <div class="who">JQ Lee</div>
+        </div>
+        <img src="assets/qr-rlm-forge.png" alt="github.com/Q00/rlm-forge" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ SLIDE 2 — Architecture ═══════ -->
+  <section class="slide">
+    <div class="tag">
+      <span class="num">§ 02</span>
+      <span>Architecture</span>
+    </div>
+
+    <h2 class="display">
+      Three layers carry <span class="accent">control</span>. <span class="mem-c">Memory</span> flows alongside.
+    </h2>
+
+    <div class="slide-body">
+    <div class="arch">
+      <div class="stack">
+        <div class="layer outer">
+          <span class="name">Ouroboros</span>
+          <span class="role">outer scaffold</span>
+        </div>
+        <div class="arrow">envelope</div>
+        <div class="layer inner">
+          <span class="name">Hermes</span>
+          <span class="role">inner LM call</span>
+        </div>
+        <div class="arrow">child evidence manifest</div>
+        <div class="layer gate">
+          <span class="name">TraceGuard</span>
+          <span class="role">deterministic gate</span>
+        </div>
+      </div>
+
+      <div class="mem-axis">
+        <span class="cap">Memory · 2 layers</span>
+
+        <div class="mem-card">
+          <div class="who">layer 1</div>
+          <div class="name">Hermes built-in <span class="mono" style="font-size:.85em">MEMORY.md</span></div>
+        </div>
+
+        <div class="mem-card">
+          <div class="who">layer 2</div>
+          <div class="name">RLM-FORGE <span class="mono" style="font-size:.85em">memory_priors</span></div>
+        </div>
+
+        <div class="mem-rule">
+          Both can guide behavior —<br/>
+          <b>neither becomes evidence.</b>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <!-- ═══════ SLIDE 3 — Hermes role ═══════ -->
+  <section class="slide">
+    <div class="tag">
+      <span class="num">§ 03</span>
+      <span>Why Hermes</span>
+    </div>
+
+    <h2 class="display">
+      Hermes turns LLM calls into <span class="hermes-c">function calls</span>.
+    </h2>
+
+    <div class="slide-body">
+    <div class="hermes-grid">
+      <!-- LEFT — function-call diagram -->
+      <div class="fn-diagram">
+        <div class="caller-box">
+          OUROBOROS
+          <span class="sub">recursion · scheduling · trace</span>
+        </div>
+
+        <div class="pipe"></div>
+
+        <div class="envelope">
+          <span class="cap in">envelope in</span>
+          mode · context · evidence_handles
+        </div>
+
+        <div class="pipe"></div>
+
+        <div class="hermes-box">
+          <div class="glyph">★ inference boundary</div>
+          <div class="name">HERMES</div>
+          <div class="desc">one bounded call · structured JSON in / out</div>
+          <div class="providers">
+            <span class="p">GLM-4.7</span>
+            <span class="p">Opus-4.7</span>
+            <span class="p">GPT-5.5</span>
+          </div>
+          <div class="providers-note">provider swap, same contract</div>
+        </div>
+
+        <div class="pipe"></div>
+
+        <div class="envelope">
+          <span class="cap out">envelope out</span>
+          verdict · result · evidence_references
+        </div>
+
+        <div class="pipe"></div>
+
+        <div class="caller-box">
+          OUROBOROS
+          <span class="sub">validate · commit · retry · terminate</span>
+        </div>
+      </div>
+
+      <!-- RIGHT — 5 Hermes roles -->
+      <div class="hermes-side">
+        <div class="roles-head">What Hermes brings</div>
+
+        <div class="role-row">
+          <span class="role-num">1</span>
+          <div>
+            <div class="role-name">Inference boundary</div>
+            <div class="role-desc">The <strong>single LLM call site</strong> every recursive call passes through</div>
+          </div>
+        </div>
+
+        <div class="role-row">
+          <span class="role-num">2</span>
+          <div>
+            <div class="role-name">Bounded · 4 modes</div>
+            <div class="role-desc mono-desc">decompose · execute_atomic · summarize · synthesize</div>
+          </div>
+        </div>
+
+        <div class="role-row">
+          <span class="role-num">3</span>
+          <div>
+            <div class="role-name">Structured JSON RPC</div>
+            <div class="role-desc">envelope in / out — LLM becomes a <strong>callable function</strong></div>
+          </div>
+        </div>
+
+        <div class="role-row">
+          <span class="role-num">4</span>
+          <div>
+            <div class="role-name">Provider-swappable</div>
+            <div class="role-desc"><span class="mono">hermes model</span> swaps GLM · Opus · GPT in one line</div>
+          </div>
+        </div>
+
+        <div class="role-row mem">
+          <span class="role-num">5</span>
+          <div>
+            <div class="role-name">Closed learning loop</div>
+            <div class="role-desc"><span class="mono" style="font-size:.85em">MEMORY.md</span> auto-injected before the envelope — part of Hermes' <strong>self-improving runtime</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <!-- ═══════ SLIDE 4 — Bug-catching flow ═══════ -->
+  <section class="slide">
+    <div class="tag">
+      <span class="num">§ 04</span>
+      <span>How TraceGuard Caught Our Paper</span>
+    </div>
+
+    <h2 class="display">
+      We fed our own paper as input — and caught a <span class="warn-c">real bug</span>.
+    </h2>
+
+    <div class="slide-body">
+    <div class="flowline">
+      <div class="stage">
+        <span class="badge">1</span>
+        <div class="lbl">input</div>
+        <div class="name">Paper sections</div>
+        <div class="detail">paper key sections target</div>
+      </div>
+
+      <div class="stage">
+        <span class="badge">2</span>
+        <div class="lbl">decompose</div>
+        <div class="name">Ouroboros</div>
+        <div class="detail">→ 4 bounded chunks</div>
+        <div class="chunk-row">
+          <div class="chunk">c0</div>
+          <div class="chunk">c1</div>
+          <div class="chunk">c2</div>
+          <div class="chunk">c3</div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <span class="badge">3</span>
+        <div class="lbl">Hermes children</div>
+        <div class="name">4 child calls</div>
+        <div class="detail">→ child_result : 000..003</div>
+        <div class="chunk-row">
+          <div class="chunk">000</div>
+          <div class="chunk">001</div>
+          <div class="chunk">002</div>
+          <div class="chunk">003</div>
+        </div>
+      </div>
+
+      <div class="stage bug">
+        <span class="badge">4</span>
+        <div class="lbl">parent synthesis</div>
+        <div class="name">cites child : 004</div>
+        <div class="detail">— does not exist</div>
+        <div class="cite-row">
+          <span class="cite">000</span>
+          <span class="cite">001</span>
+          <span class="cite">002</span>
+          <span class="cite">003</span>
+          <span class="cite miss">004</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="verdict-row">
+      <div class="verdict bad">
+        <div class="vleft">
+          <div class="vhead">
+            <span class="vlabel">5 · TraceGuard</span>
+            <span class="word">REJECT</span>
+          </div>
+          <span class="vname">Raw parent rejected</span>
+          <span class="meta">unsupported_fact_id · child_result : 004</span>
+        </div>
+        <span class="vrate">0.0435</span>
+      </div>
+      <div class="verdict good">
+        <div class="vleft">
+          <div class="vhead">
+            <span class="vlabel">6 · Repair &amp; retry</span>
+            <span class="word">ACCEPT</span>
+          </div>
+          <span class="vname">Handle ↦ fresh manifest</span>
+          <span class="meta">cites only child_result : 000..003</span>
+        </div>
+        <span class="vrate">0.0000</span>
+      </div>
+    </div>
+    </div>
+  </section>
+
+</div>
+
+<div class="chrome">
+  <span>← / →</span>
+  <span>RLM-FORGE</span>
+  <span id="counter">01 / 04</span>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const counter = document.getElementById('counter');
+  const progress = document.getElementById('progress');
+  let idx = 0;
+
+  function render() {
+    slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+    const n = String(idx + 1).padStart(2, '0');
+    const t = String(slides.length).padStart(2, '0');
+    counter.textContent = `${n} / ${t}`;
+    progress.style.width = `${((idx + 1) / slides.length) * 100}%`;
+  }
+  function go(delta) {
+    const next = Math.max(0, Math.min(slides.length - 1, idx + delta));
+    if (next === idx) return;
+    idx = next;
+    render();
+  }
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(+1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(-1); }
+    else if (e.key === 'Home') { idx = 0; render(); }
+    else if (e.key === 'End')  { idx = slides.length - 1; render(); }
+  });
+  document.addEventListener('click', (e) => {
+    const x = e.clientX / window.innerWidth;
+    if (x > 0.6) go(+1);
+    else if (x < 0.4) go(-1);
+  });
+  render();
+</script>
+</body>
+</html>

@@ -527,7 +527,82 @@
   }
   .role-desc strong { color: var(--ink); font-weight: 700; }
 
-  /* ───── slide 4 — bug-catching flow ───── */
+  /* ───── slide 4 — live demo ───── */
+  .demo-block {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 32px;
+    max-width: 1100px; margin: 0 auto; width: 100%;
+  }
+  .demo-screen {
+    background: var(--ink);
+    border: 1.5px solid var(--ink);
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    position: relative;
+    box-shadow: 14px 14px 0 var(--hermes);
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+  .demo-screen-bar {
+    background: #1a1a1f;
+    border-bottom: 1px solid #2a2a31;
+    padding: 12px 18px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .demo-screen-bar .dot {
+    width: 12px; height: 12px; border-radius: 50%;
+  }
+  .demo-screen-bar .dot.r { background: #ff5f57; }
+  .demo-screen-bar .dot.y { background: #ffbd2e; }
+  .demo-screen-bar .dot.g { background: #28ca42; }
+  .demo-screen-bar .demo-path {
+    margin-left: 18px;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--ink-4);
+    letter-spacing: .04em;
+  }
+  .demo-play {
+    flex: 1;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 22px;
+  }
+  .play-circle {
+    width: 130px; height: 130px;
+    border-radius: 50%;
+    background: var(--hermes);
+    color: var(--ink);
+    font-size: 52px;
+    display: flex; align-items: center; justify-content: center;
+    padding-left: 10px;
+    font-weight: 700;
+    box-shadow: 0 0 0 8px rgba(217,119,6,.18);
+  }
+  .demo-runlabel {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--hermes-bg);
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .demo-caption {
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--ink-2);
+    text-align: center;
+    max-width: 920px;
+    font-weight: 500;
+  }
+  .demo-caption .mono {
+    font-family: var(--mono);
+    font-size: .92em;
+    color: var(--ink);
+    background: var(--hermes-bg);
+    padding: 1px 6px;
+  }
+
+  /* ───── slide 5 — bug-catching flow ───── */
   .flowline {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -955,10 +1030,44 @@
     </div>
   </section>
 
-  <!-- ═══════ SLIDE 4 — Bug-catching flow ═══════ -->
+  <!-- ═══════ SLIDE 4 — Live Demo ═══════ -->
   <section class="slide">
     <div class="tag">
       <span class="num">§ 04</span>
+      <span>Live Demo</span>
+    </div>
+
+    <h2 class="display">
+      Watch <span class="hermes-c">MEMORY.md</span> rewrite itself.
+    </h2>
+
+    <div class="slide-body">
+      <div class="demo-block">
+        <div class="demo-screen">
+          <div class="demo-screen-bar">
+            <span class="dot r"></span>
+            <span class="dot y"></span>
+            <span class="dot g"></span>
+            <span class="demo-path">~/.hermes/memories/MEMORY.md · between RLM-FORGE runs</span>
+          </div>
+          <div class="demo-play">
+            <div class="play-circle">▶</div>
+            <div class="demo-runlabel">live capture · ~30 sec</div>
+          </div>
+        </div>
+        <div class="demo-caption">
+          Run 1 writes an operational prior into <span class="mono">MEMORY.md</span>.
+          Run 2 picks it up <strong>before</strong> our envelope arrives — behavior shifts,
+          but <span class="accent">TraceGuard</span> still gates the answer.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ SLIDE 5 — Bug-catching flow ═══════ -->
+  <section class="slide">
+    <div class="tag">
+      <span class="num">§ 05</span>
       <span>How TraceGuard Caught Our Paper</span>
     </div>
 

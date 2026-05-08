@@ -544,10 +544,15 @@
     background: var(--ink);
     border: 1.5px solid var(--ink);
     width: 100%;
-    aspect-ratio: 16 / 9;
     position: relative;
     box-shadow: 14px 14px 0 var(--hermes);
     display: flex; flex-direction: column; overflow: hidden;
+  }
+  .demo-video {
+    width: 100%;
+    height: auto;
+    display: block;
+    background: #000;
   }
   .demo-screen-bar {
     background: #1a1a1f;
@@ -1128,12 +1133,12 @@
               <span class="dot r"></span>
               <span class="dot y"></span>
               <span class="dot g"></span>
-              <span class="demo-path">~/.hermes/memories/MEMORY.md · between RLM-FORGE runs</span>
+              <span class="demo-path">demo · MEMORY.md closed loop · live capture</span>
             </div>
-            <div class="demo-play">
-              <div class="play-circle">▶</div>
-              <div class="demo-runlabel">live capture · ~30 sec</div>
-            </div>
+            <video class="demo-video"
+                   src="assets/demo_rlm.mp4"
+                   poster="assets/demo_rlm-poster.jpg"
+                   controls loop muted playsinline preload="metadata"></video>
           </div>
           <div class="demo-caption">
             Run 1 writes an operational prior into <span class="mono">MEMORY.md</span>.

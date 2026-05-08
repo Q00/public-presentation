@@ -528,10 +528,17 @@
   .role-desc strong { color: var(--ink); font-weight: 700; }
 
   /* ───── slide 4 — live demo ───── */
+  .demo-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: 48px;
+    align-items: stretch;
+    width: 100%;
+  }
   .demo-block {
     display: flex; flex-direction: column;
-    align-items: center; gap: 32px;
-    max-width: 1100px; margin: 0 auto; width: 100%;
+    gap: 24px;
+    width: 100%;
   }
   .demo-screen {
     background: var(--ink);
@@ -587,11 +594,10 @@
     font-weight: 500;
   }
   .demo-caption {
-    font-size: 18px;
+    font-size: 16.5px;
     line-height: 1.55;
     color: var(--ink-2);
-    text-align: center;
-    max-width: 920px;
+    text-align: left;
     font-weight: 500;
   }
   .demo-caption .mono {
@@ -600,6 +606,79 @@
     color: var(--ink);
     background: var(--hermes-bg);
     padding: 1px 6px;
+  }
+
+  /* loop diagram on demo slide */
+  .demo-loop {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-self: stretch;
+    background: var(--surface);
+    border: 1.5px solid var(--ink);
+    padding: 26px 24px;
+    box-shadow: 10px 10px 0 var(--ink);
+    position: relative;
+  }
+  .demo-loop .cap {
+    position: absolute;
+    top: -10px; left: 18px;
+    background: var(--bg);
+    padding: 0 12px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: .24em;
+    text-transform: uppercase;
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .loop-box {
+    border: 1.5px solid var(--ink);
+    padding: 14px 18px;
+    background: var(--surface);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 14px;
+    align-items: center;
+  }
+  .loop-box .lbl {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .loop-box .body {
+    font-size: 14.5px;
+    color: var(--ink-2);
+    font-weight: 500;
+    line-height: 1.35;
+  }
+  .loop-box.run { background: var(--accent-bg); border-color: var(--accent); }
+  .loop-box.run .lbl { color: var(--accent); }
+  .loop-box.mem-step { background: var(--hermes-bg); border-color: var(--hermes); }
+  .loop-box.mem-step .lbl { color: var(--hermes); }
+  .loop-box.gate { background: var(--ink); border-color: var(--ink); }
+  .loop-box.gate .lbl { color: var(--hermes-bg); }
+  .loop-box.gate .body { color: #cbcbd0; }
+
+  .loop-arrow {
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    font-weight: 600;
+    padding: 2px 0;
+  }
+  .loop-arrow::before {
+    content: "↓";
+    margin-right: 8px;
+    font-size: 14px;
+    color: var(--ink-2);
   }
 
   /* ───── slide 5 — bug-catching flow ───── */
@@ -815,7 +894,7 @@
     .cover-art img { max-width: 360px; }
   }
   @media (max-width: 1100px) {
-    .arch, .hermes-grid { grid-template-columns: 1fr; }
+    .arch, .hermes-grid, .demo-grid { grid-template-columns: 1fr; }
     .flowline { grid-template-columns: 1fr 1fr; }
     .stage { border-right: 1.5px solid var(--ink); }
     .stage::after { display: none; }
@@ -1042,23 +1121,55 @@
     </h2>
 
     <div class="slide-body">
-      <div class="demo-block">
-        <div class="demo-screen">
-          <div class="demo-screen-bar">
-            <span class="dot r"></span>
-            <span class="dot y"></span>
-            <span class="dot g"></span>
-            <span class="demo-path">~/.hermes/memories/MEMORY.md · between RLM-FORGE runs</span>
+      <div class="demo-grid">
+        <div class="demo-block">
+          <div class="demo-screen">
+            <div class="demo-screen-bar">
+              <span class="dot r"></span>
+              <span class="dot y"></span>
+              <span class="dot g"></span>
+              <span class="demo-path">~/.hermes/memories/MEMORY.md · between RLM-FORGE runs</span>
+            </div>
+            <div class="demo-play">
+              <div class="play-circle">▶</div>
+              <div class="demo-runlabel">live capture · ~30 sec</div>
+            </div>
           </div>
-          <div class="demo-play">
-            <div class="play-circle">▶</div>
-            <div class="demo-runlabel">live capture · ~30 sec</div>
+          <div class="demo-caption">
+            Run 1 writes an operational prior into <span class="mono">MEMORY.md</span>.
+            Run 2 picks it up <strong>before</strong> our envelope arrives — behavior shifts,
+            but <span class="accent">TraceGuard</span> still gates the answer.
           </div>
         </div>
-        <div class="demo-caption">
-          Run 1 writes an operational prior into <span class="mono">MEMORY.md</span>.
-          Run 2 picks it up <strong>before</strong> our envelope arrives — behavior shifts,
-          but <span class="accent">TraceGuard</span> still gates the answer.
+
+        <div class="demo-loop">
+          <span class="cap">Fig. — closed loop</span>
+
+          <div class="loop-box run">
+            <span class="lbl">Run 1</span>
+            <span class="body">finishes — Hermes writes operational prior to <span class="mono" style="font-size:.9em">MEMORY.md</span></span>
+          </div>
+
+          <div class="loop-arrow">writes</div>
+
+          <div class="loop-box mem-step">
+            <span class="lbl">MEMORY.md</span>
+            <span class="body">persistent across runs — agent-curated, on_memory_write hook</span>
+          </div>
+
+          <div class="loop-arrow">auto-prepended to system prompt</div>
+
+          <div class="loop-box run">
+            <span class="lbl">Run 2</span>
+            <span class="body">starts with prior already in system prompt, <strong>before</strong> our envelope</span>
+          </div>
+
+          <div class="loop-arrow">answer flows down</div>
+
+          <div class="loop-box gate">
+            <span class="lbl">TraceGuard</span>
+            <span class="body">still gates — evidence must come from this run's fresh child manifest</span>
+          </div>
         </div>
       </div>
     </div>

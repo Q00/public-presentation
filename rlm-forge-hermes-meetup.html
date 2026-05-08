@@ -119,7 +119,7 @@
     line-height: 0.96;
   }
   h1.display {
-    font-size: clamp(40px, 4.2vw, 64px);
+    font-size: clamp(44px, 4.6vw, 80px);
     line-height: 1.04;
   }
   h2.display {
@@ -162,8 +162,8 @@
 
   .cover-body {
     display: grid;
-    grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
-    gap: 4.5vw;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: 4vw;
     align-items: center;
   }
   .cover-art {
@@ -171,13 +171,13 @@
   }
   .cover-art img {
     width: 100%;
-    max-width: 580px;
+    max-width: 760px;
     height: auto;
     display: block;
     border: 1.5px solid var(--ink);
-    box-shadow: 10px 10px 0 var(--ink);
+    box-shadow: 12px 12px 0 var(--ink);
   }
-  .cover-title { align-self: center; max-width: 1340px; }
+  .cover-title { align-self: center; max-width: none; }
   .cover-title .kicker {
     font-family: var(--mono);
     font-size: 13px;
@@ -188,11 +188,11 @@
     font-weight: 500;
   }
   .cover-title .sub {
-    margin-top: 36px;
-    font-size: clamp(20px, 1.7vw, 26px);
+    margin-top: 40px;
+    font-size: clamp(20px, 1.7vw, 28px);
     color: var(--ink-2);
     line-height: 1.4;
-    max-width: 30ch;
+    max-width: 32ch;
   }
 
   .cover-foot {

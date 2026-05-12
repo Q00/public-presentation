@@ -851,28 +851,16 @@ strong{ font-weight:600; color:var(--ink); }
     </svg>
   </div>
 
-  <div class="cols narrow" style="margin-top:clamp(16px,2.2vh,28px)">
-    <div>
-      <h3 class="sub">루프가 멈추는 두 갈래</h3>
-      <ul>
-        <li><strong>Seed Gate 통과</strong>. goal · constraints · acceptance_criteria 세 칸이 다 채워지면 닫힌 Seed를 그대로 반환한다.</li>
-        <li><strong>안전밸브</strong>. Cycle &gt; 5에 이르면 강제 종료하고 empty를 반환한다. 다섯 사이클을 넘기지 않는다.</li>
-      </ul>
-      <p style="font-size:15px; color:var(--ink-3); margin-top:16px; font-style:italic">의미가 충분히 같아졌는지(ontology similarity)는 /socrates 안이 아니라 마스터 하네스가 본다.</p>
-    </div>
-    <div>
-      <div class="skill-card" style="margin-top:0">
-        <div class="name">/socrates</div>
-        <div class="role">네 단계를 Ralph 루프로 묶어 Seed를 산출</div>
-        <div class="desc">막연한 한 줄을 받아 4단계를 반복하며, 매 사이클 끝에 Seed 세 칸의 정착을 Seed Gate에서 점검한다. 정착하면 닫힌 Seed 한 묶음을 떨어뜨린다.</div>
-        <div class="flow">
-          <span class="pill in">막연한 한 줄</span>
-          <span class="arr">→</span>
-          <span class="pill">W · R · R · R</span>
-          <span class="arr">↻</span>
-          <span class="pill out">Seed</span>
-        </div>
-      </div>
+  <div class="skill-card" style="margin-top:clamp(16px,2.2vh,28px)">
+    <div class="name">/socrates</div>
+    <div class="role">네 단계를 Ralph 루프로 묶어 Seed를 산출</div>
+    <div class="desc">막연한 한 줄을 받아 4단계를 반복하며, 매 사이클 끝에 Seed 세 칸의 정착을 Seed Gate에서 점검한다. 정착하면 닫힌 Seed 한 묶음을 떨어뜨린다.</div>
+    <div class="flow">
+      <span class="pill in">막연한 한 줄</span>
+      <span class="arr">→</span>
+      <span class="pill">W · R · R · R</span>
+      <span class="arr">↻</span>
+      <span class="pill out">Seed</span>
     </div>
   </div>
 

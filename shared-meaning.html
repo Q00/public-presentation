@@ -42,18 +42,22 @@ html,body{
 
 .slide{
   scroll-snap-align:start;
-  min-height:100vh;
-  padding:clamp(48px,7vh,88px) clamp(40px,7vw,112px) clamp(48px,6vh,80px);
+  scroll-snap-stop:always;
+  height:100vh;
+  padding:clamp(40px,6vh,72px) clamp(36px,6vw,96px) clamp(40px,5vh,64px);
   max-width:1480px;
   width:100%;
   margin:0 auto;
   position:relative;
   display:flex;
   flex-direction:column;
-  justify-content:center;
+  justify-content:safe center;
   border-bottom:1px solid var(--rule-soft);
-  overflow:hidden;
+  overflow-y:auto;
+  overflow-x:hidden;
 }
+.slide > *{ flex-shrink:0; }
+.slide::-webkit-scrollbar{ width:0; height:0; }
 .slide:last-child{border-bottom:none}
 
 /* Header marks */
@@ -253,7 +257,7 @@ strong{ font-weight:600; color:var(--ink); }
   display:flex;
   justify-content:center;
 }
-.diagram svg{ width:100%; max-width:1200px; max-height:50vh; height:auto; }
+.diagram svg{ width:100%; max-width:1200px; max-height:42vh; height:auto; }
 
 /* === Skill card === */
 .skill-card{
@@ -752,11 +756,11 @@ strong{ font-weight:600; color:var(--ink); }
   <span class="slide-no">VIII</span>
   <span class="slide-tag">Orchestrator</span>
   <div class="eyebrow">/socrates · 네 단계를 묶는 Ralph 루프</div>
-  <h2 class="heading" style="font-size:clamp(36px,4.4vw,52px); margin-bottom:24px">묻기를 한 번 돌리고 끝나지 않는다.</h2>
-  <p class="lede" style="font-size:20px; margin-bottom:20px; max-width:1100px">한 사이클(W → R → R → R)이 끝나도 Seed의 세 칸(goal · constraints · acceptance_criteria) 중 하나라도 비어 있으면 다음 사이클을 돈다. 다음 사이클의 Wonder는 비어 있는 칸 쪽으로 좁혀진다.</p>
+  <h2 class="heading" style="font-size:clamp(28px,3.4vw,44px); margin-bottom:16px">묻기를 한 번 돌리고 끝나지 않는다.</h2>
+  <p class="lede" style="font-size:clamp(15px,1.3vw,19px); margin-bottom:14px; max-width:1100px">한 사이클(W → R → R → R)이 끝나도 Seed의 세 칸(goal · constraints · acceptance_criteria) 중 하나라도 비어 있으면 다음 사이클을 돈다. 다음 사이클의 Wonder는 비어 있는 칸 쪽으로 좁혀진다.</p>
 
   <div class="diagram" style="margin-top:8px">
-    <svg viewBox="0 0 1060 520" xmlns="http://www.w3.org/2000/svg" style="max-width:980px; max-height:48vh">
+    <svg viewBox="0 0 1060 520" xmlns="http://www.w3.org/2000/svg" style="max-width:980px; max-height:38vh">
       <!-- Outer SOCRATES box -->
       <rect x="130" y="40" width="820" height="430" fill="none" stroke="#111" stroke-width="1" stroke-dasharray="4 3" rx="6"/>
       <text x="200" y="62" font-family="ui-monospace, monospace" font-size="13" fill="#111" letter-spacing="0.36em" font-weight="700">SOCRATES</text>
@@ -847,7 +851,7 @@ strong{ font-weight:600; color:var(--ink); }
     </svg>
   </div>
 
-  <div class="cols narrow" style="margin-top:32px">
+  <div class="cols narrow" style="margin-top:clamp(16px,2.2vh,28px)">
     <div>
       <h3 class="sub">루프가 멈추는 두 갈래</h3>
       <ul>

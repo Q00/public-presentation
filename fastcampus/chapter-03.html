@@ -1,0 +1,2125 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>3장. 문서형 하네스 — markdown으로 deterministic하게 만들기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" />
+<link rel="stylesheet" href="./fastcampus-keynote.css" />
+<style>
+.figure-wrap{display:flex;align-items:center;justify-content:center;width:100%;margin-top:calc(8px * var(--deck-scale))}
+.figure-wrap svg{width:100%;height:auto;max-width:calc(1080px * var(--deck-scale))}
+.figure-caption{font-family:var(--mono);font-size:calc(11.5px * var(--deck-scale));letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);text-align:center;margin-top:calc(14px * var(--deck-scale))}
+.code-block{font-family:var(--mono);font-size:calc(13px * var(--deck-scale));line-height:1.7;color:var(--ink);background:rgba(241,238,229,.55);border:calc(1px * var(--deck-scale)) solid var(--rule);padding:calc(20px * var(--deck-scale)) calc(24px * var(--deck-scale));white-space:pre;overflow:hidden;letter-spacing:0}
+.code-block.small{font-size:calc(12px * var(--deck-scale));line-height:1.65}
+.flow-row{display:flex;align-items:stretch;gap:calc(14px * var(--deck-scale));margin-top:calc(20px * var(--deck-scale));flex-wrap:wrap}
+.flow-row .step{flex:1;min-width:calc(150px * var(--deck-scale));border-top:calc(1.5px * var(--deck-scale)) solid var(--rule);padding-top:calc(12px * var(--deck-scale))}
+.flow-row .step .lab{font-family:var(--mono);font-size:calc(11px * var(--deck-scale));letter-spacing:.16em;color:var(--accent);margin-bottom:calc(6px * var(--deck-scale))}
+.flow-row .step h3{font-size:calc(20px * var(--deck-scale));font-weight:700;line-height:1.25;margin-bottom:calc(6px * var(--deck-scale))}
+.flow-row .step p{font-size:calc(14px * var(--deck-scale));color:var(--ink-2);line-height:1.55}
+.clip-header{display:flex;align-items:baseline;gap:calc(18px * var(--deck-scale));margin-bottom:calc(18px * var(--deck-scale))}
+.clip-header .id{font-family:var(--mono);font-size:calc(13px * var(--deck-scale));letter-spacing:.22em;color:var(--accent)}
+.clip-header .label{font-family:var(--mono);font-size:calc(12px * var(--deck-scale));letter-spacing:.18em;color:var(--ink-3);text-transform:uppercase}
+</style>
+</head>
+<body>
+<!-- FC-GATE:START -->
+<div id="fc-gate">
+  <div class="fc-box">
+    <div class="fc-eyebrow">FAST CAMPUS · PROTECTED</div>
+    <h1 class="fc-title">암호를 입력하세요</h1>
+    <p class="fc-desc">이 자료는 공유 대상자만 볼 수 있습니다.</p>
+    <div class="fc-row">
+      <input type="password" autocomplete="off" spellcheck="false" placeholder="암호" aria-label="암호" />
+      <button type="button">열기 →</button>
+    </div>
+    <p class="fc-err">암호가 일치하지 않습니다.</p>
+  </div>
+</div>
+<style>
+#fc-gate{position:fixed;inset:0;z-index:2147483647;background:#F7F3EF;display:flex;align-items:center;justify-content:center;font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic','Segoe UI',sans-serif}
+#fc-gate .fc-box{width:min(420px,calc(100vw - 48px));border:1.5px solid #0A0A0A;background:#FFFFFF;padding:40px 36px}
+#fc-gate .fc-eyebrow{font-family:'SF Mono',ui-monospace,Menlo,Consolas,monospace;font-size:11px;letter-spacing:.2em;color:#C15F3C;margin-bottom:18px}
+#fc-gate .fc-title{font-size:28px;line-height:1.15;letter-spacing:-.03em;font-weight:800;color:#0A0A0A;margin:0}
+#fc-gate .fc-desc{font-size:14px;line-height:1.55;color:#78746E;margin:12px 0 26px}
+#fc-gate .fc-row{display:flex;gap:10px}
+#fc-gate input{flex:1;min-width:0;border:1.5px solid #0A0A0A;background:#fff;padding:13px 14px;font-size:15px;font-family:inherit;color:#0A0A0A;outline:none}
+#fc-gate input:focus{border-color:#C15F3C}
+#fc-gate button{border:1.5px solid #0A0A0A;background:#0A0A0A;color:#fff;padding:13px 18px;font-family:'SF Mono',ui-monospace,Menlo,Consolas,monospace;font-size:12px;letter-spacing:.12em;cursor:pointer;white-space:nowrap;transition:background .14s,border-color .14s}
+#fc-gate button:hover{background:#C15F3C;border-color:#C15F3C}
+#fc-gate .fc-err{display:none;font-size:13px;color:#8F3E27;margin:16px 0 0}
+#fc-gate.fc-shake .fc-box{animation:fc-shake .32s}
+@keyframes fc-shake{10%,90%{transform:translateX(-2px)}30%,70%{transform:translateX(5px)}50%{transform:translateX(-7px)}}
+</style>
+<script>
+(function(){
+  var KEY='fc_unlocked',PASS='ouroboros';
+  function ready(fn){if(document.readyState!=='loading')fn();else document.addEventListener('DOMContentLoaded',fn);}
+  try{if(sessionStorage.getItem(KEY)==='1'){ready(function(){var g=document.getElementById('fc-gate');if(g)g.remove();});return;}}catch(e){}
+  var de=document.documentElement;de.style.overflow='hidden';
+  ready(function(){
+    var gate=document.getElementById('fc-gate');if(!gate)return;
+    var input=gate.querySelector('input'),btn=gate.querySelector('button'),err=gate.querySelector('.fc-err');
+    function submit(){
+      if(input.value===PASS){
+        try{sessionStorage.setItem(KEY,'1');}catch(e){}
+        de.style.overflow='';gate.remove();
+      }else{
+        err.style.display='block';
+        gate.classList.remove('fc-shake');void gate.offsetWidth;gate.classList.add('fc-shake');
+        input.value='';input.focus();
+      }
+    }
+    btn.addEventListener('click',submit);
+    input.addEventListener('keydown',function(e){if(e.key==='Enter')submit();});
+    input.focus();
+  });
+})();
+</script>
+<!-- FC-GATE:END -->
+
+
+<div class="toolbar">
+  <button id="btnPresent">Present (P)</button>
+  <button id="btnNotes">Notes (N)</button>
+  <button id="btnPrint">Print PDF</button>
+</div>
+<div class="helpbar"><span class="blink">▸</span>&nbsp; ←/→ navigate · P present · N notes · ESC overview · Cmd+P export PDF</div>
+
+<main class="deck" id="deck">
+
+<!-- ============================================================ -->
+<!-- 01 · COVER                                                   -->
+<!-- ============================================================ -->
+<section id="chapter-03-cover" class="slide layout-cover" data-num="1">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2026</span>
+  </div>
+  <div class="body">
+    <div>
+      <div class="eyebrow">CHAPTER 03 · 문서형 하네스</div>
+      <h1 class="chapter-full-title">3장. 문서형 하네스 — markdown으로 deterministic하게 만들기</h1>
+      <p class="subtitle">AI는 매번 다르게 답한다. md로 잡을 수 있는 만큼 잡고, 한계는 한계로 안다.</p>
+    </div>
+    <div class="by">
+      <div class="who">
+        <span class="name">Fast Campus Harness Engineering</span>
+        <span class="role">Chapter Deck · decks/chapter-03.html</span>
+      </div>
+      <div class="stamp toc-area" aria-label="목차">
+        <span class="toc-label">목차</span>
+        <a class="toc-chapter" href="#chapter-03-cover">3장. 문서형 하네스</a>
+        <a class="toc-module" href="#chapter-03-module-01">3-1. 문서 설계 전략</a>
+        <a class="toc-module" href="#chapter-03-module-02">3-2. 규칙 템플릿화</a>
+        <a class="toc-module" href="#chapter-03-module-03">3-3. 문서의 강점과 한계</a>
+        <a class="toc-module" href="#chapter-03-module-04">3-4. 프로젝트 1 — 회의록 → 1page 기획안</a>
+      </div>
+    </div>
+  </div>
+  <div class="meta-bottom"><span>COVER</span><span><span class="num">01</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="1">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 01 / 86</span></div>
+  <h4>오프닝</h4>
+  <p>3장의 한 줄 — md로 deterministic하게 만든다. 2장에서는 Wonder로 빈칸을 드러냈고, 3장은 그렇게 드러난 빈칸을 잠글 수 있는 만큼 잠그는 단계다.</p>
+  <p>"deterministic"이라는 단어 하나가 4 모듈을 관통한다. 무엇을 deterministic하게 만들지(3-1) → 어떻게 잠그는지(3-2) → 어디까지 잠글 수 있는지(3-3) → 실제로 만든다(3-4).</p>
+</aside>
+
+<!-- ============================================================ -->
+<!-- 02 · CHAPTER FLOW + 2→3 다리                                  -->
+<!-- ============================================================ -->
+<section class="slide layout-grid cols-4" data-num="2">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>CHAPTER FLOW</span>
+  </div>
+  <div class="body">
+    <h2>3장 흐름 — 잠글 칸을 정하고, 잠그고, 한계를 알고, 만든다</h2>
+    <div class="cards">
+      <div class="card"><div class="num">3-1</div><h3>설계 전략</h3><p>잠글 칸과 남길 칸을 가른다. 고정 / 남김 / 질문 3칸 프레임을 만든다.</p></div>
+      <div class="card"><div class="num">3-2</div><h3>규칙 템플릿화</h3><p>역할·금지·출력형식·예시를 6칸 md 골격에 적는다.</p></div>
+      <div class="card"><div class="num">3-3</div><h3>강점과 한계</h3><p>md가 잘 다루는 영역과 다루지 못하는 영역(순서·상태·재시도)을 가른다.</p></div>
+      <div class="card"><div class="num">3-4</div><h3>프로젝트 1</h3><p>회의록 → 1page 기획안 하네스 v1을 실제로 만든다. 2장 인터뷰 하네스 v1로 시작한다.</p></div>
+    </div>
+  </div>
+  <div class="meta-bottom"><span>CHAPTER FLOW</span><span><span class="num">02</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="2">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 02 / 86</span></div>
+  <p>2장에서 만든 인터뷰 하네스 v1은 "이 일이 무엇이고 왜 하느냐"를 한 줄로 만든 산출물이다. 3장은 그 한 줄을 가져와 매번 같은 산출물로 변환하는 절차를 만든다. 2장은 WHAT, 3장은 HOW다.</p>
+  <p>3-4의 프로젝트 1이 2장의 산출물을 입력으로 쓴다는 점을 미리 알려 두면 학습자가 머릿속에서 두 장을 연결한다.</p>
+</aside>
+
+<!-- ============================================================ -->
+<!-- 03 · 3-1 MODULE DIVIDER                                      -->
+<!-- ============================================================ -->
+<section id="chapter-03-module-01" class="slide layout-divider" data-num="3">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>PART 3-1</span>
+  </div>
+  <div class="body">
+    <div class="part">MODULE · 3-1</div>
+    <h2>3-1. 문서 설계 전략</h2>
+    <div class="lede">md로 잠글 수 있는 칸과 잠그면 안 되는 칸을 먼저 가른다. 문서가 길어서 좋은 게 아니라, 경계가 보여서 좋다.</div>
+  </div>
+  <div class="meta-bottom"><span>SECTION BREAK</span><span><span class="num">03</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="3">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 03 / 86</span></div>
+  <p>3-1은 클립 셋으로 진행. 첫 두 클립은 무엇을 잠그고 무엇을 남길지 가르는 개념. 마지막 클립은 본인 업무에 적용하는 실습.</p>
+</aside>
+
+<!-- ============================================================ -->
+<!-- ===== CLIP 2003-1-1 · 좋은 md는 무엇을 고정할까 (slides 04-09) -->
+<!-- ============================================================ -->
+
+<!-- 04 · 클립 헤더 -->
+<section class="slide layout-statement" data-num="4">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-1-1 · CLIP 1</span>
+  </div>
+  <div class="body">
+    <div class="clip-header"><span class="id">CLIP 2003-1-1</span><span class="label">20분 · 강의</span></div>
+    <h2>좋은 md는 무엇을 고정할까</h2>
+    <div class="lede">AI는 같은 프롬프트에도 매번 다르게 답한다. 그 비결정성에서 <em>매번 같이 가야 할 칸</em>부터 잠근다.</div>
+  </div>
+  <div class="meta-bottom"><span>3-1. 문서 설계 전략</span><span><span class="num">04</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="4">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 04 / 86</span></div>
+  <p>이 클립은 잠글 칸 4가지(역할·목표·금지·형식)를 가르는 데 20분을 쓴다. 학습자가 가져갈 것은 "잠글 칸 4가지의 목록"이다.</p>
+</aside>
+
+<!-- 05 · 문제: 비결정성 -->
+<section class="slide layout-statement" data-num="5">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-1-1 · WHY</span>
+  </div>
+  <div class="body">
+    <h2>문제 — 같은 프롬프트, 매번 다른 답</h2>
+    <div class="lede">"이번엔 잘 됐는데 다음엔 망가졌다." AI가 본래 비결정적이라 같은 입력에도 같은 출력이 보장되지 않는데, md의 첫 일은 바로 그 비결정성을 줄이는 작업이다.</div>
+  </div>
+  <div class="meta-bottom"><span>3-1. 문서 설계 전략</span><span><span class="num">05</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="5">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 05 / 86</span></div>
+  <p>"비결정적(non-deterministic)"은 어려운 단어가 아니다. 같은 질문에 매번 다른 답이 나온다는 뜻이다. 이걸 줄이는 도구가 md다.</p>
+  <p>2장에서는 빈칸을 Wonder로 채웠다면, 3장은 Wonder로 답을 받은 뒤 그 답이 매번 같은 형식으로 나오게 만드는 단계다.</p>
+</aside>
+
+<!-- 06 · 핵심 개념: 잠글 칸 4가지 -->
+<section class="slide layout-grid cols-4" data-num="6">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-1-1 · CONCEPT</span>
+  </div>
+  <div class="body">
+    <h2>매번 같이 가야 할 네 칸</h2>
+    <div class="cards">
+      <div class="card"><div class="num">칸 1</div><h3>역할</h3><p>AI가 누구처럼 행동하나. 직무, 관점, 독자가 한 줄에 들어간다.</p></div>
+      <div class="card"><div class="num">칸 2</div><h3>목표</h3><p>이 작업이 끝났을 때 어떤 산출물이 나와야 하나. 한 문장으로 적는다.</p></div>
+      <div class="card"><div class="num">칸 3</div><h3>금지사항</h3><p>AI가 추측해서는 안 되는 것, 임의로 해서는 안 되는 것.</p></div>
+      <div class="card"><div class="num">칸 4</div><h3>출력 형식</h3><p>제목, 섹션, 길이, 표 형태 — 모양을 미리 정해 두면 매번 같이 나온다.</p></div>
+    </div>
+  </div>
+  <div class="meta-bottom"><span>3-1. 문서 설계 전략</span><span><span class="num">06</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="6">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 06 / 86</span></div>
+  <p>네 칸은 "매번 같이 가도 문제 없는 자리"라는 공통점이 있다. 그래서 잠가도 안전하다.</p>
+  <p>네 칸이 흐릿하면 AI가 자기 마음대로 채운다. 한 번은 운 좋게 맞고, 두 번째부터 어긋난다.</p>
+</aside>
+
+<!-- 07 · 도식: 잠글 칸 4가지 -->
+<section class="slide" data-num="7">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-1-1 · FIGURE</span>
+  </div>
+  <div class="body">
+    <h2 style="font-size:calc(40px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(20px * var(--deck-scale));">잠글 칸 — 한눈에 보는 도식</h2>
+    <div class="figure-wrap" aria-label="잠글 칸 4가지 도식">
+      <svg viewBox="0 0 1080 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="lock-figure-title">
+        <title id="lock-figure-title">잠글 칸 4가지</title>
+        <g font-family="Pretendard Variable, Pretendard, sans-serif">
+          <rect x="40" y="60" width="240" height="200" fill="#fff" stroke="#1a1a1a" stroke-width="1.6"/>
+          <text x="160" y="100" text-anchor="middle" font-size="13" letter-spacing="2.2" fill="#9b6b3f">CHAMBER 1</text>
+          <text x="160" y="135" text-anchor="middle" font-size="22" font-weight="700">역할</text>
+          <text x="160" y="170" text-anchor="middle" font-size="13" fill="#5b5b5b">누구처럼,</text>
+          <text x="160" y="190" text-anchor="middle" font-size="13" fill="#5b5b5b">누구를 위해,</text>
+          <text x="160" y="210" text-anchor="middle" font-size="13" fill="#5b5b5b">무엇을 만든다</text>
+
+          <rect x="300" y="60" width="240" height="200" fill="#fff" stroke="#1a1a1a" stroke-width="1.6"/>
+          <text x="420" y="100" text-anchor="middle" font-size="13" letter-spacing="2.2" fill="#9b6b3f">CHAMBER 2</text>
+          <text x="420" y="135" text-anchor="middle" font-size="22" font-weight="700">목표</text>
+          <text x="420" y="170" text-anchor="middle" font-size="13" fill="#5b5b5b">완료 시점에</text>
+          <text x="420" y="190" text-anchor="middle" font-size="13" fill="#5b5b5b">남아 있어야 할</text>
+          <text x="420" y="210" text-anchor="middle" font-size="13" fill="#5b5b5b">한 문장 산출물</text>
+
+          <rect x="560" y="60" width="240" height="200" fill="#fff" stroke="#1a1a1a" stroke-width="1.6"/>
+          <text x="680" y="100" text-anchor="middle" font-size="13" letter-spacing="2.2" fill="#9b6b3f">CHAMBER 3</text>
+          <text x="680" y="135" text-anchor="middle" font-size="22" font-weight="700">금지사항</text>
+          <text x="680" y="170" text-anchor="middle" font-size="13" fill="#5b5b5b">추측 금지,</text>
+          <text x="680" y="190" text-anchor="middle" font-size="13" fill="#5b5b5b">임의 결정 금지,</text>
+          <text x="680" y="210" text-anchor="middle" font-size="13" fill="#5b5b5b">권한 밖 행동 금지</text>
+
+          <rect x="820" y="60" width="220" height="200" fill="#fff" stroke="#1a1a1a" stroke-width="1.6"/>
+          <text x="930" y="100" text-anchor="middle" font-size="13" letter-spacing="2.2" fill="#9b6b3f">CHAMBER 4</text>
+          <text x="930" y="135" text-anchor="middle" font-size="22" font-weight="700">출력 형식</text>
+          <text x="930" y="170" text-anchor="middle" font-size="13" fill="#5b5b5b">섹션 이름,</text>
+          <text x="930" y="190" text-anchor="middle" font-size="13" fill="#5b5b5b">길이, 표/리스트,</text>
+          <text x="930" y="210" text-anchor="middle" font-size="13" fill="#5b5b5b">한 장 vs 여러 장</text>
+
+          <text x="540" y="295" text-anchor="middle" font-size="13" font-weight="600" fill="#9b6b3f" letter-spacing="2.4">DETERMINISTIC — 매번 같이 가야 안전한 칸들</text>
+        </g>
+      </svg>
+    </div>
+    <p class="figure-caption">네 칸이 한 줄씩 적혀 있으면, 같은 입력에 같은 모양의 출력이 나온다.</p>
+  </div>
+  <div class="meta-bottom"><span>3-1. 문서 설계 전략</span><span><span class="num">07</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="7">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 07 / 86</span></div>
+  <p>도식을 손가락으로 짚으며 한 칸씩 따라간다. 각 칸의 자세한 설명은 곧이어 나온다.</p>
+</aside>
+
+<!-- 08 · 적용 데모: 회의록 변환의 잠글 칸 -->
+<section class="slide layout-table" data-num="8">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-1-1 · DEMO</span>
+  </div>
+  <div class="body">
+    <h2 style="font-size:calc(40px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(22px * var(--deck-scale));">데모 — 회의록 → 1page 기획안의 잠글 칸들</h2>
+    <table>
+      <thead><tr><th>칸</th><th>회의록 변환에서의 한 줄</th></tr></thead>
+      <tbody>
+        <tr><td class="k">역할</td><td>너는 PM 보조다. 결정자(임원 2명)에게 보낼 1page 기획안을 만든다.</td></tr>
+        <tr><td class="k">목표</td><td>회의에서 결정된 항목과 미해결 이슈를 임원이 한눈에 볼 수 있게 정리한다.</td></tr>
+        <tr><td class="k">금지사항</td><td>회의에서 결정되지 않은 우선순위를 임의로 정하지 않는다. 결론 없는 안건은 "미해결"로 둔다.</td></tr>
+        <tr><td class="k">출력 형식</td><td>5섹션: 제목 / 배경 / 결정사항 / 액션아이템 / 미해결. A4 한 장 분량.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="meta-bottom"><span>3-1. 문서 설계 전략</span><span><span class="num">08</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="8">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 08 / 86</span></div>
+  <p>이 표가 3장 전체에서 반복적으로 등장하는 예시다. 같은 회의록 변환 문제로 모든 모듈이 한 줄을 따라간다.</p>
+</aside>
+
+<!-- 09 · 정리/전환 -->
+<section class="slide layout-statement" data-num="9">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-1-1 · CLOSE</span>
+  </div>
+  <div class="body">
+    <h2>잠그면 매번 같이 적용된다</h2>
+    <div class="lede">네 칸이 잠겨 있으면 같은 입력에 같은 형식이 나온다. 그러면 다음 질문이 따라온다 — <em>잠그면 안 되는 칸은 무엇인가?</em></div>
+  </div>
+  <div class="meta-bottom"><span>3-1. 문서 설계 전략</span><span><span class="num">09</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="9">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 09 / 86</span></div>
+  <p>"잠그면 좋다"는 명제 뒤에 "그럼 다 잠그면?"이라는 의문이 자연스럽게 따라온다.</p>
+</aside>
+
+<!-- ============================================================ -->
+<!-- ===== CLIP 2003-1-2 · 좋은 md는 무엇을 남겨둘까 (10-15)        -->
+<!-- ============================================================ -->
+
+<!-- 10 · 클립 헤더 -->
+<section class="slide layout-statement" data-num="10">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-1-2 · CLIP 2</span>
+  </div>
+  <div class="body">
+    <div class="clip-header"><span class="id">CLIP 2003-1-2</span><span class="label">20분 · 강의</span></div>
+    <h2>좋은 md는 무엇을 남겨둘까</h2>
+    <div class="lede">다 잠그면 상황을 못 읽는다. <em>매번 사람이 다시 봐야 할 칸</em>은 잠그지 않고 남긴다.</div>
+  </div>
+  <div class="meta-bottom"><span>3-1. 문서 설계 전략</span><span><span class="num">10</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="10">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 10 / 86</span></div>
+  <p>잠금의 반대편 — 남김. 두 칸이 짝을 이뤄야 md가 deterministic하면서도 상황에 맞는다.</p>
+</aside>
+
+<!-- 11 · 문제: over-locking -->
+<section class="slide layout-statement" data-num="11">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-1-2 · WHY</span>
+  </div>
+  <div class="body">
+    <h2>다 잠그면 형식은 맞고 내용은 어긋난다</h2>
+    <div class="lede">"이번 회의에서 가장 중요한 안건은 무엇인가"를 미리 정해 두면, 다른 회의에서는 어색해진다. 잠그면 안전하지만, <em>잠그면 안 되는 자리까지 잠그면 산출물이 상황을 못 읽는다.</em></div>
+  </div>
+  <div class="meta-bottom"><span>3-1. 문서 설계 전략</span><span><span class="num">11</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="11">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 11 / 86</span></div>
+  <p>over-locking 개념. 잠금이 좋다고 다 잠그면 → 형식은 맞고 내용은 안 맞는 산출물이 나온다.</p>
+  <p>예시 한 줄로 충분: 같은 템플릿으로 100번 회의록을 돌렸을 때, 1번도 임원이 읽고 결정으로 넘어가지 못하면 그 템플릿은 over-locked다.</p>
+</aside>
+
+<!-- 12 · 핵심 개념: 사람의 판단 영역 -->
+<section class="slide layout-grid cols-3" data-num="12">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-1-2 · CONCEPT</span>
+  </div>
+  <div class="body">
+    <h2>매번 사람이 다시 봐야 할 세 영역</h2>
+    <div class="cards">
+      <div class="card"><div class="num">자리 1</div><h3>가치 판단</h3><p>이번 입력에서 무엇이 가장 중요한가. 우선순위는 매번 다르다.</p></div>
+      <div class="card"><div class="num">자리 2</div><h3>상황 판단</h3><p>이 산출물의 독자가 지금 어떤 맥락에 있나. 톤과 강조점이 매번 달라진다.</p></div>
+      <div class="card"><div class="num">자리 3</div><h3>맥락 판단</h3><p>이 결정이 기존 방향과 어긋나는가. 흐름 속에서만 보이는 판단이다.</p></div>
+    </div>
+  </div>
+  <div class="meta-bottom"><span>3-1. 문서 설계 전략</span><span><span class="num">12</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="12">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 12 / 86</span></div>
+  <p>세 자리는 "매번 사람이 입력을 보고 다시 정해야 한다"는 공통점이 있다. 그래서 md에 박지 않고 빈칸으로 둔다.</p>
+</aside>
+
+<!-- 13 · 도식: 고정 / 남김 / 질문 — 3칸 프레임 -->
+<section class="slide" data-num="13">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-1-2 · FIGURE</span>
+  </div>
+  <div class="body">
+    <h2 style="font-size:calc(40px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(20px * var(--deck-scale));">3칸 프레임 — 고정 · 남김 · 질문</h2>
+    <div class="figure-wrap" aria-label="고정 남김 질문 3칸 프레임">
+      <svg viewBox="0 0 1080 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="three-frame-title">
+        <title id="three-frame-title">3칸 프레임</title>
+        <g font-family="Pretendard Variable, Pretendard, sans-serif">
+          <!-- 고정 -->
+          <rect x="40" y="60" width="320" height="240" fill="#fff" stroke="#1a1a1a" stroke-width="1.6"/>
+          <text x="200" y="100" text-anchor="middle" font-size="14" letter-spacing="2.6" fill="#9b6b3f">FROZEN</text>
+          <text x="200" y="140" text-anchor="middle" font-size="32" font-weight="700">고정</text>
+          <text x="200" y="180" text-anchor="middle" font-size="14" fill="#1a1a1a" font-weight="600">매번 같이 간다</text>
+          <text x="200" y="210" text-anchor="middle" font-size="13" fill="#5b5b5b">역할 · 목표 · 금지 · 형식</text>
+          <text x="200" y="240" text-anchor="middle" font-size="12" fill="#5b5b5b" font-style="italic">AI는 그대로 따른다</text>
+          <text x="200" y="275" text-anchor="middle" font-size="11" letter-spacing="1.4" fill="#9b6b3f">DETERMINISTIC</text>
+
+          <!-- 남김 -->
+          <rect x="380" y="60" width="320" height="240" fill="#fff" stroke="#1a1a1a" stroke-width="1.6"/>
+          <text x="540" y="100" text-anchor="middle" font-size="14" letter-spacing="2.6" fill="#9b6b3f">OPEN</text>
+          <text x="540" y="140" text-anchor="middle" font-size="32" font-weight="700">남김</text>
+          <text x="540" y="180" text-anchor="middle" font-size="14" fill="#1a1a1a" font-weight="600">사람이 매번 다시 본다</text>
+          <text x="540" y="210" text-anchor="middle" font-size="13" fill="#5b5b5b">가치 · 상황 · 맥락 판단</text>
+          <text x="540" y="240" text-anchor="middle" font-size="12" fill="#5b5b5b" font-style="italic">AI에 박지 않는다</text>
+          <text x="540" y="275" text-anchor="middle" font-size="11" letter-spacing="1.4" fill="#9b6b3f">JUDGMENT</text>
+
+          <!-- 질문 -->
+          <rect x="720" y="60" width="320" height="240" fill="#fff" stroke="#1a1a1a" stroke-width="1.6"/>
+          <text x="880" y="100" text-anchor="middle" font-size="14" letter-spacing="2.6" fill="#9b6b3f">ASK</text>
+          <text x="880" y="140" text-anchor="middle" font-size="32" font-weight="700">질문</text>
+          <text x="880" y="180" text-anchor="middle" font-size="14" fill="#1a1a1a" font-weight="600">모르는 값은 묻는다</text>
+          <text x="880" y="210" text-anchor="middle" font-size="13" fill="#5b5b5b">구체값 · 입력 시 빈칸</text>
+          <text x="880" y="240" text-anchor="middle" font-size="12" fill="#5b5b5b" font-style="italic">사람이 채워서 넘긴다</text>
+          <text x="880" y="275" text-anchor="middle" font-size="11" letter-spacing="1.4" fill="#9b6b3f">RUNTIME</text>
+
+          <text x="540" y="335" text-anchor="middle" font-size="13" font-weight="600" fill="#1a1a1a" letter-spacing="2.0">잘못된 칸에 들어가면 산출물이 매번 어긋난다</text>
+        </g>
+      </svg>
+    </div>
+    <p class="figure-caption">고정은 매번 같이, 남김은 사람이 매번 본다, 질문은 입력 시점에 답을 채운다.</p>
+  </div>
+  <div class="meta-bottom"><span>3-1. 문서 설계 전략</span><span><span class="num">13</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="13">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 13 / 86</span></div>
+  <p>이 도식이 3-1 전체의 척추다. 곧이어 본인 업무를 이 3칸으로 분류하는 실습이 이어진다.</p>
+  <p>"질문" 칸은 흔히 빠뜨리는 칸이다. 답을 모를 때 임시로 채우면 결국 추측이고, 빈칸으로 두면 입력 시점에 사람이 정확히 채울 수 있다.</p>
+</aside>
+
+<!-- 14 · 적용 데모: 회의록 한 조각을 3칸으로 -->
+<section class="slide layout-table" data-num="14">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-1-2 · DEMO</span>
+  </div>
+  <div class="body">
+    <h2 style="font-size:calc(40px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(22px * var(--deck-scale));">데모 — 회의록 변환의 항목을 3칸으로 분류한다</h2>
+    <table>
+      <thead><tr><th>회의록 변환의 항목</th><th>3칸 분류</th><th>이유</th></tr></thead>
+      <tbody>
+        <tr><td>출력 5섹션 (제목·배경·결정·액션·미해결)</td><td class="k">고정</td><td>매번 같은 모양이어야 임원이 같은 자리에서 본다</td></tr>
+        <tr><td>"PM 보조" 역할 정의</td><td class="k">고정</td><td>이 하네스의 정체성. 바뀌면 톤이 무너진다</td></tr>
+        <tr><td>이번 회의에서 강조할 핵심 3가지</td><td class="k">남김</td><td>매번 회의 내용에 따라 다르다. 사람이 본다</td></tr>
+        <tr><td>임원의 우선 관심사 (이번 분기 한정)</td><td class="k">남김</td><td>분기마다 변한다. 박으면 다음 분기에 어색</td></tr>
+        <tr><td>회의 일자 / 참석자</td><td class="k">질문</td><td>입력 시점에 사람이 채운다. 추측 금지</td></tr>
+        <tr><td>예산 수치 / 의사결정 기한</td><td class="k">질문</td><td>구체값은 입력 시 채운다. 모르면 빈칸</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="meta-bottom"><span>3-1. 문서 설계 전략</span><span><span class="num">14</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="14">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 14 / 86</span></div>
+  <p>이 표가 다음 실습의 모델 답안이다. 본인 업무도 이런 표 한 장으로 정리하면 설계 체크리스트 초안이 된다.</p>
+</aside>
+
+<!-- 15 · 정리/전환 -->
+<section class="slide layout-statement" data-num="15">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-1-2 · CLOSE</span>
+  </div>
+  <div class="body">
+    <h2>정리 — 3칸이 가르면 잠금의 한계가 보인다</h2>
+    <div class="lede">고정/남김/질문 — 세 자리가 분리되면, 무엇을 md로 잡고 무엇을 사람이 채울지가 명확해진다. 이 분류가 다음 실습의 입력이다.</div>
+  </div>
+  <div class="meta-bottom"><span>3-1. 문서 설계 전략</span><span><span class="num">15</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="15">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 15 / 86</span></div>
+  <p>다음은 본인 업무로 적용하는 실습. 20분 단독으로 진행.</p>
+</aside>
+
+<!-- ============================================================ -->
+<!-- ===== CLIP 2003-1-3 · 실습 설계 체크리스트 (16-22)             -->
+<!-- ============================================================ -->
+
+<!-- 16 · 실습 클립 헤더 -->
+<section class="slide layout-statement" data-num="16">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-1-3 · CLIP 3</span>
+  </div>
+  <div class="body">
+    <div class="clip-header"><span class="id">CLIP 2003-1-3</span><span class="label">20분 · 실습</span></div>
+    <h2>실습 ① — 본인 업무를 3칸으로 옮긴다</h2>
+    <div class="lede">반복적으로 하는 업무 1건을 골라, 고정 / 남김 / 질문으로 분류한 한 장짜리 설계 체크리스트를 만든다.</div>
+  </div>
+  <div class="meta-bottom"><span>3-1. 문서 설계 전략</span><span><span class="num">16</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="16">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 16 / 86</span></div>
+  <p>실습 산출물이 다음 모듈(3-2)의 입력이 된다. 6칸 템플릿의 재료가 여기서 나온다.</p>
+</aside>
+
+<!-- 17 · 실습 안내 (INPUT/PROCESS/OUTPUT) -->
+<section class="slide layout-grid cols-3 compact-practice" data-num="17">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-1-3 · OVERVIEW</span>
+  </div>
+  <div class="body">
+    <h2>실습 한눈에</h2>
+    <div class="cards">
+      <div class="card"><div class="num">INPUT</div><h3>반복 업무 1건</h3><p>본인이 매주 또는 매월 반복하는 업무 한 가지를 고른다.</p></div>
+      <div class="card"><div class="num">PROCESS</div><h3>3칸 분류</h3><p>업무의 구성 항목을 적은 뒤 고정 / 남김 / 질문으로 분류한다.</p></div>
+      <div class="card"><div class="num">OUTPUT</div><h3>설계 체크리스트</h3><p>한 장 분량. 다음 모듈 6칸 템플릿의 재료가 된다.</p></div>
+    </div>
+  </div>
+  <div class="meta-bottom"><span>3-1. 문서 설계 전략</span><span><span class="num">17</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="17">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 17 / 86</span></div>
+  <p>이 페이지는 실습의 큰 그림이다. 단계별 진행은 곧이어 이어진다.</p>
+</aside>
+
+<!-- 18 · 입력 명세 -->
+<section class="slide layout-grid cols-3" data-num="18">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-1-3 · INPUT SPEC</span>
+  </div>
+  <div class="body">
+    <h2>입력 — 어떤 업무가 적합한가</h2>
+    <div class="cards">
+      <div class="card"><div class="num">조건 1</div><h3>반복적</h3><p>매주, 매월, 매분기 — 같은 형식의 산출물이 반복적으로 필요한 업무.</p></div>
+      <div class="card"><div class="num">조건 2</div><h3>형식이 있다</h3><p>완성된 산출물의 모양이 어느 정도 정해져 있다. 백지에서 시작하지 않는다.</p></div>
+      <div class="card"><div class="num">조건 3</div><h3>입력은 매번 다르다</h3><p>회의록, 데이터 파일, 사용자 피드백 — 내용은 매번 새로 들어온다.</p></div>
+    </div>
+    <div class="practice-checklist">
+      <h3>적합 후보 예시</h3>
+      <ul>
+        <li><strong>회의록 정리</strong>주간/월간 회의의 요약본</li>
+        <li><strong>주간 보고</strong>지표 + 코멘트 정형 문서</li>
+        <li><strong>채용 인터뷰 노트</strong>면접 후 평가 정리</li>
+      </ul>
+    </div>
+  </div>
+  <div class="meta-bottom"><span>3-1. 문서 설계 전략</span><span><span class="num">18</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="18">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 18 / 86</span></div>
+  <p>한 번만 하는 일은 md로 만들 가치가 없다. 반복 + 형식 + 가변 입력 — 세 조건이 다 있어야 한다.</p>
+</aside>
+
+<!-- 19 · 작성 절차 5단계 -->
+<section class="slide" data-num="19">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-1-3 · PROCESS</span>
+  </div>
+  <div class="body">
+    <h2 style="font-size:calc(38px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(14px * var(--deck-scale));">작성 절차 — 다섯 단계로 채운다</h2>
+    <div class="flow-row">
+      <div class="step"><div class="lab">STEP 1</div><h3>산출물 형식</h3><p>완성된 모양(섹션 이름·길이·표 형태)을 먼저 적는다.</p></div>
+      <div class="step"><div class="lab">STEP 2</div><h3>매번 같은 규칙</h3><p>역할·목표·금지를 형식 옆에 적는다. 이게 고정 칸이다.</p></div>
+      <div class="step"><div class="lab">STEP 3</div><h3>사람의 판단</h3><p>매번 다시 봐야 할 항목을 분리해 남김 칸으로 옮긴다.</p></div>
+      <div class="step"><div class="lab">STEP 4</div><h3>모르는 값</h3><p>답을 모르는 항목은 질문 칸에 놓고 빈칸으로 둔다.</p></div>
+      <div class="step"><div class="lab">STEP 5</div><h3>한 줄 예시</h3><p>각 칸에 한 줄짜리 예시를 붙인다. 다음 단계의 재료가 된다.</p></div>
+    </div>
+  </div>
+  <div class="meta-bottom"><span>3-1. 문서 설계 전략</span><span><span class="num">19</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="19">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 19 / 86</span></div>
+  <p>다섯 단계 중 가장 어려운 건 STEP 3. "이건 사람이 매번 봐야 한다"를 솔직하게 인정하는 단계다.</p>
+</aside>
+
+<!-- 20 · 작성 데모 (회의록 변환 예시) -->
+<section class="slide" data-num="20">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-1-3 · WORKED EXAMPLE</span>
+  </div>
+  <div class="body">
+    <h2 style="font-size:calc(36px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(16px * var(--deck-scale));">데모 — 회의록 변환의 설계 체크리스트</h2>
+    <pre class="code-block small"># 설계 체크리스트 — 회의록 → 1page 기획안
+
+## 고정 (매번 같이)
+- 역할: PM 보조. 임원 2명에게 보낼 1page 기획안을 만든다
+- 목표: 결정 항목과 미해결 이슈를 임원이 한눈에 본다
+- 금지: 결정되지 않은 우선순위를 임의로 정하지 않는다
+- 형식: 5섹션 — 제목 / 배경 / 결정사항 / 액션아이템 / 미해결
+
+## 남김 (매번 사람이 본다)
+- 강조할 핵심 안건 3가지 — 회의 내용에 따라
+- 임원에게 어울리는 톤 — 분기 컨텍스트에 따라
+- 미해결 이슈 중 무엇을 부각할지 — 다음 회의 예정에 따라
+
+## 질문 (입력 시점에 채운다)
+- 회의 일자, 참석자
+- 예산 수치
+- 의사결정 기한</pre>
+  </div>
+  <div class="meta-bottom"><span>3-1. 문서 설계 전략</span><span><span class="num">20</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="20">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 20 / 86</span></div>
+  <p>이 카드 한 장이 다음 모듈의 입력. 본인 업무 버전도 이 정도 분량이면 충분하다. 데모를 따라 본인 업무 한 건을 옮긴다 — 8~10분이면 한 장이 나온다.</p>
+</aside>
+
+<!-- 21 · 자기 검수 -->
+<section class="slide layout-grid cols-2" data-num="21">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-1-3 · SELF-CHECK</span>
+  </div>
+  <div class="body">
+    <h2>자기 검수 — 끝났는지 보는 다섯 가지</h2>
+    <div class="cards">
+      <div class="card"><div class="num">CHECK 1</div><h3>형식이 한 줄로 적혔나</h3><p>섹션 이름과 길이가 모호하면 다시 본다.</p></div>
+      <div class="card"><div class="num">CHECK 2</div><h3>금지사항이 구체적인가</h3><p>"잘 해라" 같은 말은 금지가 아니다. AI가 안 할 행동이 분명해야 한다.</p></div>
+      <div class="card"><div class="num">CHECK 3</div><h3>남김 칸에 추측이 없나</h3><p>"이번엔 X가 중요할 듯"은 추측이다. 매번 다시 본다는 표시만 둔다.</p></div>
+      <div class="card"><div class="num">CHECK 4</div><h3>질문 칸이 빈칸인가</h3><p>모르는 값을 임의로 채우지 않았는지 다시 본다.</p></div>
+    </div>
+    <div class="practice-checklist">
+      <h3>위반 시</h3>
+      <ul>
+        <li><strong>형식 모호</strong>산출물의 한 칸을 직접 그려 본다</li>
+        <li><strong>금지 추상</strong>"안 할 행동" 한 문장으로 적는다</li>
+        <li><strong>남김 추측</strong>표시만 두고 답은 비운다</li>
+      </ul>
+    </div>
+  </div>
+  <div class="meta-bottom"><span>3-1. 문서 설계 전략</span><span><span class="num">21</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="21">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 21 / 86</span></div>
+  <p>"안 할 행동"이 구체적으로 적히는지가 가장 자주 빠지는 곳이다. "결정되지 않은 우선순위를 추측 금지"처럼 동사 + 목적어로 적힌다.</p>
+</aside>
+
+<!-- 22 · 산출물 기준 / 다음 모듈 입력 -->
+<section class="slide layout-statement" data-num="22">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-1-3 · DELIVERABLE</span>
+  </div>
+  <div class="body">
+    <h2>산출물 기준 — 한 장 설계 체크리스트</h2>
+    <div class="lede"><strong>고정 4~6항 / 남김 2~4항 / 질문 2~4항</strong> — 세 칸이 모두 채워진 한 장 분량.<span class="br"></span>이 카드를 다음 모듈(3-2)의 6칸 md 템플릿 입력으로 그대로 가져간다.</div>
+  </div>
+  <div class="meta-bottom"><span>3-1. 문서 설계 전략</span><span><span class="num">22</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="22">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 22 / 86</span></div>
+  <p>3-2의 6칸 템플릿은 이 체크리스트의 "고정" 칸을 옮겨 적는 작업이다. "남김"과 "질문"은 템플릿 안에 빈칸으로 들어간다.</p>
+</aside>
+
+<!-- ============================================================ -->
+<!-- 23 · 3-2 MODULE DIVIDER                                      -->
+<!-- ============================================================ -->
+<section id="chapter-03-module-02" class="slide layout-divider" data-num="23">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>PART 3-2</span>
+  </div>
+  <div class="body">
+    <div class="part">MODULE · 3-2</div>
+    <h2>3-2. 규칙 템플릿화</h2>
+    <div class="lede">3-1에서 가른 칸을 실제 md 본문으로 옮긴다. 6칸 골격 — 역할 / 목표 / 금지 / 출력 / 예시 / 검수.</div>
+  </div>
+  <div class="meta-bottom"><span>SECTION BREAK</span><span><span class="num">23</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="23">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 23 / 86</span></div>
+  <p>이 모듈의 산출물은 md 템플릿 v1. 한 페이지짜리 마크다운 파일.</p>
+</aside>
+
+<!-- ============================================================ -->
+<!-- ===== CLIP 2003-2-1 · 역할이 잘 보이는 md (24-29)              -->
+<!-- ============================================================ -->
+
+<!-- 24 · 클립 헤더 -->
+<section class="slide layout-statement" data-num="24">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-2-1 · CLIP 1</span>
+  </div>
+  <div class="body">
+    <div class="clip-header"><span class="id">CLIP 2003-2-1</span><span class="label">20분 · 강의</span></div>
+    <h2>역할이 잘 보이는 md</h2>
+    <div class="lede">역할 한 줄이 흐리면 그 아래 모든 칸이 흐려진다. 역할은 <em>책임의 경계</em>다.</div>
+  </div>
+  <div class="meta-bottom"><span>3-2. 규칙 템플릿화</span><span><span class="num">24</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="24">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 24 / 86</span></div>
+  <p>역할 칸이 6칸 골격의 첫 칸인 이유 — 나머지 5칸의 톤·관점·길이를 다 잡아주기 때문이다.</p>
+</aside>
+
+<!-- 25 · 문제 -->
+<section class="slide layout-statement" data-num="25">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-2-1 · WHY</span>
+  </div>
+  <div class="body">
+    <h2>문제 — "회의록 정리해줘"는 역할이 없다</h2>
+    <div class="lede">역할이 없으면 AI는 자기 마음대로 골라 행동한다. 같은 회의록도 PM 톤으로, 기자 톤으로, 요약기 톤으로 매번 다르게 나온다.<span class="br"></span>역할 한 줄이 빠지면 나머지 칸을 잠가도 효과가 약해진다.</div>
+  </div>
+  <div class="meta-bottom"><span>3-2. 규칙 템플릿화</span><span><span class="num">25</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="25">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 25 / 86</span></div>
+  <p>같은 회의록을 세 번 돌렸을 때 톤이 다르게 나오는 경험은 누구나 있다. 그 원인이 보통 역할 누락이다.</p>
+</aside>
+
+<!-- 26 · 핵심: 역할 = 책임의 경계 -->
+<section class="slide layout-grid cols-3" data-num="26">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-2-1 · CONCEPT</span>
+  </div>
+  <div class="body">
+    <h2>역할 한 줄에 들어가야 할 세 가지</h2>
+    <div class="cards">
+      <div class="card"><div class="num">요소 1</div><h3>누구처럼</h3><p>직무·관점. PM 보조, 데이터 분석가, 카피라이터 — 무엇처럼 굴어야 하나.</p></div>
+      <div class="card"><div class="num">요소 2</div><h3>누구를 위해</h3><p>독자. 임원 2명, 사용자, 동료 PM — 산출물의 실제 수신자를 정한다.</p></div>
+      <div class="card"><div class="num">요소 3</div><h3>무엇을 만든다</h3><p>산출 형태. 1page 기획안, 보고서, 한 줄 요약 — 결과물의 모양.</p></div>
+    </div>
+  </div>
+  <div class="meta-bottom"><span>3-2. 규칙 템플릿화</span><span><span class="num">26</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="26">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 26 / 86</span></div>
+  <p>세 요소가 다 있어야 역할 한 줄이 작동한다. 둘만 있으면 매번 다른 결과가 나온다.</p>
+</aside>
+
+<!-- 27 · 도식: 역할 한 줄 골격 -->
+<section class="slide layout-statement" data-num="27">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-2-1 · TEMPLATE</span>
+  </div>
+  <div class="body">
+    <h2>역할 한 줄 — 한 문장 공식</h2>
+    <div class="lede" style="margin-top:calc(20px * var(--deck-scale));font-family:var(--mono);font-size:calc(22px * var(--deck-scale));line-height:1.6;">
+      <strong>너는 [누구처럼]이고, [독자]를 위해 [산출물]을 만든다.</strong>
+      <span class="br"></span>
+      <span style="font-family:var(--pretendard);font-size:calc(18px * var(--deck-scale));color:var(--ink-2);">세 자리가 다 채워지면 한 줄로 톤·관점·산출 형태가 잡힌다.</span>
+    </div>
+  </div>
+  <div class="meta-bottom"><span>3-2. 규칙 템플릿화</span><span><span class="num">27</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="27">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 27 / 86</span></div>
+  <p>이 공식을 본인 업무에 한 번 채워 보면 역할 칸의 빈자리가 어디인지 즉시 보인다.</p>
+</aside>
+
+<!-- 28 · 적용 데모 (변환 전후) -->
+<section class="slide layout-table" data-num="28">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-2-1 · DEMO</span>
+  </div>
+  <div class="body">
+    <h2 style="font-size:calc(40px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(22px * var(--deck-scale));">변환 전후 — 역할 한 줄이 들어가면</h2>
+    <table>
+      <thead><tr><th>업무 요청</th><th>역할 변환 전</th><th>역할 변환 후</th></tr></thead>
+      <tbody>
+        <tr><td>회의록 변환</td><td>"회의록 정리해줘"</td><td>"너는 PM 보조이고, 결정자(임원 2명)를 위해 1page 기획안을 만든다"</td></tr>
+        <tr><td>주간 보고</td><td>"이번 주 보고 써줘"</td><td>"너는 팀장 보조이고, 본부장을 위해 지표 5개의 주간 변동 요약을 만든다"</td></tr>
+        <tr><td>인터뷰 노트</td><td>"인터뷰 정리해줘"</td><td>"너는 채용 매니저 보조이고, 면접관 그룹을 위해 후보자 평가 1page 노트를 만든다"</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="meta-bottom"><span>3-2. 규칙 템플릿화</span><span><span class="num">28</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="28">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 28 / 86</span></div>
+  <p>오른쪽 칸이 다 채워지면 그 아래 금지·형식 칸을 적기가 훨씬 쉬워진다.</p>
+</aside>
+
+<!-- 29 · 정리/전환 -->
+<section class="slide layout-statement" data-num="29">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-2-1 · CLOSE</span>
+  </div>
+  <div class="body">
+    <h2>역할이 잠기면 톤도 잠긴다</h2>
+    <div class="lede">역할 한 줄이 잠기면 그 아래 칸들(금지·형식)도 같이 잠긴다.</div>
+  </div>
+  <div class="meta-bottom"><span>3-2. 규칙 템플릿화</span><span><span class="num">29</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="29">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 29 / 86</span></div>
+  <p>역할 → 금지 → 형식 → 예시 → 검수 — 6칸 골격이 곧이어 차례로 펼쳐진다.</p>
+</aside>
+
+<!-- ============================================================ -->
+<!-- ===== CLIP 2003-2-2 · 금지·출력형식·예시 (30-35)               -->
+<!-- ============================================================ -->
+
+<!-- 30 · 클립 헤더 -->
+<section class="slide layout-statement" data-num="30">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-2-2 · CLIP 2</span>
+  </div>
+  <div class="body">
+    <div class="clip-header"><span class="id">CLIP 2003-2-2</span><span class="label">20분 · 강의</span></div>
+    <h2>금지·출력형식·예시 — 나머지 잠글 칸</h2>
+    <div class="lede">금지는 사고를 막고, 형식은 모양을 잡고, 예시는 그 둘을 한 번에 보여준다. 6칸 골격이 여기서 완성된다.</div>
+  </div>
+  <div class="meta-bottom"><span>3-2. 규칙 템플릿화</span><span><span class="num">30</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="30">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 30 / 86</span></div>
+  <p>이 클립이 끝나면 6칸 md 템플릿의 모든 칸이 정의된다. 다음 실습 클립에서 본인 버전을 만든다.</p>
+</aside>
+
+<!-- 31 · 문제 -->
+<section class="slide layout-statement" data-num="31">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-2-2 · WHY</span>
+  </div>
+  <div class="body">
+    <h2>형식과 예시가 없으면 길이부터 매번 달라진다</h2>
+    <div class="lede">역할만 적혀 있고 형식이 없으면, 같은 회의록도 어느 날은 한 페이지, 어느 날은 다섯 페이지로 나온다. 예시가 없으면 AI가 분량과 헤딩을 매번 다르게 정한다.</div>
+  </div>
+  <div class="meta-bottom"><span>3-2. 규칙 템플릿화</span><span><span class="num">31</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="31">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 31 / 86</span></div>
+  <p>형식이 매번 다르면 검수 기준도 일정하지 않게 된다. 매번 다른 모양이 나오면 읽는 사람도 매번 다른 기준으로 본다.</p>
+</aside>
+
+<!-- 32 · 핵심: 세 칸의 역할 -->
+<section class="slide layout-grid cols-3" data-num="32">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-2-2 · CONCEPT</span>
+  </div>
+  <div class="body">
+    <h2>세 칸의 역할 — 무엇을 잡나</h2>
+    <div class="cards">
+      <div class="card"><div class="num">금지</div><h3>사고 예방</h3><p>AI가 위험하게 행동하지 않도록 막는다. 추측 금지, 임의 결정 금지, 권한 밖 행동 금지.</p></div>
+      <div class="card"><div class="num">출력 형식</div><h3>빠른 정렬</h3><p>섹션 이름·길이·표 모양을 정한다. 매번 같은 자리에 같은 정보가 들어간다.</p></div>
+      <div class="card"><div class="num">예시</div><h3>한 줄 견본</h3><p>각 섹션에 한 줄짜리 예시를 붙인다. 형식 + 톤이 한 번에 잡힌다.</p></div>
+    </div>
+  </div>
+  <div class="meta-bottom"><span>3-2. 규칙 템플릿화</span><span><span class="num">32</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="32">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 32 / 86</span></div>
+  <p>예시가 가장 효과 좋다. 한 줄짜리 견본이 형식 정의 다섯 줄보다 더 정확하게 모양을 정해 준다.</p>
+</aside>
+
+<!-- 33 · 도식: md 6칸 골격 -->
+<section class="slide" data-num="33">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-2-2 · FIGURE</span>
+  </div>
+  <div class="body">
+    <h2 style="font-size:calc(38px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(16px * var(--deck-scale));">md 6칸 골격 — 책임을 나누는 칸들</h2>
+    <div class="figure-wrap" aria-label="md 6칸 골격 도식">
+      <svg viewBox="0 0 1080 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="six-frame-title">
+        <title id="six-frame-title">md 6칸 골격</title>
+        <g font-family="Pretendard Variable, Pretendard, sans-serif">
+          <!-- 6 칸 배열 (3x2) -->
+          <g>
+            <rect x="40" y="50" width="320" height="135" fill="#fff" stroke="#1a1a1a" stroke-width="1.5"/>
+            <text x="60" y="80" font-size="11" letter-spacing="2" fill="#9b6b3f">1 · ROLE</text>
+            <text x="60" y="115" font-size="22" font-weight="700">역할</text>
+            <text x="60" y="145" font-size="13" fill="#5b5b5b">누구처럼 · 누구를 위해 · 무엇을</text>
+
+            <rect x="380" y="50" width="320" height="135" fill="#fff" stroke="#1a1a1a" stroke-width="1.5"/>
+            <text x="400" y="80" font-size="11" letter-spacing="2" fill="#9b6b3f">2 · GOAL</text>
+            <text x="400" y="115" font-size="22" font-weight="700">목표</text>
+            <text x="400" y="145" font-size="13" fill="#5b5b5b">완료 시점에 남을 한 문장 산출</text>
+
+            <rect x="720" y="50" width="320" height="135" fill="#fff" stroke="#1a1a1a" stroke-width="1.5"/>
+            <text x="740" y="80" font-size="11" letter-spacing="2" fill="#9b6b3f">3 · FORBID</text>
+            <text x="740" y="115" font-size="22" font-weight="700">금지</text>
+            <text x="740" y="145" font-size="13" fill="#5b5b5b">추측 금지 · 임의 결정 금지</text>
+
+            <rect x="40" y="200" width="320" height="135" fill="#fff" stroke="#1a1a1a" stroke-width="1.5"/>
+            <text x="60" y="230" font-size="11" letter-spacing="2" fill="#9b6b3f">4 · OUTPUT</text>
+            <text x="60" y="265" font-size="22" font-weight="700">출력 형식</text>
+            <text x="60" y="295" font-size="13" fill="#5b5b5b">섹션 · 길이 · 표 모양</text>
+
+            <rect x="380" y="200" width="320" height="135" fill="#fff" stroke="#1a1a1a" stroke-width="1.5"/>
+            <text x="400" y="230" font-size="11" letter-spacing="2" fill="#9b6b3f">5 · EXAMPLE</text>
+            <text x="400" y="265" font-size="22" font-weight="700">예시</text>
+            <text x="400" y="295" font-size="13" fill="#5b5b5b">한 줄 견본 — 형식과 톤을 동시에</text>
+
+            <rect x="720" y="200" width="320" height="135" fill="#fff" stroke="#1a1a1a" stroke-width="1.5"/>
+            <text x="740" y="230" font-size="11" letter-spacing="2" fill="#9b6b3f">6 · CHECK</text>
+            <text x="740" y="265" font-size="22" font-weight="700">검수</text>
+            <text x="740" y="295" font-size="13" fill="#5b5b5b">출력 후 사람이 확인할 항목</text>
+          </g>
+        </g>
+      </svg>
+    </div>
+    <p class="figure-caption">여섯 칸이 다 잠기면 매번 같은 입력에 같은 형식의 산출물이 나온다.</p>
+  </div>
+  <div class="meta-bottom"><span>3-2. 규칙 템플릿화</span><span><span class="num">33</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="33">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 33 / 86</span></div>
+  <p>6번 검수 칸은 산출물 그 자체가 아니라 "받은 사람이 확인할 항목"이다. AI가 자기 출력을 자가검수하는 칸이 아니다.</p>
+</aside>
+
+<!-- 34 · 적용 데모: 6칸 채워진 회의록 변환 템플릿 -->
+<section class="slide" data-num="34">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-2-2 · DEMO</span>
+  </div>
+  <div class="body">
+    <h2 style="font-size:calc(36px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(16px * var(--deck-scale));">데모 — 회의록 변환의 6칸 채움</h2>
+    <pre class="code-block small"># 회의록 → 1page 기획안 — md 템플릿 v1
+
+## 1. 역할
+너는 PM 보조다. 결정자(임원 2명)를 위해 1page 기획안을 만든다.
+
+## 2. 목표
+회의에서 결정된 항목과 미해결 이슈를 임원이 한눈에 보고 다음 결정으로 넘어가게 한다.
+
+## 3. 금지사항
+- 회의에서 결정되지 않은 우선순위를 임의로 정하지 않는다
+- 결론 없는 안건은 "미해결"로 두고 추측하지 않는다
+- 참석자가 한 발언을 다른 사람에게 옮겨 적지 않는다
+
+## 4. 출력 형식
+A4 한 장. 5섹션:
+- 제목 (회의명 + 일자)
+- 배경 (3줄 이내)
+- 결정사항 (불릿 리스트)
+- 액션아이템 (담당자 + 기한)
+- 미해결 (질문 형태로)
+
+## 5. 예시
+- 결정사항: "다음 분기 마케팅 예산 5천만 원 증액. 사유: 신규 시장 진입."
+- 액션아이템: "@김PM — 4월 15일까지 신규 채널 후보 3곳 리스트업."
+
+## 6. 검수
+받은 사람이 추가 질문 없이 다음 결정으로 넘어갈 수 있는가.</pre>
+  </div>
+  <div class="meta-bottom"><span>3-2. 규칙 템플릿화</span><span><span class="num">34</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="34">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 34 / 86</span></div>
+  <p>이 템플릿을 그대로 복사해 쓸 수 있다. 본인 업무 버전은 다음 실습에서 만든다.</p>
+</aside>
+
+<!-- 35 · 정리/전환 -->
+<section class="slide layout-statement" data-num="35">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-2-2 · CLOSE</span>
+  </div>
+  <div class="body">
+    <h2>6칸이 채워지면 매번 같은 모양으로 나온다</h2>
+    <div class="lede">역할 + 목표 + 금지 + 형식 + 예시 + 검수. 여섯 칸이 채워진 md는 같은 입력에 같은 모양의 출력을 낸다. 다음은 본인 버전을 만드는 실습이다.</div>
+  </div>
+  <div class="meta-bottom"><span>3-2. 규칙 템플릿화</span><span><span class="num">35</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="35">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 35 / 86</span></div>
+  <p>다음 실습은 3-1 체크리스트 + 본 클립의 6칸 골격을 합쳐 본인 md 템플릿 v1을 만든다.</p>
+</aside>
+
+<!-- ============================================================ -->
+<!-- ===== CLIP 2003-2-3 · 실습 md 템플릿 v1 (36-42)                -->
+<!-- ============================================================ -->
+
+<!-- 36 · 실습 클립 헤더 -->
+<section class="slide layout-statement" data-num="36">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-2-3 · CLIP 3</span>
+  </div>
+  <div class="body">
+    <div class="clip-header"><span class="id">CLIP 2003-2-3</span><span class="label">20분 · 실습</span></div>
+    <h2>실습 ② — md 템플릿 v1 완성</h2>
+    <div class="lede">3-1의 설계 체크리스트를 6칸 골격에 옮긴다. 한 페이지짜리 마크다운 파일을 만든다.</div>
+  </div>
+  <div class="meta-bottom"><span>3-2. 규칙 템플릿화</span><span><span class="num">36</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="36">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 36 / 86</span></div>
+  <p>이 실습이 3장에서 가장 손이 많이 가는 단계다. 그래서 20분을 단독으로 쓴다.</p>
+</aside>
+
+<!-- 37 · 실습 안내 (INPUT/PROCESS/OUTPUT) -->
+<section class="slide layout-grid cols-3 compact-practice" data-num="37">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-2-3 · OVERVIEW</span>
+  </div>
+  <div class="body">
+    <h2>실습 한눈에</h2>
+    <div class="cards">
+      <div class="card"><div class="num">INPUT</div><h3>3-1 체크리스트</h3><p>고정 / 남김 / 질문이 분류된 한 장 카드.</p></div>
+      <div class="card"><div class="num">PROCESS</div><h3>6칸 골격 채우기</h3><p>역할 → 목표 → 금지 → 형식 → 예시 → 검수 순으로 한 칸씩.</p></div>
+      <div class="card"><div class="num">OUTPUT</div><h3>md 템플릿 v1</h3><p>한 페이지 마크다운. 다음 모듈 한계 진단의 대상이 된다.</p></div>
+    </div>
+  </div>
+  <div class="meta-bottom"><span>3-2. 규칙 템플릿화</span><span><span class="num">37</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="37">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 37 / 86</span></div>
+  <p>3-1과 3-2가 1:1로 이어진다는 점을 다시 짚어준다. 새 정보를 만드는 실습이 아니라 옮기는 실습이다.</p>
+</aside>
+
+<!-- 38 · 입력 명세 -->
+<section class="slide layout-table" data-num="38">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-2-3 · INPUT MAP</span>
+  </div>
+  <div class="body">
+    <h2 style="font-size:calc(40px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(22px * var(--deck-scale));">입력 — 3-1 체크리스트가 6칸의 어디로 가는가</h2>
+    <table>
+      <thead><tr><th>3-1 체크리스트</th><th>3-2 6칸 골격</th></tr></thead>
+      <tbody>
+        <tr><td class="k">고정 · 역할</td><td>1. 역할 (그대로 옮김)</td></tr>
+        <tr><td class="k">고정 · 목표</td><td>2. 목표 (그대로 옮김)</td></tr>
+        <tr><td class="k">고정 · 금지</td><td>3. 금지사항 (그대로 옮김)</td></tr>
+        <tr><td class="k">고정 · 형식</td><td>4. 출력 형식 (그대로 옮김)</td></tr>
+        <tr><td class="k">남김 항목</td><td>4. 출력 형식 안의 빈칸 표시 또는 별도 메모</td></tr>
+        <tr><td class="k">질문 항목</td><td>4. 출력 형식 안의 입력 시 받을 칸으로 표기</td></tr>
+        <tr><td>(새로 추가)</td><td>5. 예시 — 데모 한 줄</td></tr>
+        <tr><td>(새로 추가)</td><td>6. 검수 — 받는 사람이 볼 한 가지 기준</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="meta-bottom"><span>3-2. 규칙 템플릿화</span><span><span class="num">38</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="38">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 38 / 86</span></div>
+  <p>예시(5)와 검수(6)가 새로 추가되는 두 칸이다. 나머지 네 칸은 옮기는 작업.</p>
+</aside>
+
+<!-- 39 · 작성 절차 -->
+<section class="slide" data-num="39">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-2-3 · PROCESS</span>
+  </div>
+  <div class="body">
+    <h2 style="font-size:calc(38px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(14px * var(--deck-scale));">작성 절차 — 한 칸씩 채운다</h2>
+    <div class="flow-row">
+      <div class="step"><div class="lab">STEP 1</div><h3>1·2·3·4번 옮기기</h3><p>3-1 체크리스트의 고정 칸을 그대로 6칸 골격으로 옮긴다.</p></div>
+      <div class="step"><div class="lab">STEP 2</div><h3>5번 예시 한 줄</h3><p>각 출력 섹션마다 한 줄짜리 견본을 적는다. 형식과 톤을 같이 정한다.</p></div>
+      <div class="step"><div class="lab">STEP 3</div><h3>6번 검수 기준</h3><p>받는 사람이 산출물을 보고 다음 행동으로 넘어갈 한 가지 기준을 적는다.</p></div>
+      <div class="step"><div class="lab">STEP 4</div><h3>1회 시운전</h3><p>실제 입력 한 건을 넣어 본다. 모양이 의도대로 나오는지 본다.</p></div>
+    </div>
+  </div>
+  <div class="meta-bottom"><span>3-2. 규칙 템플릿화</span><span><span class="num">39</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="39">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 39 / 86</span></div>
+  <p>STEP 4의 1회 시운전을 빠뜨리면 안 된다. 종이 위 템플릿과 실제 출력은 다르다.</p>
+</aside>
+
+<!-- 40 · 작성 데모 -->
+<section class="slide" data-num="40">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-2-3 · WORKED EXAMPLE</span>
+  </div>
+  <div class="body">
+    <h2 style="font-size:calc(36px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(16px * var(--deck-scale));">데모 — 주간 보고용 md 템플릿 v1</h2>
+    <pre class="code-block small"># 주간 보고 md 템플릿 v1
+
+## 1. 역할
+너는 팀장 보조다. 본부장을 위해 지표 5개의 주간 변동 요약을 만든다.
+
+## 2. 목표
+본부장이 한 페이지로 이번 주 변동 + 원인 + 다음 주 액션을 본다.
+
+## 3. 금지사항
+- 원인 추측 금지: 데이터에 없는 인과는 적지 않는다
+- "잘 됐다/못 됐다" 평가 금지: 수치만 적는다
+
+## 4. 출력 형식
+- 지표 표 (지표명 / 이번 주 / 지난 주 / 변동률)
+- 변동 요약 (각 지표 1줄)
+- 다음 주 액션 (담당자 + 한 줄)
+
+## 5. 예시
+- "MAU 12.3만 (+5.2% w/w) — 신규 캠페인 효과로 추정"
+- "@김팀장 — 캠페인 효과 측정 4/12까지"
+
+## 6. 검수
+본부장이 액션 한 건을 확정할 수 있는가.</pre>
+  </div>
+  <div class="meta-bottom"><span>3-2. 규칙 템플릿화</span><span><span class="num">40</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="40">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 40 / 86</span></div>
+  <p>데모는 회의록 변환과 다른 도메인을 일부러 골랐다. 6칸이 도메인 무관하게 작동한다는 걸 보여준다.</p>
+</aside>
+
+<!-- 41 · 자기 검수 -->
+<section class="slide layout-grid cols-2" data-num="41">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-2-3 · SELF-CHECK</span>
+  </div>
+  <div class="body">
+    <h2>자기 검수 — 끝났는지 보는 네 가지</h2>
+    <div class="cards">
+      <div class="card"><div class="num">CHECK 1</div><h3>역할 한 줄에 세 요소 다 있나</h3><p>누구처럼 / 누구를 위해 / 무엇을 — 빠진 자리는 없나.</p></div>
+      <div class="card"><div class="num">CHECK 2</div><h3>금지가 동사로 적혔나</h3><p>"잘 해라"가 아니라 "X 하지 마라"로 적혔는지 본다.</p></div>
+      <div class="card"><div class="num">CHECK 3</div><h3>예시 한 줄이 진짜 예시인가</h3><p>"적당한 길이로"가 아니라 실제 한 줄 견본이 있는지 본다.</p></div>
+      <div class="card"><div class="num">CHECK 4</div><h3>1회 시운전 했나</h3><p>실제 입력 1건을 넣어 모양을 봤는지 본다.</p></div>
+    </div>
+  </div>
+  <div class="meta-bottom"><span>3-2. 규칙 템플릿화</span><span><span class="num">41</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="41">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 41 / 86</span></div>
+  <p>CHECK 4를 빠뜨리면 종이 템플릿이 된다. 시운전을 한 번은 한다.</p>
+</aside>
+
+<!-- 42 · 산출물 기준 -->
+<section class="slide layout-statement" data-num="42">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-2-3 · DELIVERABLE</span>
+  </div>
+  <div class="body">
+    <h2>산출물 기준 — md 템플릿 v1</h2>
+    <div class="lede"><strong>한 페이지 마크다운 파일. 6칸이 다 채워졌고, 1회 시운전한 결과가 의도와 비슷하다.</strong><span class="br"></span>이 파일이 다음 모듈(3-3) 한계 진단의 대상이 된다.</div>
+  </div>
+  <div class="meta-bottom"><span>3-2. 규칙 템플릿화</span><span><span class="num">42</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="42">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 42 / 86</span></div>
+  <p>3-3은 이 템플릿이 어디까지 버틸지를 본다. 강점과 한계를 같이 본다.</p>
+</aside>
+
+<!-- ============================================================ -->
+<!-- 43 · 3-3 MODULE DIVIDER                                      -->
+<!-- ============================================================ -->
+<section id="chapter-03-module-03" class="slide layout-divider" data-num="43">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>PART 3-3</span>
+  </div>
+  <div class="body">
+    <div class="part">MODULE · 3-3</div>
+    <h2>3-3. 문서의 강점과 한계</h2>
+    <div class="lede">md가 deterministic하게 만들 수 있는 자리와, 만들 수 없는 자리. 한계를 알면 어디서부터 4장의 분업형 하네스로 넘길지가 보인다.</div>
+  </div>
+  <div class="meta-bottom"><span>SECTION BREAK</span><span><span class="num">43</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="43">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 43 / 86</span></div>
+  <p>이 모듈의 산출물은 한계 진단표. 본인 템플릿이 어디까지 버티고 어디서 무너지는지를 한 장에 정리한다.</p>
+</aside>
+
+<!-- ============================================================ -->
+<!-- ===== CLIP 2003-3-1 · 문서가 강한 일 (44-49)                   -->
+<!-- ============================================================ -->
+
+<!-- 44 · 클립 헤더 -->
+<section class="slide layout-statement" data-num="44">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-3-1 · CLIP 1</span>
+  </div>
+  <div class="body">
+    <div class="clip-header"><span class="id">CLIP 2003-3-1</span><span class="label">20분 · 강의</span></div>
+    <h2>문서가 강한 일</h2>
+    <div class="lede">md는 <em>형식·규칙·반복 패턴</em>에서 매번 같은 결과를 낸다. markdown이 deterministic하게 작동하는 영역이 여기다.</div>
+  </div>
+  <div class="meta-bottom"><span>3-3. 문서의 강점과 한계</span><span><span class="num">44</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="44">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 44 / 86</span></div>
+  <p>3-1, 3-2에서 다룬 내용은 다 "강한 자리"의 얘기였다. 이 클립은 그것을 명시화한다.</p>
+</aside>
+
+<!-- 45 · 문제: md를 만능으로 보면 -->
+<section class="slide layout-statement" data-num="45">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-3-1 · WHY</span>
+  </div>
+  <div class="body">
+    <h2>문제 — md를 만능으로 보면 빈자리가 안 보인다</h2>
+    <div class="lede">"md만 잘 쓰면 다 풀린다"는 기대는 어느 순간 무너진다. 강점이 끝나는 자리를 알아야, 한계가 시작되는 자리도 보인다.</div>
+  </div>
+  <div class="meta-bottom"><span>3-3. 문서의 강점과 한계</span><span><span class="num">45</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="45">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 45 / 86</span></div>
+  <p>강점-한계 짝이 이 모듈의 척추. 강점만 보면 과신, 한계만 보면 포기. 두 자리를 같이 본다.</p>
+</aside>
+
+<!-- 46 · 핵심: md가 강한 3가지 자리 -->
+<section class="slide layout-grid cols-3" data-num="46">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-3-1 · CONCEPT</span>
+  </div>
+  <div class="body">
+    <h2>md가 강한 영역 — 세 가지</h2>
+    <div class="cards">
+      <div class="card"><div class="num">자리 1</div><h3>출력 형식</h3><p>섹션·길이·표 모양 — 매번 같은 모양으로 나오게 만든다.</p></div>
+      <div class="card"><div class="num">자리 2</div><h3>반복 규칙</h3><p>금지/허용 규칙을 한 번 적어 두면 매번 같이 적용된다.</p></div>
+      <div class="card"><div class="num">자리 3</div><h3>같은 입력 패턴</h3><p>구조가 비슷한 입력(회의록·로그·데이터 표)을 같은 처리로 변환.</p></div>
+    </div>
+  </div>
+  <div class="meta-bottom"><span>3-3. 문서의 강점과 한계</span><span><span class="num">46</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="46">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 46 / 86</span></div>
+  <p>세 자리의 공통점 — 시간이 지나도 변하지 않는 부분이다. 그래서 문서로 적어 두면 안전하다.</p>
+</aside>
+
+<!-- 47 · 도식: 강함의 영역 -->
+<section class="slide layout-table" data-num="47">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-3-1 · MAP</span>
+  </div>
+  <div class="body">
+    <h2 style="font-size:calc(38px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(22px * var(--deck-scale));">강함의 영역 — 어떤 작업이 md로 충분한가</h2>
+    <table>
+      <thead><tr><th>작업 유형</th><th>md만으로 충분한가</th><th>이유</th></tr></thead>
+      <tbody>
+        <tr><td>회의록 → 1page 기획안</td><td class="k">충분</td><td>입력 형식 일정, 출력 형식 고정, 한 번 처리</td></tr>
+        <tr><td>인터뷰 노트 정리</td><td class="k">충분</td><td>같은 평가 항목을 매번 채운다</td></tr>
+        <tr><td>주간 보고 작성</td><td class="k">충분</td><td>지표·코멘트의 형식이 정해져 있다</td></tr>
+        <tr><td>채팅 문의 자동 분류</td><td class="k">충분</td><td>분류 카테고리가 고정된 규칙</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="meta-bottom"><span>3-3. 문서의 강점과 한계</span><span><span class="num">47</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="47">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 47 / 86</span></div>
+  <p>네 사례 모두 "한 번에 한 입력 → 한 번에 한 출력" 구조다. 흐름이나 상태 없이.</p>
+</aside>
+
+<!-- 48 · 적용 데모 -->
+<section class="slide layout-statement" data-num="48">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-3-1 · DEMO</span>
+  </div>
+  <div class="body">
+    <h2>회의록 변환에서 md가 잡고 있는 것</h2>
+    <div class="lede"><strong>5섹션 출력 / "추측 금지" 규칙 / "PM 보조" 역할 — 매번 같이 적용된다.</strong><span class="br"></span>같은 회의록을 여러 번 변환해도 형식이 매번 같다. markdown으로 deterministic하게 만든다는 말의 의미가 이 한 줄에 있다.</div>
+  </div>
+  <div class="meta-bottom"><span>3-3. 문서의 강점과 한계</span><span><span class="num">48</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="48">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 48 / 86</span></div>
+  <p>"같은 모양이 매번 나온다"는 게 deterministic의 의미라는 점을 한 번 더 짚는다.</p>
+</aside>
+
+<!-- 49 · 정리/전환 -->
+<section class="slide layout-statement" data-num="49">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-3-1 · CLOSE</span>
+  </div>
+  <div class="body">
+    <h2>강함이 끝나는 곳에서 한계가 시작된다</h2>
+    <div class="lede">md가 잘 잡는 일은 한 번의 입력에 한 번의 출력, 형식이 정해진 변환이다. 그 너머는 여러 단계, 흐르는 상태, 실패 후 복구 — markdown으로 안 풀리는 자리다.</div>
+  </div>
+  <div class="meta-bottom"><span>3-3. 문서의 강점과 한계</span><span><span class="num">49</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="49">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 49 / 86</span></div>
+  <p>다음 클립의 핵심을 미리 한 번 짚어 둔다.</p>
+</aside>
+
+<!-- ============================================================ -->
+<!-- ===== CLIP 2003-3-2 · 문서가 약한 일 (50-55)                   -->
+<!-- ============================================================ -->
+
+<!-- 50 · 클립 헤더 -->
+<section class="slide layout-statement" data-num="50">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-3-2 · CLIP 2</span>
+  </div>
+  <div class="body">
+    <div class="clip-header"><span class="id">CLIP 2003-3-2</span><span class="label">20분 · 강의</span></div>
+    <h2>문서가 약한 일</h2>
+    <div class="lede">md로는 잡히지 않는 세 가지 — <em>순서, 상태, 재시도</em>. 이 셋이 보이면 markdown으로 안 풀린다는 신호고, 4장의 분업형 하네스로 넘긴다.</div>
+  </div>
+  <div class="meta-bottom"><span>3-3. 문서의 강점과 한계</span><span><span class="num">50</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="50">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 50 / 86</span></div>
+  <p>약점이 보여야 분업형으로 넘어갈 동기가 생긴다. markdown으로 안 풀리는 자리는 4장에서 다른 도구로 푼다.</p>
+</aside>
+
+<!-- 51 · 문제: 한 번에 안 되는 일 -->
+<section class="slide layout-statement" data-num="51">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-3-2 · WHY</span>
+  </div>
+  <div class="body">
+    <h2>작업이 길어지면 md만으론 안 된다</h2>
+    <div class="lede">한 번의 입력 → 한 번의 출력은 md가 잘한다. 그러나 여러 단계가 이어지고, 단계 사이에 결과가 누적되고, 중간에 실패하면 어디로 돌아갈지 — 이 영역은 문서만으로 안 된다.</div>
+  </div>
+  <div class="meta-bottom"><span>3-3. 문서의 강점과 한계</span><span><span class="num">51</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="51">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 51 / 86</span></div>
+  <p>"길어진다"의 의미를 한 번 풀어준다 — 회의록 한 건이 아니라 회의록 100건을 처리할 때 누적되는 문제들.</p>
+</aside>
+
+<!-- 52 · 핵심: 약한 자리 3가지 -->
+<section class="slide layout-grid cols-3" data-num="52">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-3-2 · CONCEPT</span>
+  </div>
+  <div class="body">
+    <h2>md가 닿지 못하는 영역 — 세 가지</h2>
+    <div class="cards">
+      <div class="card"><div class="num">한계 1</div><h3>순서</h3><p>A 다음 B인지, B 다음 A인지 — 단계의 순서가 결과에 영향을 미치는데 md는 순서를 강제하지 못한다.</p></div>
+      <div class="card"><div class="num">한계 2</div><h3>상태</h3><p>한 단계의 결과가 다음 단계에 입력으로 들어간다. 그 흐름은 문서 밖에서 따로 관리해야 한다.</p></div>
+      <div class="card"><div class="num">한계 3</div><h3>재시도</h3><p>중간에 실패하면 어디로 돌아갈지 — 복구 지점은 실행 환경이나 코드에서 정해야 한다.</p></div>
+    </div>
+  </div>
+  <div class="meta-bottom"><span>3-3. 문서의 강점과 한계</span><span><span class="num">52</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="52">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 52 / 86</span></div>
+  <p>세 한계의 공통점 — 시간 위에서 흐르는 일이라는 점. md는 정적인 규칙에는 강하지만 흐르는 상태에는 닿지 못한다.</p>
+</aside>
+
+<!-- 53 · 도식: 한계의 영역 -->
+<section class="slide layout-table" data-num="53">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-3-2 · MAP</span>
+  </div>
+  <div class="body">
+    <h2 style="font-size:calc(38px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(22px * var(--deck-scale));">한계의 영역 — md만으로 부족한 작업</h2>
+    <table>
+      <thead><tr><th>작업 유형</th><th>md만으로 충분한가</th><th>왜 부족한가</th></tr></thead>
+      <tbody>
+        <tr><td>회의록 100건 일괄 처리 + 실패 시 재시도</td><td class="k">부족</td><td>실패 지점 추적과 복구는 md 밖</td></tr>
+        <tr><td>긴 문서 청크 → 단계별 요약 → 통합 요약</td><td class="k">부족</td><td>단계 사이 상태가 흐른다</td></tr>
+        <tr><td>고객 문의 → 분류 → 해당 부서 라우팅 → 응답</td><td class="k">부족</td><td>분기와 외부 시스템 호출이 섞인다</td></tr>
+        <tr><td>코드 리뷰 + 수정 + 재리뷰 사이클</td><td class="k">부족</td><td>되돌이 흐름은 md로 강제 못 한다</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="meta-bottom"><span>3-3. 문서의 강점과 한계</span><span><span class="num">53</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="53">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 53 / 86</span></div>
+  <p>이 표가 4장의 입력이 된다. 분업형 하네스가 풀려야 하는 문제들의 미리보기.</p>
+</aside>
+
+<!-- 54 · 적용 데모: 회의록 변환에서 한계가 드러나는 자리 -->
+<section class="slide layout-statement" data-num="54">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-3-2 · DEMO</span>
+  </div>
+  <div class="body">
+    <h2>회의록 변환에서 한계가 드러나는 대목</h2>
+    <div class="lede">한 건 처리는 md로 충분하다. <strong>그런데 회의록이 너무 길어 청크를 나눠야 한다면?</strong> 청크 사이의 결정사항이 어떻게 통합되는지, 어느 청크에서 결론이 나왔는지 — 이 흐름은 md만으로 다루기 어렵고, 4장의 분업형으로 넘어간다.</div>
+  </div>
+  <div class="meta-bottom"><span>3-3. 문서의 강점과 한계</span><span><span class="num">54</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="54">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 54 / 86</span></div>
+  <p>같은 회의록 변환 문제의 한 단계 위 버전 — 입력이 한 건이 아니라 여러 청크로 쪼개질 때.</p>
+</aside>
+
+<!-- 55 · 정리/전환 -->
+<section class="slide layout-statement" data-num="55">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-3-2 · CLOSE</span>
+  </div>
+  <div class="body">
+    <h2>markdown으로 한계를 느꼈다면 다음으로 넘어가야 한다</h2>
+    <div class="lede">markdown으로 해결이 안 된다면, 그 자리에 4장의 분업형 하네스가 들어선다.</div>
+  </div>
+  <div class="meta-bottom"><span>3-3. 문서의 강점과 한계</span><span><span class="num">55</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="55">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 55 / 86</span></div>
+  <p>한계 진단표가 만들어지면 4장으로 넘어갈 준비가 된 셈이다.</p>
+</aside>
+
+<!-- ============================================================ -->
+<!-- ===== CLIP 2003-3-3 · 실습 한계 진단표 (56-62)                 -->
+<!-- ============================================================ -->
+
+<!-- 56 · 실습 클립 헤더 -->
+<section class="slide layout-statement" data-num="56">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-3-3 · CLIP 3</span>
+  </div>
+  <div class="body">
+    <div class="clip-header"><span class="id">CLIP 2003-3-3</span><span class="label">20분 · 실습</span></div>
+    <h2>실습 ③ — 한계 진단표</h2>
+    <div class="lede">3-2의 md 템플릿 v1을 가져와, 어디까지 충분하고 어디부터 부족한지 한 장에 정리한다.</div>
+  </div>
+  <div class="meta-bottom"><span>3-3. 문서의 강점과 한계</span><span><span class="num">56</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="56">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 56 / 86</span></div>
+  <p>한계 진단표가 4장 입력이 된다. 이 실습이 3장과 4장을 이어준다.</p>
+</aside>
+
+<!-- 57 · 실습 안내 -->
+<section class="slide layout-grid cols-3 compact-practice" data-num="57">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-3-3 · OVERVIEW</span>
+  </div>
+  <div class="body">
+    <h2>실습 한눈에</h2>
+    <div class="cards">
+      <div class="card"><div class="num">INPUT</div><h3>md 템플릿 v1</h3><p>3-2 산출물.</p></div>
+      <div class="card"><div class="num">PROCESS</div><h3>충분 / 부족 / 이유</h3><p>템플릿이 다루는 자리와 못 다루는 자리를 가른다.</p></div>
+      <div class="card"><div class="num">OUTPUT</div><h3>한계 진단표</h3><p>한 장. 4장의 분업형 하네스 입력이 된다.</p></div>
+    </div>
+  </div>
+  <div class="meta-bottom"><span>3-3. 문서의 강점과 한계</span><span><span class="num">57</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="57">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 57 / 86</span></div>
+  <p>"부족" 칸이 비어 있어도 괜찮다 — md만으로 충분한 작업도 있다.</p>
+</aside>
+
+<!-- 58 · 입력 검토 -->
+<section class="slide layout-statement" data-num="58">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-3-3 · INPUT</span>
+  </div>
+  <div class="body">
+    <h2>입력 — 본인 md 템플릿 v1을 다시 펼친다</h2>
+    <div class="lede">3-2의 6칸 중 어느 칸이 매번 같은 결과를 내는지, 어느 칸이 입력에 따라 매번 달라지는지 — 진단의 출발점은 본인 템플릿이다.</div>
+  </div>
+  <div class="meta-bottom"><span>3-3. 문서의 강점과 한계</span><span><span class="num">58</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="58">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 58 / 86</span></div>
+  <p>실제 시운전 결과(3-2 STEP 4)가 있으면 진단이 빠르다. 시운전 안 했으면 지금 한 번 한다.</p>
+</aside>
+
+<!-- 59 · 작성 절차 충분/부족/이유 -->
+<section class="slide" data-num="59">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-3-3 · PROCESS</span>
+  </div>
+  <div class="body">
+    <h2 style="font-size:calc(38px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(14px * var(--deck-scale));">작성 절차 — 세 칸을 채운다</h2>
+    <div class="flow-row">
+      <div class="step"><div class="lab">STEP 1</div><h3>충분</h3><p>md 템플릿이 매번 같은 결과를 낸 자리. 형식·금지·규칙이 잘 적혀 있는 곳.</p></div>
+      <div class="step"><div class="lab">STEP 2</div><h3>부족</h3><p>입력에 따라 결과가 달라지거나, 단계가 길어지면 무너지는 자리.</p></div>
+      <div class="step"><div class="lab">STEP 3</div><h3>이유</h3><p>왜 부족한지 — 순서? 상태? 재시도? 셋 중 어느 한계에 해당하는지 적는다.</p></div>
+      <div class="step"><div class="lab">STEP 4</div><h3>4장 연결</h3><p>"부족" 칸 옆에 "분업형으로 넘길 자리"라고 표시한다.</p></div>
+    </div>
+  </div>
+  <div class="meta-bottom"><span>3-3. 문서의 강점과 한계</span><span><span class="num">59</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="59">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 59 / 86</span></div>
+  <p>STEP 4의 표시가 4장의 시작점이다. 미리 한 줄 표시해 두면 4장에 들어갈 때 부담이 줄어든다.</p>
+</aside>
+
+<!-- 60 · 작성 데모 -->
+<section class="slide layout-table" data-num="60">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-3-3 · WORKED EXAMPLE</span>
+  </div>
+  <div class="body">
+    <h2 style="font-size:calc(38px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(22px * var(--deck-scale));">데모 — 회의록 변환 템플릿의 한계 진단표</h2>
+    <table>
+      <thead><tr><th>자리</th><th>판정</th><th>이유 / 4장 연결</th></tr></thead>
+      <tbody>
+        <tr><td>5섹션 출력 형식</td><td class="k">충분</td><td>—</td></tr>
+        <tr><td>"추측 금지" 규칙</td><td class="k">충분</td><td>—</td></tr>
+        <tr><td>회의록 100건 일괄 처리</td><td class="k">부족</td><td>실패 시 재시도 / 분업형 필요</td></tr>
+        <tr><td>긴 회의록 청크 분할 + 통합</td><td class="k">부족</td><td>상태가 흐른다 / 분업형 필요</td></tr>
+        <tr><td>변환 후 슬랙 자동 전송</td><td class="k">부족</td><td>외부 시스템 호출 / 분업형 필요</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="meta-bottom"><span>3-3. 문서의 강점과 한계</span><span><span class="num">60</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="60">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 60 / 86</span></div>
+  <p>오른쪽 칸이 4장의 입력. "분업형 필요"라고 표시된 항목이 4장에서 다룰 거리.</p>
+</aside>
+
+<!-- 61 · 자기 검수 -->
+<section class="slide layout-grid cols-2" data-num="61">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-3-3 · SELF-CHECK</span>
+  </div>
+  <div class="body">
+    <h2>자기 검수 — 끝났는지 보는 네 가지</h2>
+    <div class="cards">
+      <div class="card"><div class="num">CHECK 1</div><h3>판정과 이유가 같이 있나</h3><p>"부족" 옆에 "왜 부족한가"가 한 줄로 적혀 있나.</p></div>
+      <div class="card"><div class="num">CHECK 2</div><h3>이유가 셋 중 하나로 분류되나</h3><p>순서 / 상태 / 재시도 — 다른 이유가 나오면 다시 본다.</p></div>
+      <div class="card"><div class="num">CHECK 3</div><h3>충분 항목도 있나</h3><p>모든 항목이 "부족"이면 템플릿이 욕심을 부렸다는 뜻이다.</p></div>
+      <div class="card"><div class="num">CHECK 4</div><h3>4장 연결 표시 있나</h3><p>"부족" 항목 옆에 분업형으로 넘길 표시가 있나.</p></div>
+    </div>
+  </div>
+  <div class="meta-bottom"><span>3-3. 문서의 강점과 한계</span><span><span class="num">61</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="61">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 61 / 86</span></div>
+  <p>CHECK 3의 의미 — 모든 자리가 부족이면 md로 안 풀릴 일을 md로 풀려고 했다는 뜻. 입력 업무를 다시 본다.</p>
+</aside>
+
+<!-- 62 · 산출물 기준 -->
+<section class="slide layout-statement" data-num="62">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-3-3 · DELIVERABLE</span>
+  </div>
+  <div class="body">
+    <h2>산출물 기준 — 한 장 한계 진단표</h2>
+    <div class="lede"><strong>충분 항목 + 부족 항목 + 이유 + 4장 연결 표시.</strong><span class="br"></span>이 진단표가 3-4 프로젝트 1의 경계가 되고, 4장 분업형 하네스의 입력이 된다.</div>
+  </div>
+  <div class="meta-bottom"><span>3-3. 문서의 강점과 한계</span><span><span class="num">62</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="62">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 62 / 86</span></div>
+  <p>3-4는 "충분" 항목들로만 만든 프로젝트다. "부족" 항목은 4장으로 넘긴다.</p>
+</aside>
+
+<!-- ============================================================ -->
+<!-- 63 · 3-4 MODULE DIVIDER                                      -->
+<!-- ============================================================ -->
+<section id="chapter-03-module-04" class="slide layout-divider" data-num="63">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>PART 3-4</span>
+  </div>
+  <div class="body">
+    <div class="part">MODULE · 3-4</div>
+    <h2>3-4. 프로젝트 1 — 회의록 → 1page 기획안</h2>
+    <div class="lede">앞의 셋(체크리스트·템플릿·진단표)과 2장의 인터뷰 하네스 v1을 합쳐 실제 프로젝트 산출물을 만든다.</div>
+  </div>
+  <div class="meta-bottom"><span>SECTION BREAK</span><span><span class="num">63</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="63">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 63 / 86</span></div>
+  <p>3장의 마지막 모듈. 클립 셋 — 사례 학습(obra/superpowers) + 흐름 설계도 실습 + 하네스 v1 본문 실습.</p>
+</aside>
+
+<!-- ============================================================ -->
+<!-- ===== CLIP 2003-4-1 · obra/superpowers 사례 (64-69)            -->
+<!-- ============================================================ -->
+
+<!-- 64 · 클립 헤더 -->
+<section class="slide layout-statement" data-num="64">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-4-1 · CLIP 1</span>
+  </div>
+  <div class="body">
+    <div class="clip-header"><span class="id">CLIP 2003-4-1</span><span class="label">20분 · 사례 학습</span></div>
+    <h2>obra/superpowers — md만으로 만든 행동 강령</h2>
+    <div class="lede">실제로 운영되는 .md 행동 강령 사례. 무엇을 잠갔고, 무엇을 남겼고, 어디가 한계인지 본다.</div>
+  </div>
+  <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">64</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="64">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 64 / 86</span></div>
+  <p>obra/superpowers는 GitHub의 공개 .md 모음. AI 에이전트의 행동 규칙을 md로만 박은 사례다.</p>
+</aside>
+
+<!-- 65 · 사례 소개 -->
+<section class="slide layout-statement" data-num="65">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-4-1 · INTRO</span>
+  </div>
+  <div class="body">
+    <h2>사례 — .md 파일들로만 만든 행동 강령</h2>
+    <div class="lede">obra/superpowers는 AI 에이전트가 따를 행동 규칙을 일련의 .md 파일로 묶은 모음이다. 코드 없이 텍스트만으로 어디까지 행동을 잠글 수 있는지 보여주는 실제 사례다.</div>
+  </div>
+  <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">65</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="65">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 65 / 86</span></div>
+  <p>repo의 코드를 읽지 않는다. md 파일들의 구조와 잠금 패턴만 본다. "이 사람들도 우리와 같은 6칸 골격을 쓰는가"가 핵심 질문.</p>
+</aside>
+
+<!-- 66 · 무엇을 잠갔나 -->
+<section class="slide layout-grid cols-2" data-num="66">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-4-1 · LOCKED</span>
+  </div>
+  <div class="body">
+    <h2>무엇을 잠갔나 — 관찰</h2>
+    <div class="cards">
+      <div class="card"><div class="num">관찰 1</div><h3>역할과 권한</h3><p>에이전트의 직무, 결정 권한, 결정을 사람에게 넘겨야 하는 자리를 명시.</p></div>
+      <div class="card"><div class="num">관찰 2</div><h3>행동 금지 목록</h3><p>위험한 명령 실행 금지, 즉답 없이 분석 우선 등의 규칙이 한 줄씩 적혀 있다.</p></div>
+      <div class="card"><div class="num">관찰 3</div><h3>의사결정 트리</h3><p>"X 상황에서는 Y 절차" 형태의 분기를 md 안에서 처리.</p></div>
+      <div class="card"><div class="num">관찰 4</div><h3>출력 모양</h3><p>응답의 헤딩·길이·언어 톤을 md로 강제.</p></div>
+    </div>
+  </div>
+  <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">66</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="66">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 66 / 86</span></div>
+  <p>네 관찰이 우리 6칸 골격(역할·목표·금지·형식·예시·검수)과 거의 1:1로 맞아떨어진다. 이게 핵심.</p>
+</aside>
+
+<!-- 67 · 강점: 이 구조가 막는 실패 -->
+<section class="slide layout-grid cols-3" data-num="67">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-4-1 · STRENGTH</span>
+  </div>
+  <div class="body">
+    <h2>강점 — 이 구조가 막는 실패</h2>
+    <div class="cards">
+      <div class="card"><div class="num">강점 1</div><h3>위험 행동 차단</h3><p>"실행 전에 사람 확인"이 적혀 있어 임의 실행 사고가 안 일어난다.</p></div>
+      <div class="card"><div class="num">강점 2</div><h3>톤 일관성</h3><p>응답 모양이 .md에 정의되어 있어 어느 세션에서나 같은 톤으로 답한다.</p></div>
+      <div class="card"><div class="num">강점 3</div><h3>책임 경계</h3><p>"이건 사람이 결정"이라고 명시된 자리는 에이전트가 넘지 않는다.</p></div>
+    </div>
+  </div>
+  <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">67</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="67">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 67 / 86</span></div>
+  <p>이 세 강점이 우리 회의록 변환 하네스에 옮길 수 있는 부분이다.</p>
+</aside>
+
+<!-- 68 · 한계: 이 구조의 약점 -->
+<section class="slide layout-grid cols-3" data-num="68">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-4-1 · LIMIT</span>
+  </div>
+  <div class="body">
+    <h2>한계 — 이 구조가 닿지 못하는 곳</h2>
+    <div class="cards">
+      <div class="card"><div class="num">한계 1</div><h3>긴 작업 흐름</h3><p>여러 단계가 이어지는 작업에서 단계 사이 상태는 md 밖에서 잡힌다.</p></div>
+      <div class="card"><div class="num">한계 2</div><h3>외부 시스템</h3><p>슬랙·DB·API 호출은 md만으로 강제할 수 없다.</p></div>
+      <div class="card"><div class="num">한계 3</div><h3>실패 복구</h3><p>중간 실패 시 어디로 돌아갈지 — md는 안내만 하고 강제하지는 못한다.</p></div>
+    </div>
+  </div>
+  <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">68</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="68">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 68 / 86</span></div>
+  <p>3-3에서 정리한 한계가 실제 사례에서도 같은 방식으로 드러난다.</p>
+</aside>
+
+<!-- 69 · 적용 질문 -->
+<section class="slide layout-grid cols-2" data-num="69">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-4-1 · APPLY</span>
+  </div>
+  <div class="body">
+    <h2>적용 — 내 프로젝트에 무엇을 가져갈까</h2>
+    <div class="cards">
+      <div class="card"><div class="num">가져갈 것</div><h3>한 줄 행동 규칙</h3><p>금지사항을 동사 + 목적어 한 줄로 적는 방식.</p></div>
+      <div class="card"><div class="num">가져갈 것</div><h3>책임 경계 표시</h3><p>"이건 사람이 결정"을 명시적으로 표기.</p></div>
+      <div class="card"><div class="num">가져가지 말 것</div><h3>의사결정 트리</h3><p>분기 흐름은 md 밖(분업형)에서 잡는 게 안전하다.</p></div>
+      <div class="card"><div class="num">가져가지 말 것</div><h3>외부 호출 의존</h3><p>슬랙·이메일 호출은 md만으로 신뢰하지 않는다.</p></div>
+    </div>
+  </div>
+  <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">69</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="69">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 69 / 86</span></div>
+  <p>이 분류가 곧이어 나오는 흐름 설계도의 입력 중 하나가 된다.</p>
+</aside>
+
+<!-- ============================================================ -->
+<!-- ===== CLIP 2003-4-2 · 실습 변환 흐름 설계도 (70-76)            -->
+<!-- ============================================================ -->
+
+<!-- 70 · 실습 클립 헤더 -->
+<section class="slide layout-statement" data-num="70">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-4-2 · CLIP 2</span>
+  </div>
+  <div class="body">
+    <div class="clip-header"><span class="id">CLIP 2003-4-2</span><span class="label">20분 · 실습</span></div>
+    <h2>실습 ④ — 변환 흐름 설계도</h2>
+    <div class="lede">회의록 입력에서 1page 기획안 출력까지 — 단계 흐름을 한 장의 도식으로 그린다.</div>
+  </div>
+  <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">70</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="70">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 70 / 86</span></div>
+  <p>설계도는 본문 작성 전 단계다. 흐름을 먼저 그리고, 그 위에 본문을 채운다.</p>
+</aside>
+
+<!-- 71 · 실습 안내 -->
+<section class="slide layout-grid cols-3 compact-practice" data-num="71">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-4-2 · OVERVIEW</span>
+  </div>
+  <div class="body">
+    <h2>실습 한눈에</h2>
+    <div class="cards">
+      <div class="card"><div class="num">INPUT</div><h3>3-1·3-2·3-3 산출물 + superpowers 학습</h3><p>체크리스트 + 템플릿 v1 + 진단표 + 사례 적용 노트.</p></div>
+      <div class="card"><div class="num">PROCESS</div><h3>5단계 흐름 그리기</h3><p>입력 → 잠금 적용 → 빈칸 채우기 → 출력 → 검수.</p></div>
+      <div class="card"><div class="num">OUTPUT</div><h3>흐름 설계도 1장</h3><p>이어지는 본문 작성의 골격이 된다.</p></div>
+    </div>
+  </div>
+  <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">71</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="71">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 71 / 86</span></div>
+  <p>3-1 ~ 3-3 산출물이 다 모이는 자리. 만약 빠진 산출물이 있다면 지금 채운다.</p>
+</aside>
+
+<!-- 72 · 입력 명세 -->
+<section class="slide layout-table" data-num="72">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-4-2 · INPUT MAP</span>
+  </div>
+  <div class="body">
+    <h2 style="font-size:calc(38px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(22px * var(--deck-scale));">입력 명세 — 각 산출물이 어디로 가는가</h2>
+    <table>
+      <thead><tr><th>산출물</th><th>흐름 설계도에서의 역할</th></tr></thead>
+      <tbody>
+        <tr><td>2장 인터뷰 하네스 v1</td><td>이 변환의 정의 — 무엇을 왜 하는가 한 줄</td></tr>
+        <tr><td>3-1 설계 체크리스트</td><td>고정 / 남김 / 질문 분류</td></tr>
+        <tr><td>3-2 md 템플릿 v1</td><td>잠금 칸 본문 — 6칸 골격</td></tr>
+        <tr><td>3-3 한계 진단표</td><td>충분 / 부족 영역 표시</td></tr>
+        <tr><td>3-4-1 superpowers 적용 노트</td><td>가져갈 패턴 / 안 가져갈 패턴</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">72</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="72">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 72 / 86</span></div>
+  <p>2장 인터뷰 하네스 v1이 첫 줄에 들어간다는 점을 한 번 더 짚는다. 2장과 3장을 잇는 자리.</p>
+</aside>
+
+<!-- 73 · 흐름 설계 도식 -->
+<section class="slide" data-num="73">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-4-2 · FIGURE</span>
+  </div>
+  <div class="body">
+    <h2 style="font-size:calc(38px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(14px * var(--deck-scale));">변환 흐름 설계도 — 5단계</h2>
+    <div class="flow-row">
+      <div class="step"><div class="lab">STEP 1</div><h3>입력 받기</h3><p>회의록 원문 + 회의 일자 + 참석자 (질문 칸 채우기).</p></div>
+      <div class="step"><div class="lab">STEP 2</div><h3>잠금 적용</h3><p>md 템플릿 v1의 6칸이 입력에 적용된다. 역할·금지·형식이 강제된다.</p></div>
+      <div class="step"><div class="lab">STEP 3</div><h3>빈칸 채우기</h3><p>AI가 결정사항·액션아이템·미해결을 추출. 남김 칸은 사람이 검토.</p></div>
+      <div class="step"><div class="lab">STEP 4</div><h3>출력</h3><p>1page 기획안 — 5섹션 형식.</p></div>
+      <div class="step"><div class="lab">STEP 5</div><h3>검수</h3><p>6번 검수 칸 기준 적용 — 받는 사람이 다음 행동으로 넘어가는가.</p></div>
+    </div>
+  </div>
+  <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">73</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="73">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 73 / 86</span></div>
+  <p>다섯 단계 흐름이 곧이어 본문으로 펼쳐진다.</p>
+</aside>
+
+<!-- 74 · 작성 데모 -->
+<section class="slide layout-statement" data-num="74">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-4-2 · WORKED EXAMPLE</span>
+  </div>
+  <div class="body">
+    <h2>데모 — 한 페이지 흐름 설계도</h2>
+    <div class="lede"><strong>제목:</strong> 회의록 → 1page 기획안 변환 v1<span class="br"></span><strong>입력:</strong> 회의록 + 일자 + 참석자<span class="br"></span><strong>잠금:</strong> md 템플릿 v1 (6칸)<span class="br"></span><strong>채움:</strong> 결정·액션·미해결 추출 + 남김 칸 사람 검토<span class="br"></span><strong>출력:</strong> 1page 기획안 (5섹션)<span class="br"></span><strong>검수:</strong> 받는 임원이 다음 결정으로 넘어가는가</div>
+  </div>
+  <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">74</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="74">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 74 / 86</span></div>
+  <p>설계도는 짧을수록 좋다. 6줄짜리 흐름이 한 페이지를 차지하면 충분.</p>
+</aside>
+
+<!-- 75 · 자기 검수 -->
+<section class="slide layout-grid cols-2" data-num="75">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-4-2 · SELF-CHECK</span>
+  </div>
+  <div class="body">
+    <h2>자기 검수 — 끝났는지 보는 네 가지</h2>
+    <div class="cards">
+      <div class="card"><div class="num">CHECK 1</div><h3>5단계가 다 있나</h3><p>입력 → 잠금 → 채움 → 출력 → 검수. 빠진 단계가 없는지.</p></div>
+      <div class="card"><div class="num">CHECK 2</div><h3>각 단계가 한 줄인가</h3><p>한 단계에 두 일이 섞여 있으면 분리.</p></div>
+      <div class="card"><div class="num">CHECK 3</div><h3>잠금/채움 경계가 명확한가</h3><p>AI가 자동으로 채울 자리와 사람이 봐야 할 자리가 분리되어 있나.</p></div>
+      <div class="card"><div class="num">CHECK 4</div><h3>3-3 부족 항목이 빠져 있나</h3><p>"부족" 항목은 이 설계에서 제외되어야 한다.</p></div>
+    </div>
+  </div>
+  <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">75</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="75">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 75 / 86</span></div>
+  <p>CHECK 4가 가장 중요하다. 한계 진단표에서 "부족"으로 잡힌 자리는 이 설계도에 들어가지 않는다.</p>
+</aside>
+
+<!-- 76 · 산출물 기준 -->
+<section class="slide layout-statement" data-num="76">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-4-2 · DELIVERABLE</span>
+  </div>
+  <div class="body">
+    <h2>산출물 기준 — 한 장 흐름 설계도</h2>
+    <div class="lede"><strong>5단계 흐름이 한 장에 명시. 잠금/채움 경계가 분명. 3-3 부족 항목 제외.</strong><span class="br"></span>이 설계도가 곧이어 이어지는 하네스 v1 본문 작성의 골격이 된다.</div>
+  </div>
+  <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">76</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="76">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 76 / 86</span></div>
+  <p>곧이어 3장의 마지막 단계가 이어진다. 본문이 채워진 하네스 v1이 산출물.</p>
+</aside>
+
+<!-- ============================================================ -->
+<!-- ===== CLIP 2003-4-3 · 실습 프로젝트 1 하네스 v1 (77-84)        -->
+<!-- ============================================================ -->
+
+<!-- 77 · 실습 클립 헤더 -->
+<section class="slide layout-statement" data-num="77">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-4-3 · CLIP 3</span>
+  </div>
+  <div class="body">
+    <div class="clip-header"><span class="id">CLIP 2003-4-3</span><span class="label">20분 · 실습</span></div>
+    <h2>실습 ⑤ — 프로젝트 1 하네스 v1 본문</h2>
+    <div class="lede">설계도를 본문으로 옮긴다. 한 페이지 마크다운으로 회의록 → 1page 기획안 하네스 v1 완성.</div>
+  </div>
+  <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">77</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="77">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 77 / 86</span></div>
+  <p>3장의 마지막 산출물. 같은 회의록을 두 번 넣어도 같은 형식이 나오면 v1 합격.</p>
+</aside>
+
+<!-- 78 · 입력 (모든 산출물 모음) -->
+<section class="slide layout-table" data-num="78">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-4-3 · INPUT</span>
+  </div>
+  <div class="body">
+    <h2 style="font-size:calc(38px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(22px * var(--deck-scale));">입력 — 다섯 산출물을 한 자리에 모은다</h2>
+    <table>
+      <thead><tr><th>출처</th><th>역할</th></tr></thead>
+      <tbody>
+        <tr><td>2장 인터뷰 하네스 v1</td><td>이 변환의 정의 — 한 줄</td></tr>
+        <tr><td>3-1 설계 체크리스트</td><td>고정·남김·질문 분류</td></tr>
+        <tr><td>3-2 md 템플릿 v1</td><td>6칸 본문</td></tr>
+        <tr><td>3-3 한계 진단표</td><td>이 v1의 적용 범위 (충분 항목만)</td></tr>
+        <tr><td>3-4-2 흐름 설계도</td><td>5단계 골격</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">78</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="78">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 78 / 86</span></div>
+  <p>다섯 산출물이 다 모였다는 건 2장과 3장의 모든 실습이 끝났다는 뜻이다. 여기서 합쳐진다.</p>
+</aside>
+
+<!-- 79 · 하네스 v1 골격 -->
+<section class="slide" data-num="79">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-4-3 · STRUCTURE</span>
+  </div>
+  <div class="body">
+    <h2 style="font-size:calc(38px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(16px * var(--deck-scale));">하네스 v1 골격 — 본문 구조</h2>
+    <pre class="code-block small"># 회의록 → 1page 기획안 하네스 v1
+
+## 0. 정의 (2장 인터뷰 하네스 v1에서)
+- 무엇을 왜 하는가 한 줄
+
+## 1. 역할 / 2. 목표 / 3. 금지 / 4. 출력 / 5. 예시 / 6. 검수
+(3-2 md 템플릿 v1 본문 그대로)
+
+## 7. 흐름 (3-4-2 설계도)
+- 입력 받기 → 잠금 적용 → 빈칸 채우기 → 출력 → 검수
+
+## 8. 적용 범위 (3-3 진단표 충분 항목)
+- 한 번에 한 회의록, 1page 출력
+- 청크 분할/재시도/외부 호출은 4장 분업형으로 위임
+
+## 9. 운영 메모
+- 시운전 결과 / 다음 v2에서 손볼 자리</pre>
+  </div>
+  <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">79</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="79">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 79 / 86</span></div>
+  <p>0번에는 2장에서 만든 한 줄이 그대로 들어간다. 8번 적용 범위에 "여기까지"를 적어 두면, 그 너머 항목들은 4장 분업형 하네스에서 다시 다룬다.</p>
+</aside>
+
+<!-- 80 · 작성 절차 -->
+<section class="slide" data-num="80">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-4-3 · PROCESS</span>
+  </div>
+  <div class="body">
+    <h2 style="font-size:calc(38px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(14px * var(--deck-scale));">작성 절차 — 다섯 단계</h2>
+    <div class="flow-row">
+      <div class="step"><div class="lab">STEP 1</div><h3>0번 정의 옮기기</h3><p>2장 인터뷰 하네스 v1의 한 줄을 0번에 붙인다.</p></div>
+      <div class="step"><div class="lab">STEP 2</div><h3>1~6번 본문 옮기기</h3><p>3-2 md 템플릿 v1 본문을 그대로 옮긴다.</p></div>
+      <div class="step"><div class="lab">STEP 3</div><h3>7번 흐름</h3><p>3-4-2 설계도 5단계를 한 줄씩 적는다.</p></div>
+      <div class="step"><div class="lab">STEP 4</div><h3>8번 적용 범위</h3><p>3-3 진단표의 충분 항목을 적고, 부족 항목을 4장 위임으로 표시.</p></div>
+      <div class="step"><div class="lab">STEP 5</div><h3>9번 시운전</h3><p>실제 회의록 1건을 넣어 본다. 결과를 9번 운영 메모에 남긴다.</p></div>
+    </div>
+  </div>
+  <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">80</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="80">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 80 / 86</span></div>
+  <p>옮기는 작업이 대부분이다. 새로 쓰는 칸은 0·7·8·9번 정도. 시간이 더 들어가는 곳은 STEP 5 시운전.</p>
+</aside>
+
+<!-- 81 · 채워진 하네스 v1 데모 -->
+<section class="slide" data-num="81">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-4-3 · WORKED EXAMPLE</span>
+  </div>
+  <div class="body">
+    <h2 style="font-size:calc(34px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(14px * var(--deck-scale));">데모 — 채워진 하네스 v1</h2>
+    <pre class="code-block small"># 회의록 → 1page 기획안 하네스 v1
+
+## 0. 정의
+"임원 2명이 분기 회의 결정사항을 한눈에 보고 다음 결정으로 넘어가게 한다."
+
+## 1. 역할 ~ 6. 검수
+(3-2 md 템플릿 v1 그대로 — 회의록 변환 6칸)
+
+## 7. 흐름
+1) 회의록 원문 + 일자 + 참석자 입력
+2) 6칸 잠금 적용 (역할·금지·형식 강제)
+3) 결정·액션·미해결 추출 / 남김 칸 사람 검토
+4) 1page 기획안 출력 (5섹션)
+5) 검수: 임원이 다음 결정으로 넘어가는가
+
+## 8. 적용 범위
+- 한 번에 한 회의록 (60분 이내, 6쪽 이내)
+- 분기 1회 임원 회의 형식
+- 청크 분할 / 슬랙 자동 전송 / 100건 일괄 처리는 4장 분업형으로 위임
+
+## 9. 운영 메모
+- 첫 시운전: 4월 2주차 분기 회의록 — 결정사항 추출은 OK, 미해결 분류는 매번 다르게 나옴 → v2에서 미해결 정의 손보기</pre>
+  </div>
+  <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">81</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="81">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 81 / 86</span></div>
+  <p>9번 운영 메모가 v2의 입력이다. v1에서 매번 다르게 나온 곳을 솔직하게 적는다.</p>
+</aside>
+
+<!-- 82 · 자기 검수 -->
+<section class="slide layout-grid cols-2" data-num="82">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-4-3 · SELF-CHECK</span>
+  </div>
+  <div class="body">
+    <h2>자기 검수 — 다섯 가지</h2>
+    <div class="cards">
+      <div class="card"><div class="num">CHECK 1</div><h3>0번 정의가 한 줄인가</h3><p>여러 줄이면 한 줄로 압축한다.</p></div>
+      <div class="card"><div class="num">CHECK 2</div><h3>1~6번이 6칸 다 있나</h3><p>역할·목표·금지·형식·예시·검수 빠짐없이.</p></div>
+      <div class="card"><div class="num">CHECK 3</div><h3>8번 적용 범위가 명시적인가</h3><p>"한 번에 한 회의록" 같은 명시적 한계가 있나.</p></div>
+      <div class="card"><div class="num">CHECK 4</div><h3>9번에 시운전 결과 있나</h3><p>실제 입력 1건 결과가 한 줄로 적혀 있나.</p></div>
+    </div>
+    <div class="practice-checklist">
+      <h3>최종 합격 기준</h3>
+      <ul>
+        <li><strong>두 번째 시운전</strong>같은 형식 회의록을 다시 넣었을 때 출력 형식이 첫 번째와 같은가</li>
+        <li><strong>같지 않다면</strong>9번 운영 메모에 이유 추가, v2 작업 항목으로 표시</li>
+      </ul>
+    </div>
+  </div>
+  <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">82</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="82">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 82 / 86</span></div>
+  <p>두 번 시운전이 deterministic의 실제 시험이다. 같은 형식 입력 → 같은 형식 출력이 나오면 합격.</p>
+</aside>
+
+<!-- 83 · 산출물 기준 -->
+<section class="slide layout-statement" data-num="83">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-4-3 · DELIVERABLE</span>
+  </div>
+  <div class="body">
+    <h2>프로젝트 1 산출물 — 회의록 → 1page 기획안 하네스 v1</h2>
+    <div class="lede"><strong>한 페이지 마크다운. 0~9번 다 채워졌고, 두 번 시운전 결과가 형식 일치.</strong><span class="br"></span>3장의 모든 실습이 한 묶음으로 정리되었다. 4장에서는 이 v1의 8번 적용 범위 밖 항목들을 분업형 하네스로 다시 본다.</div>
+  </div>
+  <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">83</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="83">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 83 / 86</span></div>
+  <p>3장 종합 산출물. 4장은 이 v1의 한계 밖에서 시작한다.</p>
+</aside>
+
+<!-- 84 · 4장으로 넘어가는 연결 -->
+<section class="slide layout-statement" data-num="84">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>2003-4-3 · BRIDGE</span>
+  </div>
+  <div class="body">
+    <h2>4장으로 — md가 닿지 못하는 곳에서 시작한다</h2>
+    <div class="lede">3장 v1의 8번 "적용 범위 밖" 항목들 — 청크 분할, 일괄 처리, 외부 호출, 실패 복구 — 이 자리들이 4장 분업형 하네스의 입력으로 그대로 넘어간다. md로는 여기까지 왔고, 그 너머는 4장 분업형에서 다시 푼다.</div>
+  </div>
+  <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">84</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="84">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 84 / 86</span></div>
+  <p>3장 마무리. 4장의 출발점을 미리 알려 두면 학습자가 머릿속에서 흐름을 잇는다.</p>
+</aside>
+
+<!-- ============================================================ -->
+<!-- 85 · 3장 정리                                                 -->
+<!-- ============================================================ -->
+<section id="chapter-03-synthesis" class="slide layout-grid cols-4" data-num="85">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>CHAPTER SYNTHESIS</span>
+  </div>
+  <div class="body">
+    <h2>3장 정리 — 무엇을, 어떻게, 어디까지, 실제로</h2>
+    <div class="cards">
+      <div class="card"><div class="num">3-1</div><h3>무엇을 잠글까</h3><p>고정 / 남김 / 질문 — 3칸 프레임으로 가른다.</p></div>
+      <div class="card"><div class="num">3-2</div><h3>어떻게 잠글까</h3><p>역할·목표·금지·형식·예시·검수 — 6칸 골격.</p></div>
+      <div class="card"><div class="num">3-3</div><h3>어디까지 잠글까</h3><p>md가 강한 영역(형식·규칙·반복)과 약한 영역(순서·상태·재시도)을 가른다.</p></div>
+      <div class="card"><div class="num">3-4</div><h3>실제로 만든다</h3><p>2장 인터뷰 하네스 + 3-1·3-2·3-3 산출물을 모아 회의록 → 1page 기획안 하네스 v1을 만든다.</p></div>
+    </div>
+  </div>
+  <div class="meta-bottom"><span>CHAPTER SYNTHESIS</span><span><span class="num">85</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="85">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 85 / 86</span></div>
+  <p>한 장의 회고. "markdown으로 deterministic하게 만든다"는 한 줄이 네 모듈로 분기되었다는 흐름을 한 번 더 짚는다.</p>
+</aside>
+
+<!-- ============================================================ -->
+<!-- 86 · CLOSING                                                 -->
+<!-- ============================================================ -->
+<section id="chapter-03-closing" class="slide dark layout-cover closing" data-num="86">
+  <div class="meta-top">
+    <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
+    <span>END</span>
+  </div>
+  <div class="body">
+    <div>
+      <div class="eyebrow">CLOSING · CHAPTER 03</div>
+      <h1>여기까지가 md의 한계다</h1>
+      <p class="subtitle">deterministic의 한계 너머 — 4장 분업형 하네스로 이어진다.</p>
+    </div>
+    <div class="by">
+      <div class="who">
+        <span class="name">완료 · decks/chapter-03.html</span>
+        <span class="role">Cover · Modules 3-1 ~ 3-4 · Synthesis · Closing</span>
+      </div>
+      <div class="stamp toc-area" aria-label="목차">
+        <span class="toc-label">목차</span>
+        <a class="toc-chapter" href="#chapter-03-cover">3장. 문서형 하네스</a>
+        <a class="toc-module" href="#chapter-03-module-01">3-1. 문서 설계 전략</a>
+        <a class="toc-module" href="#chapter-03-module-02">3-2. 규칙 템플릿화</a>
+        <a class="toc-module" href="#chapter-03-module-03">3-3. 문서의 강점과 한계</a>
+        <a class="toc-module" href="#chapter-03-module-04">3-4. 프로젝트 1</a>
+      </div>
+    </div>
+  </div>
+  <div class="meta-bottom"><span>WRAP-UP</span><span><span class="num">86</span> / 86</span></div>
+</section>
+<aside class="notes" data-for="86">
+  <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 86 / 86</span></div>
+  <p>마지막 한 줄로 닫는다 — md로는 여기까지 왔고, 그 너머는 4장 분업형에서 자연스럽게 이어진다.</p>
+</aside>
+
+</main>
+
+<script src="./presenter.js"></script>
+</body>
+</html>

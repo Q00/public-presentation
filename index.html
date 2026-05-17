@@ -5,6 +5,17 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Talks · Jaegyu Lee</title>
 <meta name="description" content="Presentation decks — Ouroboros deep dives, RLM, Shared Meaning, and lecture material." />
+<script>
+  // Apply theme before paint (shared with wpti.dev blog: key q00-blog-theme).
+  (function(){
+    try{
+      var t = localStorage.getItem('q00-blog-theme') || 'system';
+      var dark = t === 'dark' || (t === 'system' &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches);
+      if(dark) document.documentElement.classList.add('dark');
+    }catch(e){}
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=Noto+Serif+KR:wght@500;600&display=swap" rel="stylesheet" />
@@ -15,12 +26,11 @@
     --display:'Fraunces','Noto Serif KR',Georgia,serif;
     --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,monospace;
   }
-  @media (prefers-color-scheme: dark){
-    :root{
-      --paper:#0c0a09; --ink:#e7e5e4; --muted:#a8a29e; --faint:#57534e;
-      --rule:#292524; --tint:#1c1917;
-    }
+  html.dark{
+    --paper:#0c0a09; --ink:#e7e5e4; --muted:#a8a29e; --faint:#57534e;
+    --rule:#292524; --tint:#1c1917;
   }
+  html,body{ background:var(--paper) }
   *{box-sizing:border-box;margin:0;padding:0}
   html{ -webkit-text-size-adjust:100% }
   body{
@@ -38,6 +48,13 @@
     text-transform:uppercase; letter-spacing:.18em; color:var(--muted);
   }
   .top a:hover{ color:var(--ink) }
+  .top-right{ display:flex; align-items:center; gap:18px }
+  .toggle{
+    background:none; border:0; cursor:pointer; padding:4px;
+    font-family:var(--mono); font-size:13px; color:var(--muted);
+    line-height:1; letter-spacing:0;
+  }
+  .toggle:hover{ color:var(--ink) }
 
   header.masthead{ padding:56px 0 40px; border-bottom:1px solid var(--rule) }
   .eyebrow{
@@ -96,7 +113,10 @@
   <div class="wrap">
     <div class="top">
       <a href="https://wpti.dev/">← wpti.dev</a>
-      <span>Talks</span>
+      <div class="top-right">
+        <span>Talks</span>
+        <button class="toggle" id="themeToggle" type="button" aria-label="Toggle light or dark theme"></button>
+      </div>
     </div>
 
     <header class="masthead">
@@ -159,6 +179,19 @@
       <span>© <span id="y"></span> Jaegyu Lee</span>
     </footer>
   </div>
-  <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+    (function(){
+      var btn = document.getElementById('themeToggle');
+      var root = document.documentElement;
+      function paint(){ btn.textContent = root.classList.contains('dark') ? '☀' : '☾'; }
+      paint();
+      btn.addEventListener('click', function(){
+        var dark = root.classList.toggle('dark');
+        try{ localStorage.setItem('q00-blog-theme', dark ? 'dark' : 'light'); }catch(e){}
+        paint();
+      });
+    })();
+  </script>
 </body>
 </html>

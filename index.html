@@ -1,143 +1,164 @@
 <!doctype html>
 <html lang="ko">
 <head>
-<meta charset="utf-8" />
+<meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Public Presentations</title>
+<title>Talks · Jaegyu Lee</title>
+<meta name="description" content="Presentation decks — Ouroboros deep dives, RLM, Shared Meaning, and lecture material." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=Noto+Serif+KR:wght@500;600&display=swap" rel="stylesheet" />
 <style>
-:root{
-  --bg:#FFFFFF;
-  --bg-2:#F7F3EF;
-  --ink:#0A0A0A;
-  --ink-2:#3A3A38;
-  --ink-3:#78746E;
-  --rule:#0A0A0A;
-  --rule-soft:#D8D2CC;
-  --accent:#C15F3C;
-  --accent-dark:#8F3E27;
-  --accent-wash:#FAEEE9;
-  --green:#4F6651;
-  --mono:'SF Mono','Apple SD Gothic Neo',ui-monospace,Menlo,Consolas,monospace;
-  --sans:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic','Segoe UI',sans-serif;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{min-height:100%;background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-a{color:inherit;text-decoration:none}
-.page{min-height:100vh;display:flex;flex-direction:column}
-.shell{width:min(1120px,calc(100vw - 40px));margin:0 auto}
-.topline{border-bottom:1.5px solid var(--rule);padding:34px 0 18px}
-.topline-inner{display:flex;align-items:center;justify-content:space-between;gap:24px}
-.brand{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2)}
-.mark{width:14px;height:14px;border:1.5px solid var(--ink);border-radius:50%;position:relative;flex:0 0 auto}
-.mark::after{content:'';position:absolute;top:50%;left:50%;width:5px;height:5px;background:var(--accent);border-radius:50%;transform:translate(-50%,-50%)}
-.count{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
-.hero{padding:88px 0 70px}
-.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:18px}
-h1{font-size:clamp(48px,8vw,92px);line-height:.98;letter-spacing:-.04em;font-weight:800;max-width:780px}
-.summary{font-size:20px;line-height:1.55;color:var(--ink-2);max-width:760px;margin-top:28px}
-.list{border-top:1.5px solid var(--rule);margin-bottom:82px}
-.item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:28px;align-items:center;border-bottom:1px solid var(--rule-soft);padding:28px 0}
-.item:focus-within{outline:3px solid var(--accent-wash);outline-offset:4px}
-.item-main{min-width:0}
-.item-kicker{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--green);margin-bottom:10px}
-.item-title{font-size:30px;line-height:1.2;letter-spacing:-.018em;font-weight:760}
-.item-desc{font-size:16px;line-height:1.55;color:var(--ink-2);margin-top:12px;max-width:780px}
-.item-meta{display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:18px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
-.item-link{display:inline-flex;align-items:center;gap:10px;border:1.5px solid var(--rule);padding:12px 14px;font-family:var(--mono);font-size:12px;letter-spacing:.13em;text-transform:uppercase;background:#fff;transition:background .14s ease,color .14s ease,border-color .14s ease}
-.item-link:hover,.item-link:focus-visible{background:var(--accent);border-color:var(--accent);color:#fff;outline:none}
-.arrow{font-size:14px;line-height:1}
-.footer{margin-top:auto;border-top:1.5px solid var(--rule);padding:18px 0 34px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
-.footer-inner{display:flex;align-items:center;justify-content:space-between;gap:20px}
-.footer a{color:var(--accent-dark)}
-@media (max-width:760px){
-  .shell{width:min(100% - 28px,1120px)}
-  .topline{padding-top:24px}
-  .topline-inner,.footer-inner{align-items:flex-start;flex-direction:column}
-  .hero{padding:58px 0 48px}
-  .summary{font-size:17px}
-  .item{grid-template-columns:1fr;gap:20px;padding:24px 0}
-  .item-title{font-size:24px}
-  .item-link{justify-content:center;width:100%}
-}
+  :root{
+    --paper:#faf9f5; --ink:#1c1917; --muted:#78716c; --faint:#a8a29e;
+    --rule:#e7e5e4; --tint:#fdfcf9;
+    --display:'Fraunces','Noto Serif KR',Georgia,serif;
+    --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --paper:#0c0a09; --ink:#e7e5e4; --muted:#a8a29e; --faint:#57534e;
+      --rule:#292524; --tint:#1c1917;
+    }
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{ -webkit-text-size-adjust:100% }
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:var(--display);
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    line-height:1.6;
+  }
+  .wrap{ max-width:720px; margin:0 auto; padding:0 24px }
+  a{ color:inherit; text-decoration:none }
+
+  .top{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:28px 0; font-family:var(--mono); font-size:11px;
+    text-transform:uppercase; letter-spacing:.18em; color:var(--muted);
+  }
+  .top a:hover{ color:var(--ink) }
+
+  header.masthead{ padding:56px 0 40px; border-bottom:1px solid var(--rule) }
+  .eyebrow{
+    font-family:var(--mono); font-size:12px; text-transform:uppercase;
+    letter-spacing:.28em; color:var(--faint);
+  }
+  h1{
+    font-size:clamp(44px,9vw,68px); font-weight:500; line-height:1.05;
+    letter-spacing:-.02em; margin-top:14px;
+  }
+  .lede{
+    margin-top:18px; font-size:18px; line-height:1.6; color:var(--muted);
+    max-width:34em;
+  }
+
+  ul.decks{ list-style:none }
+  li.deck{ border-bottom:1px solid var(--rule); padding:30px 0 }
+  .deck-title a{ color:inherit }
+  .deck-title a:hover{ text-decoration:underline; text-underline-offset:6px;
+    text-decoration-color:var(--faint) }
+  .deck-kicker{
+    font-family:var(--mono); font-size:11px; text-transform:uppercase;
+    letter-spacing:.18em; color:var(--faint);
+  }
+  .deck-title{
+    font-size:clamp(24px,4.6vw,30px); font-weight:500; line-height:1.22;
+    letter-spacing:-.01em; margin:12px 0 14px;
+  }
+  .deck-desc{ font-size:15.5px; line-height:1.65; color:var(--muted); max-width:46em }
+  .deck-meta{
+    margin-top:18px; display:flex; flex-wrap:wrap; gap:0 22px;
+    font-family:var(--mono); font-size:11px; text-transform:uppercase;
+    letter-spacing:.16em; color:var(--faint);
+  }
+  .deck-meta .ext{ color:var(--muted) }
+  .deck-meta .ext:hover{ color:var(--ink) }
+  .go{ display:inline-block; margin-top:18px;
+    font-family:var(--mono); font-size:11px; text-transform:uppercase;
+    letter-spacing:.18em; color:var(--ink) }
+  .go:hover{ opacity:.6 }
+
+  footer{
+    margin-top:80px; border-top:1px solid var(--rule);
+    padding:32px 0 60px;
+    display:flex; flex-wrap:wrap; gap:16px; align-items:center;
+    justify-content:space-between;
+    font-family:var(--mono); font-size:11px; text-transform:uppercase;
+    letter-spacing:.16em; color:var(--faint);
+  }
+  footer nav{ display:flex; flex-wrap:wrap; gap:0 20px }
+  footer a{ color:var(--muted) }
+  footer a:hover{ color:var(--ink) }
 </style>
 </head>
 <body>
-<main class="page">
-  <header class="topline">
-    <div class="shell topline-inner">
-      <div class="brand"><span class="mark"></span> Q00 · Presentations</div>
-      <div class="count">4개 덱</div>
+  <div class="wrap">
+    <div class="top">
+      <a href="https://wpti.dev/">← wpti.dev</a>
+      <span>Talks</span>
     </div>
-  </header>
 
-  <section class="shell hero">
-    <div class="eyebrow">공개 아카이브</div>
-    <h1>발표자료 목록</h1>
-    <p class="summary">공개 공유용으로 정리한 발표 덱입니다. 각 항목은 브라우저에서 바로 열립니다.</p>
-  </section>
+    <header class="masthead">
+      <div class="eyebrow">Presentations</div>
+      <h1>Talks</h1>
+      <p class="lede">Decks from meetups and lectures — Ouroboros deep dives, RLM, and the inquiry essays. Each opens in the browser.</p>
+    </header>
 
-  <section class="shell list" aria-label="Presentation list">
-    <article class="item">
-      <div class="item-main">
-        <div class="item-kicker">Fast Campus · 하네스 A to Z</div>
-        <h2 class="item-title">하네스 A to Z — 강의 전용 교재</h2>
-        <p class="item-desc">패스트캠퍼스 〈하네스 A to Z〉 수강생을 위한 전용 교재입니다. 개인 하네스에서 팀 생태계까지 6개 챕터와 온톨로지 구조 자료. 암호 입력 후 열람합니다.</p>
-        <div class="item-meta">
-          <span>HTML</span>
-          <span>7개 자료</span>
-          <span>암호 보호</span>
-          <a href="https://fastcampus.co.kr/data_online_harnessa2z" style="color:var(--accent-dark)">패스트캠퍼스 강의 페이지 ↗</a>
+    <ul class="decks">
+      <li class="deck">
+        <div class="deck-kicker">Fast Campus · 하네스 A to Z</div>
+        <div class="deck-title"><a href="./fastcampus/index.html">하네스 A to Z — 강의 전용 교재</a></div>
+        <p class="deck-desc">패스트캠퍼스 〈하네스 A to Z〉 수강생을 위한 전용 교재. 개인 하네스에서 팀 생태계까지 6개 챕터와 온톨로지 구조 자료. 암호 입력 후 열람합니다.</p>
+        <div class="deck-meta">
+          <span>HTML</span><span>7개 자료</span><span>암호 보호</span>
+          <a class="ext" href="https://fastcampus.co.kr/data_online_harnessa2z" target="_blank" rel="noreferrer">패스트캠퍼스 강의 ↗</a>
         </div>
-      </div>
-      <a class="item-link" href="./fastcampus/index.html">열기 <span class="arrow">→</span></a>
-    </article>
-    <article class="item">
-      <div class="item-main">
-        <div class="item-kicker">Shared Meaning · A monograph on inquiry</div>
-        <h2 class="item-title">사람과 AI가 같은 의미를 짓는 일</h2>
-        <p class="item-desc">같은 단어를 써도 사람과 AI는 서로 다른 영역을 본다. Wonder · Reflect · Refine · Restate 네 단계의 Socratic Reasoning으로 그 차이를 비추고 shared meaning을 짓는 과정.</p>
-        <div class="item-meta">
-          <span>HTML</span>
-          <span>13장</span>
-          <span>2026</span>
-        </div>
-      </div>
-      <a class="item-link" href="./shared-meaning.html">열기 <span class="arrow">→</span></a>
-    </article>
-    <article class="item">
-      <div class="item-main">
-        <div class="item-kicker">RLM-FORGE · Hermes Meetup</div>
-        <h2 class="item-title">RLM is not a new model. It's an execution contract.</h2>
-        <p class="item-desc">Runtime-hosted Recursive Language Models on Hermes. Three layers (Ouroboros · Hermes · TraceGuard), two memory surfaces, and the deterministic evidence gate that caught a real bug in our own paper.</p>
-        <div class="item-meta">
-          <span>HTML</span>
-          <span>5장</span>
-          <span>2026</span>
-        </div>
-      </div>
-      <a class="item-link" href="./rlm-forge-hermes-meetup.html">열기 <span class="arrow">→</span></a>
-    </article>
-    <article class="item">
-      <div class="item-main">
-        <div class="item-kicker">Ouroboros · Deep Dive</div>
-        <h2 class="item-title">MCP Mesh와 Disposable Memory를 활용한 자율형 AI 하네스</h2>
-        <p class="item-desc">Context exhaustion, split sessions, MCP Mesh, Disposable Memory, Contract-based Agent OS를 다루는 Ouroboros 딥다이브 발표.</p>
-        <div class="item-meta">
-          <span>HTML</span>
-          <span>16장</span>
-          <span>2026</span>
-        </div>
-      </div>
-      <a class="item-link" href="./mcp-mesh-deepdive-presentation-final.html">열기 <span class="arrow">→</span></a>
-    </article>
-  </section>
+        <a class="go" href="./fastcampus/index.html">Open →</a>
+      </li>
 
-  <footer class="footer">
-    <div class="shell footer-inner">
-      <span>Public Presentations</span>
-      <a href="https://github.com/Q00/public-presentation">GitHub Repository</a>
-    </div>
-  </footer>
-</main>
+      <li class="deck">
+        <div class="deck-kicker">Shared Meaning · A monograph on inquiry</div>
+        <div class="deck-title"><a href="./shared-meaning.html">사람과 AI가 같은 의미를 짓는 일</a></div>
+        <p class="deck-desc">같은 단어를 써도 사람과 AI는 서로 다른 영역을 본다. Wonder · Reflect · Refine · Restate 네 단계의 Socratic Reasoning으로 그 차이를 비추고 shared meaning을 짓는 과정.</p>
+        <div class="deck-meta">
+          <span>HTML</span><span>13장</span><span>2026</span>
+        </div>
+        <a class="go" href="./shared-meaning.html">Open →</a>
+      </li>
+
+      <li class="deck">
+        <div class="deck-kicker">RLM-FORGE · Hermes Meetup</div>
+        <div class="deck-title"><a href="./rlm-forge-hermes-meetup.html">RLM is not a new model. It's an execution contract.</a></div>
+        <p class="deck-desc">Runtime-hosted Recursive Language Models on Hermes. Three layers (Ouroboros · Hermes · TraceGuard), two memory surfaces, and the deterministic evidence gate that caught a real bug in our own paper.</p>
+        <div class="deck-meta">
+          <span>HTML</span><span>5장</span><span>2026</span>
+        </div>
+        <a class="go" href="./rlm-forge-hermes-meetup.html">Open →</a>
+      </li>
+
+      <li class="deck">
+        <div class="deck-kicker">Ouroboros · Deep Dive</div>
+        <div class="deck-title"><a href="./mcp-mesh-deepdive-presentation-final.html">MCP Mesh와 Disposable Memory를 활용한 자율형 AI 하네스</a></div>
+        <p class="deck-desc">Context exhaustion, split sessions, MCP Mesh, Disposable Memory, Contract-based Agent OS를 다루는 Ouroboros 딥다이브 발표.</p>
+        <div class="deck-meta">
+          <span>HTML</span><span>16장</span><span>2026</span>
+        </div>
+        <a class="go" href="./mcp-mesh-deepdive-presentation-final.html">Open →</a>
+      </li>
+    </ul>
+
+    <footer>
+      <nav>
+        <a href="https://wpti.dev/">wpti.dev</a>
+        <a href="https://x.com/jqonly" target="_blank" rel="noreferrer">X</a>
+        <a href="https://www.linkedin.com/in/q00" target="_blank" rel="noreferrer">LinkedIn</a>
+        <a href="https://github.com/Q00" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="https://www.youtube.com/@Q00_Dev" target="_blank" rel="noreferrer">YouTube</a>
+      </nav>
+      <span>© <span id="y"></span> Jaegyu Lee</span>
+    </footer>
+  </div>
+  <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
 </body>
 </html>

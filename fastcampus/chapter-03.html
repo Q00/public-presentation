@@ -10,6 +10,8 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" />
 <link rel="stylesheet" href="./fastcampus-keynote.css" />
 <style>
+.slide, .slide *, .notes, .notes *{word-break:keep-all;overflow-wrap:break-word;line-break:strict}
+.slide h1, .slide h2, .slide .lede, .slide .subtitle{text-wrap:balance}
 .figure-wrap{display:flex;align-items:center;justify-content:center;width:100%;margin-top:calc(8px * var(--deck-scale))}
 .figure-wrap svg{width:100%;height:auto;max-width:calc(1080px * var(--deck-scale))}
 .figure-caption{font-family:var(--mono);font-size:calc(11.5px * var(--deck-scale));letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);text-align:center;margin-top:calc(14px * var(--deck-scale))}
@@ -140,9 +142,9 @@
   <div class="body">
     <h2>3장 흐름 — 잠글 칸을 정하고, 잠그고, 한계를 알고, 만든다</h2>
     <div class="cards">
-      <div class="card"><div class="num">3-1</div><h3>설계 전략</h3><p>잠글 칸과 남길 칸을 가른다. 고정 / 남김 / 질문 3칸 프레임을 만든다.</p></div>
+      <div class="card"><div class="num">3-1</div><h3>설계 전략</h3><p>잠글 칸과 남길 칸을 나눈다. 고정 / 남김 / 질문 3칸 프레임을 만든다.</p></div>
       <div class="card"><div class="num">3-2</div><h3>규칙 템플릿화</h3><p>역할·금지·출력형식·예시를 6칸 md 골격에 적는다.</p></div>
-      <div class="card"><div class="num">3-3</div><h3>강점과 한계</h3><p>md가 잘 다루는 영역과 다루지 못하는 영역(순서·상태·재시도)을 가른다.</p></div>
+      <div class="card"><div class="num">3-3</div><h3>강점과 한계</h3><p>md가 잘 다루는 영역과 다루지 못하는 영역(순서·상태·재시도)을 나눈다.</p></div>
       <div class="card"><div class="num">3-4</div><h3>프로젝트 1</h3><p>회의록 → 1page 기획안 하네스 v1을 실제로 만든다. 2장 인터뷰 하네스 v1로 시작한다.</p></div>
     </div>
   </div>
@@ -165,13 +167,13 @@
   <div class="body">
     <div class="part">MODULE · 3-1</div>
     <h2>3-1. 문서 설계 전략</h2>
-    <div class="lede">md로 잠글 수 있는 칸과 잠그면 안 되는 칸을 먼저 가른다. 문서가 길어서 좋은 게 아니라, 경계가 보여서 좋다.</div>
+    <div class="lede">md로 잠글 수 있는 칸과 잠그면 안 되는 칸을 먼저 나눈다. 문서가 길어서 좋은 게 아니라, 경계가 보여서 좋다.</div>
   </div>
   <div class="meta-bottom"><span>SECTION BREAK</span><span><span class="num">03</span> / 86</span></div>
 </section>
 <aside class="notes" data-for="3">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 03 / 86</span></div>
-  <p>3-1은 클립 셋으로 진행. 첫 두 클립은 무엇을 잠그고 무엇을 남길지 가르는 개념. 마지막 클립은 본인 업무에 적용하는 실습.</p>
+  <p>3-1은 클립 셋으로 진행. 첫 두 클립은 무엇을 잠그고 무엇을 남길지 나누는 개념. 마지막 클립은 본인 업무에 적용하는 실습.</p>
 </aside>
 
 <!-- ============================================================ -->
@@ -187,13 +189,13 @@
   <div class="body">
     <div class="clip-header"><span class="id">CLIP 2003-1-1</span><span class="label">20분 · 강의</span></div>
     <h2>좋은 md는 무엇을 고정할까</h2>
-    <div class="lede">AI는 같은 프롬프트에도 매번 다르게 답한다. 그 비결정성에서 <em>매번 같이 가야 할 칸</em>부터 잠근다.</div>
+    <div class="lede">AI는 같은 프롬프트에도 매번 다르게 답한다. 비결정성을 줄이려면 <em>매번 같이 가야 할 칸</em>부터 잠근다.</div>
   </div>
   <div class="meta-bottom"><span>3-1. 문서 설계 전략</span><span><span class="num">04</span> / 86</span></div>
 </section>
 <aside class="notes" data-for="4">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 04 / 86</span></div>
-  <p>이 클립은 잠글 칸 4가지(역할·목표·금지·형식)를 가르는 데 20분을 쓴다. 학습자가 가져갈 것은 "잠글 칸 4가지의 목록"이다.</p>
+  <p>이 클립은 잠글 칸 4가지(역할·목표·금지·형식)를 나누는 데 20분을 쓴다. 학습자가 가져갈 것은 "잠글 칸 4가지의 목록"이다.</p>
 </aside>
 
 <!-- 05 · 문제: 비결정성 -->
@@ -210,7 +212,7 @@
 </section>
 <aside class="notes" data-for="5">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 05 / 86</span></div>
-  <p>"비결정적(non-deterministic)"은 어려운 단어가 아니다. 같은 질문에 매번 다른 답이 나온다는 뜻이다. 이걸 줄이는 도구가 md다.</p>
+  <p>"비결정적(non-deterministic)"은 어려운 단어가 아니다. 같은 질문을 해도 매번 답이 달라지는데, md가 그 차이를 줄여 준다.</p>
   <p>2장에서는 빈칸을 Wonder로 채웠다면, 3장은 Wonder로 답을 받은 뒤 그 답이 매번 같은 형식으로 나오게 만드는 단계다.</p>
 </aside>
 
@@ -233,7 +235,7 @@
 </section>
 <aside class="notes" data-for="6">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 06 / 86</span></div>
-  <p>네 칸은 "매번 같이 가도 문제 없는 자리"라는 공통점이 있다. 그래서 잠가도 안전하다.</p>
+  <p>네 칸은 "매번 같이 가도 문제 없는 항목"이라는 공통점이 있다. 그래서 잠가도 안전하다.</p>
   <p>네 칸이 흐릿하면 AI가 자기 마음대로 채운다. 한 번은 운 좋게 맞고, 두 번째부터 어긋난다.</p>
 </aside>
 
@@ -302,9 +304,9 @@
       <thead><tr><th>칸</th><th>회의록 변환에서의 한 줄</th></tr></thead>
       <tbody>
         <tr><td class="k">역할</td><td>너는 PM 보조다. 결정자(임원 2명)에게 보낼 1page 기획안을 만든다.</td></tr>
-        <tr><td class="k">목표</td><td>회의에서 결정된 항목과 미해결 이슈를 임원이 한눈에 볼 수 있게 정리한다.</td></tr>
-        <tr><td class="k">금지사항</td><td>회의에서 결정되지 않은 우선순위를 임의로 정하지 않는다. 결론 없는 안건은 "미해결"로 둔다.</td></tr>
-        <tr><td class="k">출력 형식</td><td>5섹션: 제목 / 배경 / 결정사항 / 액션아이템 / 미해결. A4 한 장 분량.</td></tr>
+        <tr><td class="k">목표</td><td>회의에서 확정된 방향과 결정되지 않은 항목을 한 페이지 기획안 칸으로 분리해 결정자에게 보낸다.</td></tr>
+        <tr><td class="k">금지사항</td><td>회의에서 확정되지 않은 우선순위·일정·수치를 결론처럼 단정하지 않는다. 결정 안 된 항목은 "확인 필요 항목"으로 둔다.</td></tr>
+        <tr><td class="k">출력 형식</td><td>7칸: 제목 / 배경 / 문제 / 사용자 또는 대상 / 해결 방향 / 성공 기준 / 확인 필요 항목. A4 한 장 분량.</td></tr>
       </tbody>
     </table>
   </div>
@@ -362,14 +364,14 @@
   </div>
   <div class="body">
     <h2>다 잠그면 형식은 맞고 내용은 어긋난다</h2>
-    <div class="lede">"이번 회의에서 가장 중요한 안건은 무엇인가"를 미리 정해 두면, 다른 회의에서는 어색해진다. 잠그면 안전하지만, <em>잠그면 안 되는 자리까지 잠그면 산출물이 상황을 못 읽는다.</em></div>
+    <div class="lede">"이번 회의에서 가장 중요한 안건은 무엇인가"를 미리 정해 두면, 다른 회의에서는 어색해진다. 잠그면 안전하지만, <em>잠그면 안 되는 부분까지 잠그면 산출물이 상황을 못 읽는다.</em></div>
   </div>
   <div class="meta-bottom"><span>3-1. 문서 설계 전략</span><span><span class="num">11</span> / 86</span></div>
 </section>
 <aside class="notes" data-for="11">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 11 / 86</span></div>
   <p>over-locking 개념. 잠금이 좋다고 다 잠그면 → 형식은 맞고 내용은 안 맞는 산출물이 나온다.</p>
-  <p>예시 한 줄로 충분: 같은 템플릿으로 100번 회의록을 돌렸을 때, 1번도 임원이 읽고 결정으로 넘어가지 못하면 그 템플릿은 over-locked다.</p>
+  <p>예시 한 줄로 충분: 같은 템플릿으로 회의록을 100번 돌렸을 때, 한 번도 결정자가 읽고 다음 결정으로 넘어가지 못하면 그 템플릿은 over-locked다.</p>
 </aside>
 
 <!-- 12 · 핵심 개념: 사람의 판단 영역 -->
@@ -381,16 +383,16 @@
   <div class="body">
     <h2>매번 사람이 다시 봐야 할 세 영역</h2>
     <div class="cards">
-      <div class="card"><div class="num">자리 1</div><h3>가치 판단</h3><p>이번 입력에서 무엇이 가장 중요한가. 우선순위는 매번 다르다.</p></div>
-      <div class="card"><div class="num">자리 2</div><h3>상황 판단</h3><p>이 산출물의 독자가 지금 어떤 맥락에 있나. 톤과 강조점이 매번 달라진다.</p></div>
-      <div class="card"><div class="num">자리 3</div><h3>맥락 판단</h3><p>이 결정이 기존 방향과 어긋나는가. 흐름 속에서만 보이는 판단이다.</p></div>
+      <div class="card"><div class="num">유형 1</div><h3>가치 판단</h3><p>이번 입력에서 무엇이 가장 중요한가. 우선순위는 매번 다르다.</p></div>
+      <div class="card"><div class="num">유형 2</div><h3>상황 판단</h3><p>이 산출물의 독자가 지금 어떤 맥락에 있나. 톤과 강조점이 매번 달라진다.</p></div>
+      <div class="card"><div class="num">유형 3</div><h3>맥락 판단</h3><p>이 결정이 기존 방향과 어긋나는가. 흐름 속에서만 보이는 판단이다.</p></div>
     </div>
   </div>
   <div class="meta-bottom"><span>3-1. 문서 설계 전략</span><span><span class="num">12</span> / 86</span></div>
 </section>
 <aside class="notes" data-for="12">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 12 / 86</span></div>
-  <p>세 자리는 "매번 사람이 입력을 보고 다시 정해야 한다"는 공통점이 있다. 그래서 md에 박지 않고 빈칸으로 둔다.</p>
+  <p>세 유형은 "매번 사람이 입력을 보고 다시 정해야 한다"는 공통점이 있다. 그래서 md에 고정하지 않고 빈칸으로 둔다.</p>
 </aside>
 
 <!-- 13 · 도식: 고정 / 남김 / 질문 — 3칸 프레임 -->
@@ -420,7 +422,7 @@
           <text x="540" y="140" text-anchor="middle" font-size="32" font-weight="700">남김</text>
           <text x="540" y="180" text-anchor="middle" font-size="14" fill="#1a1a1a" font-weight="600">사람이 매번 다시 본다</text>
           <text x="540" y="210" text-anchor="middle" font-size="13" fill="#5b5b5b">가치 · 상황 · 맥락 판단</text>
-          <text x="540" y="240" text-anchor="middle" font-size="12" fill="#5b5b5b" font-style="italic">AI에 박지 않는다</text>
+          <text x="540" y="240" text-anchor="middle" font-size="12" fill="#5b5b5b" font-style="italic">AI에 고정하지 않는다</text>
           <text x="540" y="275" text-anchor="middle" font-size="11" letter-spacing="1.4" fill="#9b6b3f">JUDGMENT</text>
 
           <!-- 질문 -->
@@ -457,10 +459,10 @@
     <table>
       <thead><tr><th>회의록 변환의 항목</th><th>3칸 분류</th><th>이유</th></tr></thead>
       <tbody>
-        <tr><td>출력 5섹션 (제목·배경·결정·액션·미해결)</td><td class="k">고정</td><td>매번 같은 모양이어야 임원이 같은 자리에서 본다</td></tr>
+        <tr><td>출력 7칸 (제목·배경·문제·사용자·해결 방향·성공 기준·확인 필요 항목)</td><td class="k">고정</td><td>매번 같은 모양이어야 결정자가 같은 위치에서 본다</td></tr>
         <tr><td>"PM 보조" 역할 정의</td><td class="k">고정</td><td>이 하네스의 정체성. 바뀌면 톤이 무너진다</td></tr>
         <tr><td>이번 회의에서 강조할 핵심 3가지</td><td class="k">남김</td><td>매번 회의 내용에 따라 다르다. 사람이 본다</td></tr>
-        <tr><td>임원의 우선 관심사 (이번 분기 한정)</td><td class="k">남김</td><td>분기마다 변한다. 박으면 다음 분기에 어색</td></tr>
+        <tr><td>임원의 우선 관심사 (이번 분기 한정)</td><td class="k">남김</td><td>분기마다 변한다. 고정하면 다음 분기에 어색</td></tr>
         <tr><td>회의 일자 / 참석자</td><td class="k">질문</td><td>입력 시점에 사람이 채운다. 추측 금지</td></tr>
         <tr><td>예산 수치 / 의사결정 기한</td><td class="k">질문</td><td>구체값은 입력 시 채운다. 모르면 빈칸</td></tr>
       </tbody>
@@ -480,8 +482,8 @@
     <span>2003-1-2 · CLOSE</span>
   </div>
   <div class="body">
-    <h2>정리 — 3칸이 가르면 잠금의 한계가 보인다</h2>
-    <div class="lede">고정/남김/질문 — 세 자리가 분리되면, 무엇을 md로 잡고 무엇을 사람이 채울지가 명확해진다. 이 분류가 다음 실습의 입력이다.</div>
+    <h2>정리 — 3칸으로 나누면 잠금의 한계가 보인다</h2>
+    <div class="lede">고정/남김/질문 — 세 칸이 분리되면, 무엇을 md로 잡고 무엇을 사람이 채울지가 명확해진다. 이 분류가 다음 실습의 입력이다.</div>
   </div>
   <div class="meta-bottom"><span>3-1. 문서 설계 전략</span><span><span class="num">15</span> / 86</span></div>
 </section>
@@ -562,7 +564,7 @@
   <p>한 번만 하는 일은 md로 만들 가치가 없다. 반복 + 형식 + 가변 입력 — 세 조건이 다 있어야 한다.</p>
 </aside>
 
-<!-- 19 · 작성 절차 5단계 -->
+<!-- 19 · 작성 절차 -->
 <section class="slide" data-num="19">
   <div class="meta-top">
     <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
@@ -597,19 +599,19 @@
 
 ## 고정 (매번 같이)
 - 역할: PM 보조. 임원 2명에게 보낼 1page 기획안을 만든다
-- 목표: 결정 항목과 미해결 이슈를 임원이 한눈에 본다
-- 금지: 결정되지 않은 우선순위를 임의로 정하지 않는다
-- 형식: 5섹션 — 제목 / 배경 / 결정사항 / 액션아이템 / 미해결
+- 목표: 확정된 방향과 결정되지 않은 항목을 한 페이지 기획안 칸으로 분리
+- 금지: 회의에서 확정되지 않은 수치·일정·우선순위를 결론처럼 단정하지 않는다
+- 형식: 7칸 — 제목 / 배경 / 문제 / 사용자 / 해결 방향 / 성공 기준 / 확인 필요 항목
 
 ## 남김 (매번 사람이 본다)
-- 강조할 핵심 안건 3가지 — 회의 내용에 따라
-- 임원에게 어울리는 톤 — 분기 컨텍스트에 따라
-- 미해결 이슈 중 무엇을 부각할지 — 다음 회의 예정에 따라
+- 해결 방향의 강조점과 톤 — 의사결정자 성향에 따라
+- 어느 미결정 항목을 확인 필요 항목으로 끌어올릴지 — 다음 회의 일정에 따라
+- 배경에 어떤 회의 인용을 그대로 둘지 — 보존 표현 선정
 
 ## 질문 (입력 시점에 채운다)
 - 회의 일자, 참석자
-- 예산 수치
-- 의사결정 기한</pre>
+- 확정된 요구사항
+- 확인되지 않은 수치·출처</pre>
   </div>
   <div class="meta-bottom"><span>3-1. 문서 설계 전략</span><span><span class="num">20</span> / 86</span></div>
 </section>
@@ -625,19 +627,20 @@
     <span>2003-1-3 · SELF-CHECK</span>
   </div>
   <div class="body">
-    <h2>자기 검수 — 끝났는지 보는 다섯 가지</h2>
+    <h2>자기 검수 — 두 번 돌려서 같은지 본다</h2>
     <div class="cards">
-      <div class="card"><div class="num">CHECK 1</div><h3>형식이 한 줄로 적혔나</h3><p>섹션 이름과 길이가 모호하면 다시 본다.</p></div>
-      <div class="card"><div class="num">CHECK 2</div><h3>금지사항이 구체적인가</h3><p>"잘 해라" 같은 말은 금지가 아니다. AI가 안 할 행동이 분명해야 한다.</p></div>
-      <div class="card"><div class="num">CHECK 3</div><h3>남김 칸에 추측이 없나</h3><p>"이번엔 X가 중요할 듯"은 추측이다. 매번 다시 본다는 표시만 둔다.</p></div>
-      <div class="card"><div class="num">CHECK 4</div><h3>질문 칸이 빈칸인가</h3><p>모르는 값을 임의로 채우지 않았는지 다시 본다.</p></div>
+      <div class="card"><div class="num">CHECK 1</div><h3>역할 고정</h3><p>새 세션으로 한 번 더 호출해 AI가 자기 역할을 같은 문장으로 답하는가.</p></div>
+      <div class="card"><div class="num">CHECK 2</div><h3>금지 고정</h3><p>"안 할 행동"을 다시 뽑게 했을 때 같은 동사·목적어로 나오는가.</p></div>
+      <div class="card"><div class="num">CHECK 3</div><h3>형식 고정</h3><p>출력 섹션 이름과 순서가 두 번 다 같은가.</p></div>
+      <div class="card"><div class="num">CHECK 4</div><h3>남김은 매번 새로</h3><p>남김 칸이 두 번째 호출에서 다른 값으로 채워지는가. 같으면 추측이 들어간 것.</p></div>
     </div>
     <div class="practice-checklist">
-      <h3>위반 시</h3>
+      <h3>어긋났을 때</h3>
       <ul>
-        <li><strong>형식 모호</strong>산출물의 한 칸을 직접 그려 본다</li>
-        <li><strong>금지 추상</strong>"안 할 행동" 한 문장으로 적는다</li>
-        <li><strong>남김 추측</strong>표시만 두고 답은 비운다</li>
+        <li><strong>역할 어긋남</strong>역할 칸을 한 문장으로 더 좁힌다</li>
+        <li><strong>금지 어긋남</strong>추상 표현을 동사 + 목적어로 다시 적는다</li>
+        <li><strong>형식 어긋남</strong>섹션 이름과 길이를 명세에 못 박는다</li>
+        <li><strong>남김이 같음</strong>남김 칸의 임의 값을 지운다</li>
       </ul>
     </div>
   </div>
@@ -645,7 +648,7 @@
 </section>
 <aside class="notes" data-for="21">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 21 / 86</span></div>
-  <p>"안 할 행동"이 구체적으로 적히는지가 가장 자주 빠지는 곳이다. "결정되지 않은 우선순위를 추측 금지"처럼 동사 + 목적어로 적힌다.</p>
+  <p>검수의 본체는 같은 입력을 새 세션에 한 번 더 넣어 보는 것이다. deterministic의 정의가 같은 입력 → 같은 출력이니, 고정 칸이 두 번째에서도 같게 나오면 통과. 남김 칸은 반대로 두 번째에 달라야 정상이다 — 같으면 추측이 들어간 신호.</p>
 </aside>
 
 <!-- 22 · 산출물 기준 / 다음 모듈 입력 -->
@@ -676,7 +679,7 @@
   <div class="body">
     <div class="part">MODULE · 3-2</div>
     <h2>3-2. 규칙 템플릿화</h2>
-    <div class="lede">3-1에서 가른 칸을 실제 md 본문으로 옮긴다. 6칸 골격 — 역할 / 목표 / 금지 / 출력 / 예시 / 검수.</div>
+    <div class="lede">3-1에서 나눈 칸을 실제 md 본문으로 옮긴다. 6칸 골격 — 역할 / 목표 / 금지 / 출력 / 예시 / 검수.</div>
   </div>
   <div class="meta-bottom"><span>SECTION BREAK</span><span><span class="num">23</span> / 86</span></div>
 </section>
@@ -756,14 +759,14 @@
     <div class="lede" style="margin-top:calc(20px * var(--deck-scale));font-family:var(--mono);font-size:calc(22px * var(--deck-scale));line-height:1.6;">
       <strong>너는 [누구처럼]이고, [독자]를 위해 [산출물]을 만든다.</strong>
       <span class="br"></span>
-      <span style="font-family:var(--pretendard);font-size:calc(18px * var(--deck-scale));color:var(--ink-2);">세 자리가 다 채워지면 한 줄로 톤·관점·산출 형태가 잡힌다.</span>
+      <span style="font-family:var(--pretendard);font-size:calc(18px * var(--deck-scale));color:var(--ink-2);">세 요소가 다 채워지면 한 줄로 톤·관점·산출 형태가 잡힌다.</span>
     </div>
   </div>
   <div class="meta-bottom"><span>3-2. 규칙 템플릿화</span><span><span class="num">27</span> / 86</span></div>
 </section>
 <aside class="notes" data-for="27">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 27 / 86</span></div>
-  <p>이 공식을 본인 업무에 한 번 채워 보면 역할 칸의 빈자리가 어디인지 즉시 보인다.</p>
+  <p>이 공식을 본인 업무에 한 번 채워 보면 역할 칸의 빈 부분이 어디인지 즉시 보인다.</p>
 </aside>
 
 <!-- 28 · 적용 데모 (변환 전후) -->
@@ -856,7 +859,7 @@
     <h2>세 칸의 역할 — 무엇을 잡나</h2>
     <div class="cards">
       <div class="card"><div class="num">금지</div><h3>사고 예방</h3><p>AI가 위험하게 행동하지 않도록 막는다. 추측 금지, 임의 결정 금지, 권한 밖 행동 금지.</p></div>
-      <div class="card"><div class="num">출력 형식</div><h3>빠른 정렬</h3><p>섹션 이름·길이·표 모양을 정한다. 매번 같은 자리에 같은 정보가 들어간다.</p></div>
+      <div class="card"><div class="num">출력 형식</div><h3>빠른 정렬</h3><p>섹션 이름·길이·표 모양을 정한다. 매번 같은 위치에 같은 정보가 들어간다.</p></div>
       <div class="card"><div class="num">예시</div><h3>한 줄 견본</h3><p>각 섹션에 한 줄짜리 예시를 붙인다. 형식 + 톤이 한 번에 잡힌다.</p></div>
     </div>
   </div>
@@ -920,7 +923,7 @@
 </section>
 <aside class="notes" data-for="33">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 33 / 86</span></div>
-  <p>6번 검수 칸은 산출물 그 자체가 아니라 "받은 사람이 확인할 항목"이다. AI가 자기 출력을 자가검수하는 칸이 아니다.</p>
+  <p>검수 칸은 산출물 그 자체가 아니라 "받은 사람이 확인할 항목"이다. AI가 자기 출력을 자가검수하는 칸이 아니다.</p>
 </aside>
 
 <!-- 34 · 적용 데모: 6칸 채워진 회의록 변환 템플릿 -->
@@ -937,24 +940,27 @@
 너는 PM 보조다. 결정자(임원 2명)를 위해 1page 기획안을 만든다.
 
 ## 2. 목표
-회의에서 결정된 항목과 미해결 이슈를 임원이 한눈에 보고 다음 결정으로 넘어가게 한다.
+회의에서 확정된 방향과 결정되지 않은 항목을 한 페이지 기획안 칸으로 분리해 결정자에게 보낸다.
 
 ## 3. 금지사항
-- 회의에서 결정되지 않은 우선순위를 임의로 정하지 않는다
-- 결론 없는 안건은 "미해결"로 두고 추측하지 않는다
+- 회의에서 확정되지 않은 수치·일정·우선순위를 결론처럼 단정하지 않는다
+- 단서 붙은 수치(예: "정확한 출처는 다시 뽑아 와야 한다")는 본문 결론이 아니라 확인 필요 항목으로만
 - 참석자가 한 발언을 다른 사람에게 옮겨 적지 않는다
 
 ## 4. 출력 형식
-A4 한 장. 5섹션:
-- 제목 (회의명 + 일자)
-- 배경 (3줄 이내)
-- 결정사항 (불릿 리스트)
-- 액션아이템 (담당자 + 기한)
-- 미해결 (질문 형태로)
+A4 한 장. 7칸:
+- 제목 (한 줄로 압축한 목표)
+- 배경 (3줄 이내, 회의 관찰)
+- 문제 (회의 인용 그대로)
+- 사용자 또는 대상
+- 해결 방향 (확정된 요구사항)
+- 성공 기준 (확정된 한 줄)
+- 확인 필요 항목 (미결정 모두)
 
 ## 5. 예시
-- 결정사항: "다음 분기 마케팅 예산 5천만 원 증액. 사유: 신규 시장 진입."
-- 액션아이템: "@김PM — 4월 15일까지 신규 채널 후보 3곳 리스트업."
+- 문제: "일정·환불 안내가 페이지 맨 아래 작은 글씨" (회의 인용)
+- 성공 기준: "신청 직후 환불·일정 문의를 줄인다" (보존 표현)
+- 확인 필요 항목: 담당자·일정·CS 문의 수치 출처
 
 ## 6. 검수
 받은 사람이 추가 질문 없이 다음 결정으로 넘어갈 수 있는가.</pre>
@@ -1064,9 +1070,9 @@ A4 한 장. 5섹션:
   <div class="body">
     <h2 style="font-size:calc(38px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(14px * var(--deck-scale));">작성 절차 — 한 칸씩 채운다</h2>
     <div class="flow-row">
-      <div class="step"><div class="lab">STEP 1</div><h3>1·2·3·4번 옮기기</h3><p>3-1 체크리스트의 고정 칸을 그대로 6칸 골격으로 옮긴다.</p></div>
-      <div class="step"><div class="lab">STEP 2</div><h3>5번 예시 한 줄</h3><p>각 출력 섹션마다 한 줄짜리 견본을 적는다. 형식과 톤을 같이 정한다.</p></div>
-      <div class="step"><div class="lab">STEP 3</div><h3>6번 검수 기준</h3><p>받는 사람이 산출물을 보고 다음 행동으로 넘어갈 한 가지 기준을 적는다.</p></div>
+      <div class="step"><div class="lab">STEP 1</div><h3>역할·목표·금지·형식 옮기기</h3><p>3-1 체크리스트의 고정 칸을 6칸 골격에 그대로 옮긴다.</p></div>
+      <div class="step"><div class="lab">STEP 2</div><h3>예시 한 줄</h3><p>각 출력 섹션마다 한 줄짜리 견본을 적는다. 형식과 톤을 같이 정한다.</p></div>
+      <div class="step"><div class="lab">STEP 3</div><h3>검수 기준</h3><p>받는 사람이 산출물을 보고 다음 행동으로 넘어갈 한 가지 기준을 적는다.</p></div>
       <div class="step"><div class="lab">STEP 4</div><h3>1회 시운전</h3><p>실제 입력 한 건을 넣어 본다. 모양이 의도대로 나오는지 본다.</p></div>
     </div>
   </div>
@@ -1123,19 +1129,19 @@ A4 한 장. 5섹션:
     <span>2003-2-3 · SELF-CHECK</span>
   </div>
   <div class="body">
-    <h2>자기 검수 — 끝났는지 보는 네 가지</h2>
+    <h2>자기 검수 — 두 번 돌려서 같은지 본다</h2>
     <div class="cards">
-      <div class="card"><div class="num">CHECK 1</div><h3>역할 한 줄에 세 요소 다 있나</h3><p>누구처럼 / 누구를 위해 / 무엇을 — 빠진 자리는 없나.</p></div>
-      <div class="card"><div class="num">CHECK 2</div><h3>금지가 동사로 적혔나</h3><p>"잘 해라"가 아니라 "X 하지 마라"로 적혔는지 본다.</p></div>
-      <div class="card"><div class="num">CHECK 3</div><h3>예시 한 줄이 진짜 예시인가</h3><p>"적당한 길이로"가 아니라 실제 한 줄 견본이 있는지 본다.</p></div>
-      <div class="card"><div class="num">CHECK 4</div><h3>1회 시운전 했나</h3><p>실제 입력 1건을 넣어 모양을 봤는지 본다.</p></div>
+      <div class="card"><div class="num">CHECK 1</div><h3>역할 고정</h3><p>새 세션 두 번 호출해 AI가 자기 역할을 같은 문장으로 답하는가. 세 요소(누구처럼 / 누구를 위해 / 무엇)가 두 번 다 나오는가.</p></div>
+      <div class="card"><div class="num">CHECK 2</div><h3>금지가 실제로 막는가</h3><p>금지 위반에 가까운 입력을 일부러 넣었을 때 AI가 거부하거나 우회하는가. 안 막으면 추상 금지.</p></div>
+      <div class="card"><div class="num">CHECK 3</div><h3>형식 고정</h3><p>두 번째 출력의 섹션 이름·순서·길이가 첫 번째와 같은가. 예시 한 줄의 모양을 따라가는가.</p></div>
+      <div class="card"><div class="num">CHECK 4</div><h3>시운전 2회 비교</h3><p>실제 입력 1건을 두 번 넣어 고정 칸의 diff가 0인가. 다르면 잠금이 풀린 칸.</p></div>
     </div>
   </div>
   <div class="meta-bottom"><span>3-2. 규칙 템플릿화</span><span><span class="num">41</span> / 86</span></div>
 </section>
 <aside class="notes" data-for="41">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 41 / 86</span></div>
-  <p>CHECK 4를 빠뜨리면 종이 템플릿이 된다. 시운전을 한 번은 한다.</p>
+  <p>3-1 자기 검수와 동일한 본체 — 두 번 호출해서 같은지 본다. 차이는 검수 대상이 본인 md 템플릿 v1이라는 점. 시운전을 두 번 돌려 고정 칸이 같고 남김 칸은 달라야 통과. 한 번만 돌리면 종이 템플릿이 된다.</p>
 </aside>
 
 <!-- 42 · 산출물 기준 -->
@@ -1166,7 +1172,7 @@ A4 한 장. 5섹션:
   <div class="body">
     <div class="part">MODULE · 3-3</div>
     <h2>3-3. 문서의 강점과 한계</h2>
-    <div class="lede">md가 deterministic하게 만들 수 있는 자리와, 만들 수 없는 자리. 한계를 알면 어디서부터 4장의 분업형 하네스로 넘길지가 보인다.</div>
+    <div class="lede">md가 deterministic하게 만들 수 있는 곳과 그렇지 못한 곳을 나누고 나면, 한계가 보이면서 어디서부터 4장의 분업형 하네스로 넘길지가 잡힌다.</div>
   </div>
   <div class="meta-bottom"><span>SECTION BREAK</span><span><span class="num">43</span> / 86</span></div>
 </section>
@@ -1194,7 +1200,7 @@ A4 한 장. 5섹션:
 </section>
 <aside class="notes" data-for="44">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 44 / 86</span></div>
-  <p>3-1, 3-2에서 다룬 내용은 다 "강한 자리"의 얘기였다. 이 클립은 그것을 명시화한다.</p>
+  <p>3-1, 3-2에서 다룬 내용은 다 "강한 영역"의 얘기였다. 이 클립은 그 경계를 명시화한다.</p>
 </aside>
 
 <!-- 45 · 문제: md를 만능으로 보면 -->
@@ -1204,17 +1210,17 @@ A4 한 장. 5섹션:
     <span>2003-3-1 · WHY</span>
   </div>
   <div class="body">
-    <h2>문제 — md를 만능으로 보면 빈자리가 안 보인다</h2>
-    <div class="lede">"md만 잘 쓰면 다 풀린다"는 기대는 어느 순간 무너진다. 강점이 끝나는 자리를 알아야, 한계가 시작되는 자리도 보인다.</div>
+    <h2>문제 — md를 만능으로 보면 빈 곳이 안 보인다</h2>
+    <div class="lede">"md만 잘 쓰면 다 풀린다"는 기대는 어느 순간 무너진다. 강점이 끝나는 곳을 알아야, 한계가 시작되는 곳도 보인다.</div>
   </div>
   <div class="meta-bottom"><span>3-3. 문서의 강점과 한계</span><span><span class="num">45</span> / 86</span></div>
 </section>
 <aside class="notes" data-for="45">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 45 / 86</span></div>
-  <p>강점-한계 짝이 이 모듈의 척추. 강점만 보면 과신, 한계만 보면 포기. 두 자리를 같이 본다.</p>
+  <p>강점-한계 짝이 이 모듈의 중심. 강점만 보면 과신, 한계만 보면 포기. 둘을 같이 본다.</p>
 </aside>
 
-<!-- 46 · 핵심: md가 강한 3가지 자리 -->
+<!-- 46 · 핵심: md가 강한 3가지 영역 -->
 <section class="slide layout-grid cols-3" data-num="46">
   <div class="meta-top">
     <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
@@ -1223,16 +1229,16 @@ A4 한 장. 5섹션:
   <div class="body">
     <h2>md가 강한 영역 — 세 가지</h2>
     <div class="cards">
-      <div class="card"><div class="num">자리 1</div><h3>출력 형식</h3><p>섹션·길이·표 모양 — 매번 같은 모양으로 나오게 만든다.</p></div>
-      <div class="card"><div class="num">자리 2</div><h3>반복 규칙</h3><p>금지/허용 규칙을 한 번 적어 두면 매번 같이 적용된다.</p></div>
-      <div class="card"><div class="num">자리 3</div><h3>같은 입력 패턴</h3><p>구조가 비슷한 입력(회의록·로그·데이터 표)을 같은 처리로 변환.</p></div>
+      <div class="card"><div class="num">유형 1</div><h3>출력 형식</h3><p>섹션·길이·표 모양 — 매번 같은 모양으로 나오게 만든다.</p></div>
+      <div class="card"><div class="num">유형 2</div><h3>반복 규칙</h3><p>금지/허용 규칙을 한 번 적어 두면 매번 같이 적용된다.</p></div>
+      <div class="card"><div class="num">유형 3</div><h3>같은 입력 패턴</h3><p>구조가 비슷한 입력(회의록·로그·데이터 표)을 같은 처리로 변환.</p></div>
     </div>
   </div>
   <div class="meta-bottom"><span>3-3. 문서의 강점과 한계</span><span><span class="num">46</span> / 86</span></div>
 </section>
 <aside class="notes" data-for="46">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 46 / 86</span></div>
-  <p>세 자리의 공통점 — 시간이 지나도 변하지 않는 부분이다. 그래서 문서로 적어 두면 안전하다.</p>
+  <p>세 유형의 공통점 — 시간이 지나도 변하지 않는 부분이다. 그래서 문서로 적어 두면 안전하다.</p>
 </aside>
 
 <!-- 47 · 도식: 강함의 영역 -->
@@ -1268,7 +1274,7 @@ A4 한 장. 5섹션:
   </div>
   <div class="body">
     <h2>회의록 변환에서 md가 잡고 있는 것</h2>
-    <div class="lede"><strong>5섹션 출력 / "추측 금지" 규칙 / "PM 보조" 역할 — 매번 같이 적용된다.</strong><span class="br"></span>같은 회의록을 여러 번 변환해도 형식이 매번 같다. markdown으로 deterministic하게 만든다는 말의 의미가 이 한 줄에 있다.</div>
+    <div class="lede"><strong>7칸 출력 / "추측 금지" 규칙 / "PM 보조" 역할 — 매번 같이 적용된다.</strong><span class="br"></span>같은 회의록을 여러 번 변환해도 칸 구성이 매번 같다. markdown으로 deterministic하게 만든다는 말의 의미가 이 한 줄에 있다.</div>
   </div>
   <div class="meta-bottom"><span>3-3. 문서의 강점과 한계</span><span><span class="num">48</span> / 86</span></div>
 </section>
@@ -1284,14 +1290,14 @@ A4 한 장. 5섹션:
     <span>2003-3-1 · CLOSE</span>
   </div>
   <div class="body">
-    <h2>강함이 끝나는 곳에서 한계가 시작된다</h2>
-    <div class="lede">md가 잘 잡는 일은 한 번의 입력에 한 번의 출력, 형식이 정해진 변환이다. 그 너머는 여러 단계, 흐르는 상태, 실패 후 복구 — markdown으로 안 풀리는 자리다.</div>
+    <h2>강한 영역이 끝나면 거기서부터가 한계다</h2>
+    <div class="lede">md가 잘 잡는 일은 한 번의 입력에 한 번의 출력, 형식이 정해진 변환이다. 그 너머로 여러 단계가 이어지고, 상태가 흐르고, 실패 후 복구까지 가야 한다면 — 거기서부터는 markdown만으로 풀리지 않는다.</div>
   </div>
   <div class="meta-bottom"><span>3-3. 문서의 강점과 한계</span><span><span class="num">49</span> / 86</span></div>
 </section>
 <aside class="notes" data-for="49">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 49 / 86</span></div>
-  <p>다음 클립의 핵심을 미리 한 번 짚어 둔다.</p>
+  <p>md가 강한 곳과 한계가 시작되는 곳의 경계를 한 문장으로 정리한다.</p>
 </aside>
 
 <!-- ============================================================ -->
@@ -1307,13 +1313,13 @@ A4 한 장. 5섹션:
   <div class="body">
     <div class="clip-header"><span class="id">CLIP 2003-3-2</span><span class="label">20분 · 강의</span></div>
     <h2>문서가 약한 일</h2>
-    <div class="lede">md로는 잡히지 않는 세 가지 — <em>순서, 상태, 재시도</em>. 이 셋이 보이면 markdown으로 안 풀린다는 신호고, 4장의 분업형 하네스로 넘긴다.</div>
+    <div class="lede">md로는 잡히지 않는 세 가지 — <em>순서, 상태, 재시도</em>. 이 셋이 보이면 markdown만으로는 풀리지 않는다는 신호고, 4장의 분업형 하네스로 넘긴다.</div>
   </div>
   <div class="meta-bottom"><span>3-3. 문서의 강점과 한계</span><span><span class="num">50</span> / 86</span></div>
 </section>
 <aside class="notes" data-for="50">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 50 / 86</span></div>
-  <p>약점이 보여야 분업형으로 넘어갈 동기가 생긴다. markdown으로 안 풀리는 자리는 4장에서 다른 도구로 푼다.</p>
+  <p>약점이 보여야 분업형으로 넘어갈 동기가 생긴다. markdown으로 안 풀리는 부분은 4장에서 다른 도구로 푼다.</p>
 </aside>
 
 <!-- 51 · 문제: 한 번에 안 되는 일 -->
@@ -1333,7 +1339,7 @@ A4 한 장. 5섹션:
   <p>"길어진다"의 의미를 한 번 풀어준다 — 회의록 한 건이 아니라 회의록 100건을 처리할 때 누적되는 문제들.</p>
 </aside>
 
-<!-- 52 · 핵심: 약한 자리 3가지 -->
+<!-- 52 · 핵심: 약한 영역 3가지 -->
 <section class="slide layout-grid cols-3" data-num="52">
   <div class="meta-top">
     <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
@@ -1379,7 +1385,7 @@ A4 한 장. 5섹션:
   <p>이 표가 4장의 입력이 된다. 분업형 하네스가 풀려야 하는 문제들의 미리보기.</p>
 </aside>
 
-<!-- 54 · 적용 데모: 회의록 변환에서 한계가 드러나는 자리 -->
+<!-- 54 · 적용 데모: 회의록 변환에서 한계가 드러나는 부분 -->
 <section class="slide layout-statement" data-num="54">
   <div class="meta-top">
     <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 03 · KEYNOTE</span>
@@ -1403,8 +1409,8 @@ A4 한 장. 5섹션:
     <span>2003-3-2 · CLOSE</span>
   </div>
   <div class="body">
-    <h2>markdown으로 한계를 느꼈다면 다음으로 넘어가야 한다</h2>
-    <div class="lede">markdown으로 해결이 안 된다면, 그 자리에 4장의 분업형 하네스가 들어선다.</div>
+    <h2>md의 끝, 분업형의 시작</h2>
+    <div class="lede">markdown으로 해결이 안 된다면, 거기에 4장의 분업형 하네스가 들어선다.</div>
   </div>
   <div class="meta-bottom"><span>3-3. 문서의 강점과 한계</span><span><span class="num">55</span> / 86</span></div>
 </section>
@@ -1445,7 +1451,7 @@ A4 한 장. 5섹션:
     <h2>실습 한눈에</h2>
     <div class="cards">
       <div class="card"><div class="num">INPUT</div><h3>md 템플릿 v1</h3><p>3-2 산출물.</p></div>
-      <div class="card"><div class="num">PROCESS</div><h3>충분 / 부족 / 이유</h3><p>템플릿이 다루는 자리와 못 다루는 자리를 가른다.</p></div>
+      <div class="card"><div class="num">PROCESS</div><h3>충분 / 부족 / 이유</h3><p>템플릿이 다루는 영역과 못 다루는 영역을 나눈다.</p></div>
       <div class="card"><div class="num">OUTPUT</div><h3>한계 진단표</h3><p>한 장. 4장의 분업형 하네스 입력이 된다.</p></div>
     </div>
   </div>
@@ -1482,10 +1488,10 @@ A4 한 장. 5섹션:
   <div class="body">
     <h2 style="font-size:calc(38px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(14px * var(--deck-scale));">작성 절차 — 세 칸을 채운다</h2>
     <div class="flow-row">
-      <div class="step"><div class="lab">STEP 1</div><h3>충분</h3><p>md 템플릿이 매번 같은 결과를 낸 자리. 형식·금지·규칙이 잘 적혀 있는 곳.</p></div>
-      <div class="step"><div class="lab">STEP 2</div><h3>부족</h3><p>입력에 따라 결과가 달라지거나, 단계가 길어지면 무너지는 자리.</p></div>
+      <div class="step"><div class="lab">STEP 1</div><h3>충분</h3><p>md 템플릿이 매번 같은 결과를 낸 곳. 형식·금지·규칙이 잘 적혀 있다.</p></div>
+      <div class="step"><div class="lab">STEP 2</div><h3>부족</h3><p>입력에 따라 결과가 달라지거나, 단계가 길어지면 무너지는 곳.</p></div>
       <div class="step"><div class="lab">STEP 3</div><h3>이유</h3><p>왜 부족한지 — 순서? 상태? 재시도? 셋 중 어느 한계에 해당하는지 적는다.</p></div>
-      <div class="step"><div class="lab">STEP 4</div><h3>4장 연결</h3><p>"부족" 칸 옆에 "분업형으로 넘길 자리"라고 표시한다.</p></div>
+      <div class="step"><div class="lab">STEP 4</div><h3>4장 연결</h3><p>"부족" 칸 옆에 "분업형으로 넘길 항목"이라고 표시한다.</p></div>
     </div>
   </div>
   <div class="meta-bottom"><span>3-3. 문서의 강점과 한계</span><span><span class="num">59</span> / 86</span></div>
@@ -1504,9 +1510,9 @@ A4 한 장. 5섹션:
   <div class="body">
     <h2 style="font-size:calc(38px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(22px * var(--deck-scale));">데모 — 회의록 변환 템플릿의 한계 진단표</h2>
     <table>
-      <thead><tr><th>자리</th><th>판정</th><th>이유 / 4장 연결</th></tr></thead>
+      <thead><tr><th>항목</th><th>판정</th><th>이유 / 4장 연결</th></tr></thead>
       <tbody>
-        <tr><td>5섹션 출력 형식</td><td class="k">충분</td><td>—</td></tr>
+        <tr><td>7칸 출력 형식</td><td class="k">충분</td><td>—</td></tr>
         <tr><td>"추측 금지" 규칙</td><td class="k">충분</td><td>—</td></tr>
         <tr><td>회의록 100건 일괄 처리</td><td class="k">부족</td><td>실패 시 재시도 / 분업형 필요</td></tr>
         <tr><td>긴 회의록 청크 분할 + 통합</td><td class="k">부족</td><td>상태가 흐른다 / 분업형 필요</td></tr>
@@ -1530,17 +1536,17 @@ A4 한 장. 5섹션:
   <div class="body">
     <h2>자기 검수 — 끝났는지 보는 네 가지</h2>
     <div class="cards">
-      <div class="card"><div class="num">CHECK 1</div><h3>판정과 이유가 같이 있나</h3><p>"부족" 옆에 "왜 부족한가"가 한 줄로 적혀 있나.</p></div>
-      <div class="card"><div class="num">CHECK 2</div><h3>이유가 셋 중 하나로 분류되나</h3><p>순서 / 상태 / 재시도 — 다른 이유가 나오면 다시 본다.</p></div>
-      <div class="card"><div class="num">CHECK 3</div><h3>충분 항목도 있나</h3><p>모든 항목이 "부족"이면 템플릿이 욕심을 부렸다는 뜻이다.</p></div>
-      <div class="card"><div class="num">CHECK 4</div><h3>4장 연결 표시 있나</h3><p>"부족" 항목 옆에 분업형으로 넘길 표시가 있나.</p></div>
+      <div class="card"><div class="num">CHECK 1</div><h3>판정 + 이유 한 줄</h3><p>"부족"마다 "왜"가 한 줄로 붙어 있다.</p></div>
+      <div class="card"><div class="num">CHECK 2</div><h3>AI 재분류와 일치</h3><p>같은 항목을 AI에게 다시 분류시켰을 때 순서/상태/재시도 중 같은 카테고리로 떨어지는가. 갈리면 판정 근거가 약하다.</p></div>
+      <div class="card"><div class="num">CHECK 3</div><h3>전부 부족이면 입력 재검토</h3><p>본인 판정이든 AI 재분류든 모든 항목이 "부족"이면 md로 안 풀릴 일을 md로 풀려고 한 것. 입력 업무를 다시 본다.</p></div>
+      <div class="card"><div class="num">CHECK 4</div><h3>4장 연결 표시</h3><p>"부족" 항목마다 분업형으로 넘길 표시가 붙어 있다.</p></div>
     </div>
   </div>
   <div class="meta-bottom"><span>3-3. 문서의 강점과 한계</span><span><span class="num">61</span> / 86</span></div>
 </section>
 <aside class="notes" data-for="61">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 61 / 86</span></div>
-  <p>CHECK 3의 의미 — 모든 자리가 부족이면 md로 안 풀릴 일을 md로 풀려고 했다는 뜻. 입력 업무를 다시 본다.</p>
+  <p>CHECK 3의 의미 — 모든 항목이 부족이면 md로 안 풀릴 일을 md로 풀려고 했다는 뜻. 입력 업무를 다시 본다.</p>
 </aside>
 
 <!-- 62 · 산출물 기준 -->
@@ -1599,7 +1605,7 @@ A4 한 장. 5섹션:
 </section>
 <aside class="notes" data-for="64">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 64 / 86</span></div>
-  <p>obra/superpowers는 GitHub의 공개 .md 모음. AI 에이전트의 행동 규칙을 md로만 박은 사례다.</p>
+  <p>obra/superpowers는 GitHub의 공개 .md 모음. AI 에이전트의 행동 규칙을 md로만 적어 둔 사례다.</p>
 </aside>
 
 <!-- 65 · 사례 소개 -->
@@ -1628,7 +1634,7 @@ A4 한 장. 5섹션:
   <div class="body">
     <h2>무엇을 잠갔나 — 관찰</h2>
     <div class="cards">
-      <div class="card"><div class="num">관찰 1</div><h3>역할과 권한</h3><p>에이전트의 직무, 결정 권한, 결정을 사람에게 넘겨야 하는 자리를 명시.</p></div>
+      <div class="card"><div class="num">관찰 1</div><h3>역할과 권한</h3><p>에이전트의 직무, 결정 권한, 결정을 사람에게 넘겨야 하는 항목을 명시.</p></div>
       <div class="card"><div class="num">관찰 2</div><h3>행동 금지 목록</h3><p>위험한 명령 실행 금지, 즉답 없이 분석 우선 등의 규칙이 한 줄씩 적혀 있다.</p></div>
       <div class="card"><div class="num">관찰 3</div><h3>의사결정 트리</h3><p>"X 상황에서는 Y 절차" 형태의 분기를 md 안에서 처리.</p></div>
       <div class="card"><div class="num">관찰 4</div><h3>출력 모양</h3><p>응답의 헤딩·길이·언어 톤을 md로 강제.</p></div>
@@ -1652,7 +1658,7 @@ A4 한 장. 5섹션:
     <div class="cards">
       <div class="card"><div class="num">강점 1</div><h3>위험 행동 차단</h3><p>"실행 전에 사람 확인"이 적혀 있어 임의 실행 사고가 안 일어난다.</p></div>
       <div class="card"><div class="num">강점 2</div><h3>톤 일관성</h3><p>응답 모양이 .md에 정의되어 있어 어느 세션에서나 같은 톤으로 답한다.</p></div>
-      <div class="card"><div class="num">강점 3</div><h3>책임 경계</h3><p>"이건 사람이 결정"이라고 명시된 자리는 에이전트가 넘지 않는다.</p></div>
+      <div class="card"><div class="num">강점 3</div><h3>책임 경계</h3><p>"이건 사람이 결정"이라고 명시된 항목은 에이전트가 넘지 않는다.</p></div>
     </div>
   </div>
   <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">67</span> / 86</span></div>
@@ -1690,19 +1696,19 @@ A4 한 장. 5섹션:
     <span>2003-4-1 · APPLY</span>
   </div>
   <div class="body">
-    <h2>적용 — 내 프로젝트에 무엇을 가져갈까</h2>
+    <h2>적용 — 4-3에서 실제로 옮길 항목</h2>
     <div class="cards">
-      <div class="card"><div class="num">가져갈 것</div><h3>한 줄 행동 규칙</h3><p>금지사항을 동사 + 목적어 한 줄로 적는 방식.</p></div>
-      <div class="card"><div class="num">가져갈 것</div><h3>책임 경계 표시</h3><p>"이건 사람이 결정"을 명시적으로 표기.</p></div>
-      <div class="card"><div class="num">가져가지 말 것</div><h3>의사결정 트리</h3><p>분기 흐름은 md 밖(분업형)에서 잡는 게 안전하다.</p></div>
-      <div class="card"><div class="num">가져가지 말 것</div><h3>외부 호출 의존</h3><p>슬랙·이메일 호출은 md만으로 신뢰하지 않는다.</p></div>
+      <div class="card"><h3>AGENTS · CLAUDE 류 → SKILL.md 본문</h3><p>역할·금지선·책임 경계를 frontmatter 아래 named 섹션으로.</p></div>
+      <div class="card"><h3>skills/*.md → 본문 섹션 분리</h3><p>역할·제약·처리·출력·검수를 한 문단에 섞지 않고 섹션으로 나눈다.</p></div>
+      <div class="card"><h3>hooks/ → PostToolUse hook</h3><p>보존 표현 인용·확인 필요 항목 섹션·미확인 수치 단정을 .claude/hooks/에서 자동 검사.</p></div>
+      <div class="card"><h3>using-superpowers → 메타 스킬</h3><p>using-1page-harness/SKILL.md 한 파일에 행동 양식을 모아 둔다.</p></div>
     </div>
   </div>
   <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">69</span> / 86</span></div>
 </section>
 <aside class="notes" data-for="69">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 69 / 86</span></div>
-  <p>이 분류가 곧이어 나오는 흐름 설계도의 입력 중 하나가 된다.</p>
+  <p>네 카드가 곧이어 나오는 4-2 설계도의 입력이자, 4-3에서 만들 Claude Code 스킬 워크스페이스의 네 파일(skills/SKILL.md · hooks/ · settings.json · using-* 메타)에 그대로 대응한다.</p>
 </aside>
 
 <!-- ============================================================ -->
@@ -1736,16 +1742,16 @@ A4 한 장. 5섹션:
   <div class="body">
     <h2>실습 한눈에</h2>
     <div class="cards">
-      <div class="card"><div class="num">INPUT</div><h3>3-1·3-2·3-3 산출물 + superpowers 학습</h3><p>체크리스트 + 템플릿 v1 + 진단표 + 사례 적용 노트.</p></div>
-      <div class="card"><div class="num">PROCESS</div><h3>5단계 흐름 그리기</h3><p>입력 → 잠금 적용 → 빈칸 채우기 → 출력 → 검수.</p></div>
-      <div class="card"><div class="num">OUTPUT</div><h3>흐름 설계도 1장</h3><p>이어지는 본문 작성의 골격이 된다.</p></div>
+      <div class="card"><div class="num">INPUT</div><h3>3-1·3-2·3-3 산출물 + Superpowers 관찰</h3><p>체크리스트 + 템플릿 v1 + 진단표 + 4-1 관찰 표.</p></div>
+      <div class="card"><div class="num">PROCESS</div><h3>처리 순서 그리기</h3><p>원문 보존 → 확정/미결정 분리 → 출력 칸 맵핑 → 확인 필요 항목 분리 → 보존 표현 검사 → 마감.</p></div>
+      <div class="card"><div class="num">OUTPUT</div><h3>흐름 설계도 1장</h3><p>이어지는 프로젝트 1 스킬 워크스페이스의 골격이 된다.</p></div>
     </div>
   </div>
   <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">71</span> / 86</span></div>
 </section>
 <aside class="notes" data-for="71">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 71 / 86</span></div>
-  <p>3-1 ~ 3-3 산출물이 다 모이는 자리. 만약 빠진 산출물이 있다면 지금 채운다.</p>
+  <p>3-1 ~ 3-3 산출물이 여기서 다 모인다. 빠진 산출물이 있다면 지금 채운다.</p>
 </aside>
 
 <!-- 72 · 입력 명세 -->
@@ -1759,7 +1765,7 @@ A4 한 장. 5섹션:
     <table>
       <thead><tr><th>산출물</th><th>흐름 설계도에서의 역할</th></tr></thead>
       <tbody>
-        <tr><td>2장 인터뷰 하네스 v1</td><td>이 변환의 정의 — 무엇을 왜 하는가 한 줄</td></tr>
+        <tr><td>2장 인터뷰 하네스 v1</td><td>변환이 무엇이고 왜 하는지를 한 줄로 정한다</td></tr>
         <tr><td>3-1 설계 체크리스트</td><td>고정 / 남김 / 질문 분류</td></tr>
         <tr><td>3-2 md 템플릿 v1</td><td>잠금 칸 본문 — 6칸 골격</td></tr>
         <tr><td>3-3 한계 진단표</td><td>충분 / 부족 영역 표시</td></tr>
@@ -1771,7 +1777,7 @@ A4 한 장. 5섹션:
 </section>
 <aside class="notes" data-for="72">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 72 / 86</span></div>
-  <p>2장 인터뷰 하네스 v1이 첫 줄에 들어간다는 점을 한 번 더 짚는다. 2장과 3장을 잇는 자리.</p>
+  <p>2장 인터뷰 하네스 v1이 첫 줄에 들어간다는 점을 한 번 더 짚는다. 2장과 3장을 잇는 단계다.</p>
 </aside>
 
 <!-- 73 · 흐름 설계 도식 -->
@@ -1781,13 +1787,14 @@ A4 한 장. 5섹션:
     <span>2003-4-2 · FIGURE</span>
   </div>
   <div class="body">
-    <h2 style="font-size:calc(38px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(14px * var(--deck-scale));">변환 흐름 설계도 — 5단계</h2>
+    <h2 style="font-size:calc(38px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(14px * var(--deck-scale));">변환 흐름 설계도 — 처리 순서</h2>
     <div class="flow-row">
-      <div class="step"><div class="lab">STEP 1</div><h3>입력 받기</h3><p>회의록 원문 + 회의 일자 + 참석자 (질문 칸 채우기).</p></div>
-      <div class="step"><div class="lab">STEP 2</div><h3>잠금 적용</h3><p>md 템플릿 v1의 6칸이 입력에 적용된다. 역할·금지·형식이 강제된다.</p></div>
-      <div class="step"><div class="lab">STEP 3</div><h3>빈칸 채우기</h3><p>AI가 결정사항·액션아이템·미해결을 추출. 남김 칸은 사람이 검토.</p></div>
-      <div class="step"><div class="lab">STEP 4</div><h3>출력</h3><p>1page 기획안 — 5섹션 형식.</p></div>
-      <div class="step"><div class="lab">STEP 5</div><h3>검수</h3><p>6번 검수 칸 기준 적용 — 받는 사람이 다음 행동으로 넘어가는가.</p></div>
+      <div class="step"><div class="lab">STEP 1</div><h3>원문 보존</h3><p>회의록 원문을 그대로 첨부하거나 인용 블록으로 둔다.</p></div>
+      <div class="step"><div class="lab">STEP 2</div><h3>확정 / 미결정 분리</h3><p>회의에서 확정된 내용과 결정되지 않은 내용을 두 묶음으로 나눈다.</p></div>
+      <div class="step"><div class="lab">STEP 3</div><h3>출력 칸 맵핑</h3><p>확정 내용만 제목·배경·문제·사용자·해결 방향·성공 기준 칸으로 옮긴다.</p></div>
+      <div class="step"><div class="lab">STEP 4</div><h3>확인 필요 항목 분리</h3><p>미결정 내용은 결론 칸과 다른 칸에 따로 모은다.</p></div>
+      <div class="step"><div class="lab">STEP 5</div><h3>보존 표현 인용 검사</h3><p>회의록의 핵심 표현이 큰따옴표로 남아 있는지 마지막에 다시 본다.</p></div>
+      <div class="step"><div class="lab">STEP 6</div><h3>마감</h3><p>한 페이지 안에 결론 칸과 확인 필요 항목 칸이 모두 들어가는지 확인.</p></div>
     </div>
   </div>
   <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">73</span> / 86</span></div>
@@ -1805,7 +1812,7 @@ A4 한 장. 5섹션:
   </div>
   <div class="body">
     <h2>데모 — 한 페이지 흐름 설계도</h2>
-    <div class="lede"><strong>제목:</strong> 회의록 → 1page 기획안 변환 v1<span class="br"></span><strong>입력:</strong> 회의록 + 일자 + 참석자<span class="br"></span><strong>잠금:</strong> md 템플릿 v1 (6칸)<span class="br"></span><strong>채움:</strong> 결정·액션·미해결 추출 + 남김 칸 사람 검토<span class="br"></span><strong>출력:</strong> 1page 기획안 (5섹션)<span class="br"></span><strong>검수:</strong> 받는 임원이 다음 결정으로 넘어가는가</div>
+    <div class="lede"><strong>제목:</strong> 회의록 → 1page 기획안 변환 v1<span class="br"></span><strong>입력:</strong> 회의록 원문 + 확인된 요구사항 + 반드시 보존할 표현<span class="br"></span><strong>분해:</strong> 확정된 내용 / 결정되지 않은 내용으로 두 묶음<span class="br"></span><strong>맵핑:</strong> 확정 내용은 결론 칸으로, 미결정은 확인 필요 항목 칸으로<span class="br"></span><strong>출력:</strong> 1page 기획안 (제목·배경·문제·사용자·해결 방향·성공 기준·확인 필요 항목)<span class="br"></span><strong>검수:</strong> 보존 표현 인용 유지 + 미확인 사실이 결론 칸에 없는지</div>
   </div>
   <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">74</span> / 86</span></div>
 </section>
@@ -1823,17 +1830,17 @@ A4 한 장. 5섹션:
   <div class="body">
     <h2>자기 검수 — 끝났는지 보는 네 가지</h2>
     <div class="cards">
-      <div class="card"><div class="num">CHECK 1</div><h3>5단계가 다 있나</h3><p>입력 → 잠금 → 채움 → 출력 → 검수. 빠진 단계가 없는지.</p></div>
-      <div class="card"><div class="num">CHECK 2</div><h3>각 단계가 한 줄인가</h3><p>한 단계에 두 일이 섞여 있으면 분리.</p></div>
-      <div class="card"><div class="num">CHECK 3</div><h3>잠금/채움 경계가 명확한가</h3><p>AI가 자동으로 채울 자리와 사람이 봐야 할 자리가 분리되어 있나.</p></div>
-      <div class="card"><div class="num">CHECK 4</div><h3>3-3 부족 항목이 빠져 있나</h3><p>"부족" 항목은 이 설계에서 제외되어야 한다.</p></div>
+      <div class="card"><div class="num">CHECK 1</div><h3>처리 순서 전부</h3><p>원문 보존 → 확정/미결정 분리 → 결론 칸 맵핑 → 확인 필요 항목 분리 → 보존 표현 검사 → 마감.</p></div>
+      <div class="card"><div class="num">CHECK 2</div><h3>단계당 한 줄</h3><p>한 단계에 두 일이 섞여 있으면 분리.</p></div>
+      <div class="card"><div class="num">CHECK 3</div><h3>결론 / 확인 필요 항목 분리</h3><p>확정된 결론 칸과 미결정 칸이 서로 다른 칸으로 나뉘어 있다.</p></div>
+      <div class="card"><div class="num">CHECK 4</div><h3>한계 진단표 부족 항목 제외</h3><p>md로 부족한 항목은 본 설계에서 빠지고, 4장 분업형 후보로만 표시된다.</p></div>
     </div>
   </div>
   <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">75</span> / 86</span></div>
 </section>
 <aside class="notes" data-for="75">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 75 / 86</span></div>
-  <p>CHECK 4가 가장 중요하다. 한계 진단표에서 "부족"으로 잡힌 자리는 이 설계도에 들어가지 않는다.</p>
+  <p>CHECK 4가 가장 중요하다. 한계 진단표에서 "부족"으로 잡힌 항목은 이 설계도에 들어가지 않는다.</p>
 </aside>
 
 <!-- 76 · 산출물 기준 -->
@@ -1844,7 +1851,7 @@ A4 한 장. 5섹션:
   </div>
   <div class="body">
     <h2>산출물 기준 — 한 장 흐름 설계도</h2>
-    <div class="lede"><strong>5단계 흐름이 한 장에 명시. 잠금/채움 경계가 분명. 3-3 부족 항목 제외.</strong><span class="br"></span>이 설계도가 곧이어 이어지는 하네스 v1 본문 작성의 골격이 된다.</div>
+    <div class="lede"><strong>처리 순서가 한 장에 명시. 결론 / 확인 필요 항목 경계가 분명. 한계 진단표의 부족 항목은 본 설계 밖.</strong><span class="br"></span>이 설계도가 곧이어 이어지는 프로젝트 1 스킬 워크스페이스의 골격이 된다.</div>
   </div>
   <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">76</span> / 86</span></div>
 </section>
@@ -1865,8 +1872,8 @@ A4 한 장. 5섹션:
   </div>
   <div class="body">
     <div class="clip-header"><span class="id">CLIP 2003-4-3</span><span class="label">20분 · 실습</span></div>
-    <h2>실습 ⑤ — 프로젝트 1 하네스 v1 본문</h2>
-    <div class="lede">설계도를 본문으로 옮긴다. 한 페이지 마크다운으로 회의록 → 1page 기획안 하네스 v1 완성.</div>
+    <h2>실습 ⑤ — 프로젝트 1 스킬 워크스페이스</h2>
+    <div class="lede">설계도를 Claude Code 스킬로 옮긴다. SKILL.md(frontmatter 포함) · PostToolUse hook · settings.json 세 파일을 .claude/ 폴더 하나로 묶는다.</div>
   </div>
   <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">77</span> / 86</span></div>
 </section>
@@ -1882,15 +1889,15 @@ A4 한 장. 5섹션:
     <span>2003-4-3 · INPUT</span>
   </div>
   <div class="body">
-    <h2 style="font-size:calc(38px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(22px * var(--deck-scale));">입력 — 다섯 산출물을 한 자리에 모은다</h2>
+    <h2 style="font-size:calc(38px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(22px * var(--deck-scale));">입력 — 앞 산출물이 워크스페이스의 어디로 가는가</h2>
     <table>
-      <thead><tr><th>출처</th><th>역할</th></tr></thead>
+      <thead><tr><th>출처</th><th>워크스페이스에서의 역할</th></tr></thead>
       <tbody>
-        <tr><td>2장 인터뷰 하네스 v1</td><td>이 변환의 정의 — 한 줄</td></tr>
-        <tr><td>3-1 설계 체크리스트</td><td>고정·남김·질문 분류</td></tr>
-        <tr><td>3-2 md 템플릿 v1</td><td>6칸 본문</td></tr>
-        <tr><td>3-3 한계 진단표</td><td>이 v1의 적용 범위 (충분 항목만)</td></tr>
-        <tr><td>3-4-2 흐름 설계도</td><td>5단계 골격</td></tr>
+        <tr><td>3-1 설계 체크리스트</td><td>SKILL.md 본문의 역할 · 금지 · 출력 형식 섹션</td></tr>
+        <tr><td>3-2 md 템플릿 v1</td><td>SKILL.md 본문의 골격 (역할 / 입력 / 처리 / 금지 / 출력 / 예시)</td></tr>
+        <tr><td>3-3 한계 진단표</td><td>SKILL.md 본문의 적용 범위 · 적용 범위 밖 섹션</td></tr>
+        <tr><td>3-4-1 Superpowers 관찰 + 작성 프랙티스</td><td>SKILL.md frontmatter(name·description·triggers) + .claude/ 폴더 구조</td></tr>
+        <tr><td>3-4-2 설계도</td><td>SKILL.md 처리 순서 · 출력 맵핑 · hook 검사 항목</td></tr>
       </tbody>
     </table>
   </div>
@@ -1898,7 +1905,7 @@ A4 한 장. 5섹션:
 </section>
 <aside class="notes" data-for="78">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 78 / 86</span></div>
-  <p>다섯 산출물이 다 모였다는 건 2장과 3장의 모든 실습이 끝났다는 뜻이다. 여기서 합쳐진다.</p>
+  <p>다섯 산출물이 다 모였다면 2장과 3장의 실습이 모두 끝난 것이고, 그게 여기서 하나로 합쳐진다.</p>
 </aside>
 
 <!-- 79 · 하네스 v1 골격 -->
@@ -1908,30 +1915,28 @@ A4 한 장. 5섹션:
     <span>2003-4-3 · STRUCTURE</span>
   </div>
   <div class="body">
-    <h2 style="font-size:calc(38px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(16px * var(--deck-scale));">하네스 v1 골격 — 본문 구조</h2>
-    <pre class="code-block small"># 회의록 → 1page 기획안 하네스 v1
+    <h2 style="font-size:calc(38px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(16px * var(--deck-scale));">워크스페이스 골격 — Claude Code 스킬 한 묶음</h2>
+    <pre class="code-block small">&lt;프로젝트-루트&gt;/
+└── .claude/
+    ├── settings.json                ← SessionStart + PostToolUse 트리거 등록
+    ├── hooks/
+    │   ├── session-start.sh         ← 세션 시작 시 핵심 규약을 컨텍스트 상단에 주입
+    │   └── check-1page-output.sh    ← Write/Edit 직후 산출물 가드 (검사 n종)
+    └── skills/
+        ├── using-&lt;프로젝트&gt;-harness/
+        │   └── SKILL.md             ← 메타 스킬: hook 협업 규약·재작성 행동 양식
+        └── &lt;도메인&gt;-to-1page/
+            └── SKILL.md             ← 도메인 스킬: 보존 표현·7칸 스키마·처리 순서·예시
 
-## 0. 정의 (2장 인터뷰 하네스 v1에서)
-- 무엇을 왜 하는가 한 줄
-
-## 1. 역할 / 2. 목표 / 3. 금지 / 4. 출력 / 5. 예시 / 6. 검수
-(3-2 md 템플릿 v1 본문 그대로)
-
-## 7. 흐름 (3-4-2 설계도)
-- 입력 받기 → 잠금 적용 → 빈칸 채우기 → 출력 → 검수
-
-## 8. 적용 범위 (3-3 진단표 충분 항목)
-- 한 번에 한 회의록, 1page 출력
-- 청크 분할/재시도/외부 호출은 4장 분업형으로 위임
-
-## 9. 운영 메모
-- 시운전 결과 / 다음 v2에서 손볼 자리</pre>
+# 두 스킬의 분담 — Superpowers 패턴 그대로
+메타 (using-*)     →  어떤 도메인이든 공통인 협업 규약
+도메인 (meeting-*) →  본 작업에만 적용되는 구체 규칙</pre>
   </div>
   <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">79</span> / 86</span></div>
 </section>
 <aside class="notes" data-for="79">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 79 / 86</span></div>
-  <p>0번에는 2장에서 만든 한 줄이 그대로 들어간다. 8번 적용 범위에 "여기까지"를 적어 두면, 그 너머 항목들은 4장 분업형 하네스에서 다시 다룬다.</p>
+  <p>SKILL.md가 곧 메타 스킬이다 — AI가 매 호출 직전에 읽는 행동 양식. Superpowers의 using-* 패턴을 본뜬 구조. 두 hook의 역할이 다르다: SessionStart는 세션 시작 시 핵심 규약을 컨텍스트에 주입하는 사전 안내, PostToolUse는 Write/Edit 직후 산출물을 검사하는 사후 가드. 적용 범위 밖 항목은 SKILL.md 안에 "4장 분업형 후보"로 표시만 해 둔다.</p>
 </aside>
 
 <!-- 80 · 작성 절차 -->
@@ -1941,20 +1946,21 @@ A4 한 장. 5섹션:
     <span>2003-4-3 · PROCESS</span>
   </div>
   <div class="body">
-    <h2 style="font-size:calc(38px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(14px * var(--deck-scale));">작성 절차 — 다섯 단계</h2>
+    <h2 style="font-size:calc(34px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(14px * var(--deck-scale));">작성 절차 — 워크스페이스 파일 채우기</h2>
     <div class="flow-row">
-      <div class="step"><div class="lab">STEP 1</div><h3>0번 정의 옮기기</h3><p>2장 인터뷰 하네스 v1의 한 줄을 0번에 붙인다.</p></div>
-      <div class="step"><div class="lab">STEP 2</div><h3>1~6번 본문 옮기기</h3><p>3-2 md 템플릿 v1 본문을 그대로 옮긴다.</p></div>
-      <div class="step"><div class="lab">STEP 3</div><h3>7번 흐름</h3><p>3-4-2 설계도 5단계를 한 줄씩 적는다.</p></div>
-      <div class="step"><div class="lab">STEP 4</div><h3>8번 적용 범위</h3><p>3-3 진단표의 충분 항목을 적고, 부족 항목을 4장 위임으로 표시.</p></div>
-      <div class="step"><div class="lab">STEP 5</div><h3>9번 시운전</h3><p>실제 회의록 1건을 넣어 본다. 결과를 9번 운영 메모에 남긴다.</p></div>
+      <div class="step"><div class="lab">STEP 1</div><h3>폴더 정렬</h3><p>using-&lt;프로젝트&gt;-harness/ 와 &lt;도메인&gt;-to-1page/, hooks/ 폴더 먼저 만든다.</p></div>
+      <div class="step"><div class="lab">STEP 2</div><h3>메타 스킬</h3><p>using-* SKILL.md에 hook 협업 규약·재작성 행동 양식·도메인 호출 순서.</p></div>
+      <div class="step"><div class="lab">STEP 3</div><h3>도메인 스킬</h3><p>&lt;도메인&gt;-to-1page SKILL.md에 보존 표현·7칸 스키마·처리 순서·예시.</p></div>
+      <div class="step"><div class="lab">STEP 4</div><h3>SessionStart hook</h3><p>session-start.sh로 핵심 규약을 stdout 출력. 세션 시작 시 컨텍스트 상단에 박힌다.</p></div>
+      <div class="step"><div class="lab">STEP 5</div><h3>PostToolUse hook</h3><p>check-1page-output.sh로 보존 표현·확인 필요 항목 섹션·미확인 수치 단정을 사후 검사.</p></div>
+      <div class="step"><div class="lab">STEP 6</div><h3>settings + 시운전</h3><p>settings.json에 둘 다 등록 후 회의록 1건으로 시운전.</p></div>
     </div>
   </div>
   <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">80</span> / 86</span></div>
 </section>
 <aside class="notes" data-for="80">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 80 / 86</span></div>
-  <p>옮기는 작업이 대부분이다. 새로 쓰는 칸은 0·7·8·9번 정도. 시간이 더 들어가는 곳은 STEP 5 시운전.</p>
+  <p>대부분은 앞 산출물을 옮기는 작업이다. 새로 쓰는 부분은 frontmatter·hook 스크립트의 보존 표현 갈아끼우기·settings.json. 시간이 가장 많이 드는 곳은 STEP 5 시운전 — 같은 회의록을 두 번 넣어 같은 형식이 나오는지 본다.</p>
 </aside>
 
 <!-- 81 · 채워진 하네스 v1 데모 -->
@@ -1964,35 +1970,43 @@ A4 한 장. 5섹션:
     <span>2003-4-3 · WORKED EXAMPLE</span>
   </div>
   <div class="body">
-    <h2 style="font-size:calc(34px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(14px * var(--deck-scale));">데모 — 채워진 하네스 v1</h2>
-    <pre class="code-block small"># 회의록 → 1page 기획안 하네스 v1
+    <h2 style="font-size:calc(34px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(14px * var(--deck-scale));">데모 — 채워진 SKILL.md</h2>
+    <pre class="code-block small">---
+name: meeting-to-1page
+description: Use when converting a meeting note into a 1page draft.
+             Triggers on "회의록 정리", "1page 기획안", "회의록 → 1page".
+---
 
-## 0. 정의
-"임원 2명이 분기 회의 결정사항을 한눈에 보고 다음 결정으로 넘어가게 한다."
+# Meeting → 1page Planning Harness
 
-## 1. 역할 ~ 6. 검수
-(3-2 md 템플릿 v1 그대로 — 회의록 변환 6칸)
+## 역할
+- 회의록 원문과 확인된 요구사항 안에서만 1page 초안을 7칸으로 구조화
+- "반드시 보존할 표현"은 큰따옴표 인용으로 유지
 
-## 7. 흐름
-1) 회의록 원문 + 일자 + 참석자 입력
-2) 6칸 잠금 적용 (역할·금지·형식 강제)
-3) 결정·액션·미해결 추출 / 남김 칸 사람 검토
-4) 1page 기획안 출력 (5섹션)
-5) 검수: 임원이 다음 결정으로 넘어가는가
+## 제약
+- 회의록에 없는 수치·일정·담당자는 결론처럼 쓰지 않는다
+- 단서 붙은 수치는 본문 결론이 아니라 확인 필요 항목으로만
 
-## 8. 적용 범위
-- 한 번에 한 회의록 (60분 이내, 6쪽 이내)
-- 분기 1회 임원 회의 형식
-- 청크 분할 / 슬랙 자동 전송 / 100건 일괄 처리는 4장 분업형으로 위임
+## 처리 순서
+원문 보존 → 확정/미결정 분리 → 결론 칸 맵핑 → 확인 필요 항목 분리
+  → 보존 표현 인용 검사 → 한 페이지 마감
 
-## 9. 운영 메모
-- 첫 시운전: 4월 2주차 분기 회의록 — 결정사항 추출은 OK, 미해결 분류는 매번 다르게 나옴 → v2에서 미해결 정의 손보기</pre>
+## 출력 형식
+제목 · 배경 · 문제 · 사용자 · 해결 방향 · 성공 기준 · 확인 필요 항목
+
+## Hook 협업 규약
+파일명에 1page / one-page 포함 시 PostToolUse hook이 자동 검사
+  ① 보존 표현 인용  ② 확인 필요 항목 섹션  ③ 미확인 수치 단정 차단
+exit 2 받으면 위반 위치만 보정. 두 번 연속 실패 시 사용자 보고.
+
+## 적용 범위 밖 (4장 분업형 / MCP형 후보)
+회차별 답변 추적 / 자동 재시도 횟수 제어 / 외부 회신 단계 순서</pre>
   </div>
   <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">81</span> / 86</span></div>
 </section>
 <aside class="notes" data-for="81">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 81 / 86</span></div>
-  <p>9번 운영 메모가 v2의 입력이다. v1에서 매번 다르게 나온 곳을 솔직하게 적는다.</p>
+  <p>frontmatter의 description이 Claude Code가 매 호출에서 매칭하는 문장이다. 본인 업무 어휘로 적어야 트리거된다. 시운전에서 매번 다르게 나온 항목은 SKILL.md 아래쪽 시운전 메모 섹션에 솔직히 적어 두면 v2 입력이 된다.</p>
 </aside>
 
 <!-- 82 · 자기 검수 -->
@@ -2002,18 +2016,18 @@ A4 한 장. 5섹션:
     <span>2003-4-3 · SELF-CHECK</span>
   </div>
   <div class="body">
-    <h2>자기 검수 — 다섯 가지</h2>
+    <h2>자기 검수 — 워크스페이스 여섯 파일</h2>
     <div class="cards">
-      <div class="card"><div class="num">CHECK 1</div><h3>0번 정의가 한 줄인가</h3><p>여러 줄이면 한 줄로 압축한다.</p></div>
-      <div class="card"><div class="num">CHECK 2</div><h3>1~6번이 6칸 다 있나</h3><p>역할·목표·금지·형식·예시·검수 빠짐없이.</p></div>
-      <div class="card"><div class="num">CHECK 3</div><h3>8번 적용 범위가 명시적인가</h3><p>"한 번에 한 회의록" 같은 명시적 한계가 있나.</p></div>
-      <div class="card"><div class="num">CHECK 4</div><h3>9번에 시운전 결과 있나</h3><p>실제 입력 1건 결과가 한 줄로 적혀 있나.</p></div>
+      <div class="card"><div class="num">CHECK 1</div><h3>메타 스킬 + 도메인 스킬 분리</h3><p>using-&lt;프로젝트&gt;-harness/ 와 &lt;도메인&gt;-to-1page/ 두 SKILL.md가 따로 있다. 메타에는 협업 규약, 도메인에는 보존 표현·스키마.</p></div>
+      <div class="card"><div class="num">CHECK 2</div><h3>frontmatter triggers</h3><p>두 SKILL.md의 description에 본인 도메인 트리거 단어가 들어가 있다.</p></div>
+      <div class="card"><div class="num">CHECK 3</div><h3>SessionStart + PostToolUse hook</h3><p>session-start.sh가 규약을 stdout 출력, check-1page-output.sh가 사후 검사. settings.json에 둘 다 등록.</p></div>
+      <div class="card"><div class="num">CHECK 4</div><h3>시운전 메모</h3><p>세션 시작 시 SessionStart 안내가 들어오는지 + Write/Edit 직후 PostToolUse 통과/실패 한 줄.</p></div>
     </div>
     <div class="practice-checklist">
       <h3>최종 합격 기준</h3>
       <ul>
-        <li><strong>두 번째 시운전</strong>같은 형식 회의록을 다시 넣었을 때 출력 형식이 첫 번째와 같은가</li>
-        <li><strong>같지 않다면</strong>9번 운영 메모에 이유 추가, v2 작업 항목으로 표시</li>
+        <li><strong>두 번째 시운전</strong>같은 형식 회의록을 다시 넣었을 때 출력 칸 구성이 첫 번째와 같은가</li>
+        <li><strong>같지 않다면</strong>SKILL.md 시운전 메모에 이유 추가, v2 작업 항목으로 표시</li>
       </ul>
     </div>
   </div>
@@ -2031,8 +2045,8 @@ A4 한 장. 5섹션:
     <span>2003-4-3 · DELIVERABLE</span>
   </div>
   <div class="body">
-    <h2>프로젝트 1 산출물 — 회의록 → 1page 기획안 하네스 v1</h2>
-    <div class="lede"><strong>한 페이지 마크다운. 0~9번 다 채워졌고, 두 번 시운전 결과가 형식 일치.</strong><span class="br"></span>3장의 모든 실습이 한 묶음으로 정리되었다. 4장에서는 이 v1의 8번 적용 범위 밖 항목들을 분업형 하네스로 다시 본다.</div>
+    <h2>프로젝트 1 산출물 — 회의록 → 1page 스킬 워크스페이스</h2>
+    <div class="lede"><strong>.claude/ 폴더 하나에 메타 스킬 SKILL.md · SessionStart hook · PostToolUse hook · settings.json이 정렬되어 있고, 두 번 시운전 결과가 형식 일치.</strong><span class="br"></span>Superpowers에서 옮긴 네 구성(AGENTS·CLAUDE 류 지침 / skills 분리 / hooks 가드 / using-* 메타)이 한 묶음으로 정리되었다. 4장에서는 이 스킬의 적용 범위 밖 항목들을 분업형 하네스로 다시 본다.</div>
   </div>
   <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">83</span> / 86</span></div>
 </section>
@@ -2049,7 +2063,7 @@ A4 한 장. 5섹션:
   </div>
   <div class="body">
     <h2>4장으로 — md가 닿지 못하는 곳에서 시작한다</h2>
-    <div class="lede">3장 v1의 8번 "적용 범위 밖" 항목들 — 청크 분할, 일괄 처리, 외부 호출, 실패 복구 — 이 자리들이 4장 분업형 하네스의 입력으로 그대로 넘어간다. md로는 여기까지 왔고, 그 너머는 4장 분업형에서 다시 푼다.</div>
+    <div class="lede">3장 워크스페이스의 "적용 범위 밖" 항목들 — 회차별 답변 추적, 자동 재시도 횟수 제어, 외부 회신 단계 순서, 입력별 회귀 케이스 — 이 항목들이 4장 분업형 하네스의 입력으로 그대로 넘어간다. md + hook으로는 여기까지 왔고, 그 너머는 4장에서 다시 푼다.</div>
   </div>
   <div class="meta-bottom"><span>3-4. 프로젝트 1 — 회의록 → 1page 기획안</span><span><span class="num">84</span> / 86</span></div>
 </section>
@@ -2069,9 +2083,9 @@ A4 한 장. 5섹션:
   <div class="body">
     <h2>3장 정리 — 무엇을, 어떻게, 어디까지, 실제로</h2>
     <div class="cards">
-      <div class="card"><div class="num">3-1</div><h3>무엇을 잠글까</h3><p>고정 / 남김 / 질문 — 3칸 프레임으로 가른다.</p></div>
+      <div class="card"><div class="num">3-1</div><h3>무엇을 잠글까</h3><p>고정 / 남김 / 질문 — 3칸 프레임으로 나눈다.</p></div>
       <div class="card"><div class="num">3-2</div><h3>어떻게 잠글까</h3><p>역할·목표·금지·형식·예시·검수 — 6칸 골격.</p></div>
-      <div class="card"><div class="num">3-3</div><h3>어디까지 잠글까</h3><p>md가 강한 영역(형식·규칙·반복)과 약한 영역(순서·상태·재시도)을 가른다.</p></div>
+      <div class="card"><div class="num">3-3</div><h3>어디까지 잠글까</h3><p>md가 강한 영역(형식·규칙·반복)과 약한 영역(순서·상태·재시도)을 나눈다.</p></div>
       <div class="card"><div class="num">3-4</div><h3>실제로 만든다</h3><p>2장 인터뷰 하네스 + 3-1·3-2·3-3 산출물을 모아 회의록 → 1page 기획안 하네스 v1을 만든다.</p></div>
     </div>
   </div>
@@ -2093,8 +2107,8 @@ A4 한 장. 5섹션:
   <div class="body">
     <div>
       <div class="eyebrow">CLOSING · CHAPTER 03</div>
-      <h1>여기까지가 md의 한계다</h1>
-      <p class="subtitle">deterministic의 한계 너머 — 4장 분업형 하네스로 이어진다.</p>
+      <h1>md로는 여기까지</h1>
+      <p class="subtitle">그 다음은 4장 분업형 하네스로 이어진다.</p>
     </div>
     <div class="by">
       <div class="who">

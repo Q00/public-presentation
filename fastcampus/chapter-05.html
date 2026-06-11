@@ -165,7 +165,7 @@
     <span>5-1 · RUNTIME LOCK-IN</span>
   </div>
   <div class="body">
-    <h2>한 런타임에 종속되면 정책 변화를 그대로 떠안는다 — 그래서 런타임 독립</h2>
+    <h2>한 런타임에 종속되면 정책 변화를 그대로 떠안는다. 그래서 런타임 독립으로 간다</h2>
     <div class="cards">
       <div class="card"><div class="num">2026-06-15 변화</div><h3>headless / SDK가 별도 크레딧으로 분리</h3>
         <p>Claude Code의 <code>-p</code> 옵션(headless) 사용과 SDK를 통한 호출이 추가 $200 크레딧 한도에서만 처리된다. 한 세션 안 대화형 사용은 기존 Max Plan을 유지.</p>
@@ -173,7 +173,7 @@
       </div>
       <div class="card"><div class="num">결과</div><h3>한 벤더에 종속되면 위험하다</h3>
         <p>지금까지 만든 하네스는 메인·보조를 나눴어도 모두 Claude 한 런타임 위에서 돌았다. 한 벤더의 정책·요금이 바뀌면 전체가 그 영향 아래 놓인다.</p>
-        <p><strong>의미:</strong> 그래서 5장은 특정 런타임에 묶이지 않는 설계로 간다 — capability를 런타임 독립 단위로 두고, adapter로 Claude·Codex 등을 갈아끼운다.</p>
+        <p><strong>의미:</strong> 그래서 5장은 특정 런타임에 묶이지 않는 설계로 간다. capability를 런타임 독립 단위로 두고, adapter로 Claude·Codex 등을 갈아끼운다.</p>
       </div>
     </div>
   </div>
@@ -182,7 +182,7 @@
 <aside class="notes" data-for="4">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 04 / 60</span></div>
   <p>이 슬라이드의 메시지는 '분업형의 한계'가 아니다. '한 벤더(Claude) 종속의 위험'이고, 2026-06-15 정책은 그 위험을 보여주는 외부 사건으로만 쓴다. 사실 기반이라 본인 의견은 덧붙이지 않는다.</p>
-  <p>발화 멘트: 지금까지 만든 하네스는 전부 Claude 위에서 돌았다. 6/15부터 headless·SDK가 별도 크레딧으로 분리되는데, 짚을 건 비용 액수가 아니라 '한 벤더에 묶이면 정책 한 번이 전체를 좌우한다'는 구조다. 그래서 5장은 런타임 독립 — 특정 런타임에 종속되지 않는 capability 설계로 가고, 이게 5-2의 Capability Matrix·adapter로 이어진다.</p>
+  <p>발화 멘트: 지금까지 만든 하네스는 전부 Claude 위에서 돌았다. 6/15부터 headless·SDK가 별도 크레딧으로 분리되는데, 짚을 건 비용 액수가 아니라 '한 벤더에 묶이면 정책 한 번이 전체를 좌우한다'는 구조다. 그래서 5장은 런타임 독립, 곧 특정 런타임에 종속되지 않는 capability 설계로 가고, 이게 5-2의 Capability Matrix·adapter로 이어진다.</p>
 </aside>
 
 <section id="chapter-05-module-01-signals" class="slide layout-grid cols-4" data-num="5" data-curriculum="curriculum.md rows 50-52">
@@ -472,7 +472,7 @@
   <div class="body">
     <div class="part">MODULE · 5-2</div>
     <h2>5-2. <span class="nb">Capability Graph</span>와 MCP 아키텍처</h2>
-    <div class="lede">런타임(Claude / Codex / OpenCode / Hermes / Kiro / Copilot, Gemini 등 추가 adapter 포함)을 갈아끼워도 같은 workflow가 도는 추상화<br/>— <span class="nb">Capability Matrix</span>와 <span class="nb">Capability Graph</span>로 묶는다.<br/>MCP는 그 graph를 코드형 orchestration boundary로 강제하는 실행 지점이다.</div>
+    <div class="lede">런타임(Claude / Codex / OpenCode / Hermes / Kiro / Copilot, Gemini 등 추가 adapter 포함)을 갈아끼워도 같은 workflow가 도는 추상화를<br/><span class="nb">Capability Matrix</span>와 <span class="nb">Capability Graph</span>로 묶는다.<br/>MCP는 그 graph를 코드형 orchestration boundary로 강제하는 실행 지점이다.</div>
     <div class="step-reference" aria-label="5-2 강의 흐름">
       <strong>LECTURE ARC</strong>
       <a href="#chapter-05-mcp-inversion">MCP 뒤집기</a>
@@ -490,12 +490,12 @@
 </section>
 <aside class="notes" data-for="12">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 12 / 60</span></div>
-  <p>5-1에서는 MCP까지 필요한 업무만 골랐다. 5-2는 그 위에 한 층 더 — "MCP라고 다 같은 MCP가 아니다"를 짚는다. 도구를 호출하는 시점에 무엇을 알 수 있는가, 어느 런타임에서 도는가, 같은 묶음이 다른 런타임에서도 도는가. 이 세 질문이 5-2의 중심축이다.</p>
-  <p>5-2의 한 줄 — <span class="nb">Capability Matrix</span>로 무엇이 같고 무엇이 다른지 보고, <span class="nb">Capability Graph</span>로 어떤 node가 어떤 capability에 의존하는지 연결한다. MCP는 그 graph에서 순서, 상태, retry를 코드로 강제할 boundary다.</p>
+  <p>5-1에서는 MCP까지 필요한 업무만 골랐다. 5-2는 그 위에 한 층을 더 얹어 "MCP라고 다 같은 MCP가 아니다"를 짚는다. 도구를 호출하는 시점에 무엇을 알 수 있는가, 어느 런타임에서 도는가, 같은 묶음이 다른 런타임에서도 도는가. 이 세 질문이 5-2의 중심축이다.</p>
+  <p>5-2의 한 줄은 이렇다. <span class="nb">Capability Matrix</span>로 무엇이 같고 무엇이 다른지 보고, <span class="nb">Capability Graph</span>로 어떤 node가 어떤 capability에 의존하는지 연결한다. MCP는 그 graph에서 순서, 상태, retry를 코드로 강제할 boundary다.</p>
 </aside>
 
 <!-- ============================================================ -->
-<!-- 33 · MCP 뒤집기 — 툴이 LLM을 쓴다                                 -->
+<!-- 33 · MCP 뒤집기: 툴이 LLM을 쓴다                                 -->
 <!-- ============================================================ -->
 <section id="chapter-05-mcp-inversion" class="slide layout-statement" data-num="13" data-curriculum="curriculum.md rows 53-55">
   <div class="meta-top">
@@ -504,17 +504,17 @@
   </div>
   <div class="body">
     <div class="eyebrow">5-2의 출발</div>
-    <h2>MCP를 새로운 시각으로 — 툴이 LLM을 쓴다</h2>
+    <h2>MCP를 새로운 시각으로 본다. 툴이 LLM을 쓴다</h2>
   </div>
   <div class="meta-bottom"><span>5-2. Capability Graph와 MCP 아키텍처</span><span><span class="num">13</span> / 60</span></div>
 </section>
 <aside class="notes" data-for="13">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 13 / 60</span></div>
-  <p>5-2는 capability·stateless로 곧장 가지 않는다. 먼저 MCP를 보는 시각을 한 번 뒤집는다. 대부분은 MCP를 "LLM이 외부 도구를 호출하는 길"로만 쓴다. 그래서 context를 많이 먹는다며 직접 CLI로 도구를 부르기도 한다. Ouroboros는 반대로 갔다 — 도구(MCP) 안에서 LLM을 부린다. 다음 두 장에서 그 안이 어떻게 도는지와, 그래서 무엇이 풀렸는지 본다.</p>
+  <p>5-2는 capability·stateless로 곧장 가지 않는다. 먼저 MCP를 보는 시각을 한 번 뒤집는다. 대부분은 MCP를 "LLM이 외부 도구를 호출하는 길"로만 쓴다. 그래서 context를 많이 먹는다며 직접 CLI로 도구를 부르기도 한다. Ouroboros는 반대로 갔다. 도구(MCP) 안에서 LLM을 부린다. 다음 두 장에서 그 안이 어떻게 도는지와, 그래서 무엇이 풀렸는지 본다.</p>
 </aside>
 
 <!-- ============================================================ -->
-<!-- 34 · ooo run 내부 — 바깥엔 툴 콜 하나, 안엔 에이전트                -->
+<!-- 34 · ooo run 내부: 바깥엔 툴 콜 하나, 안엔 에이전트                -->
 <!-- ============================================================ -->
 <section class="slide" data-num="14" data-curriculum="curriculum.md rows 53-55">
   <div class="meta-top">
@@ -522,10 +522,10 @@
     <span>5-2 · INSIDE ooo run</span>
   </div>
   <div class="body">
-    <h2 style="font-size:calc(36px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(16px * var(--deck-scale));"><span class="nb">ooo run</span> 한 번 — 바깥엔 툴 콜 하나, 안엔 에이전트가 돈다</h2>
+    <h2 style="font-size:calc(36px * var(--deck-scale));font-weight:700;letter-spacing:-.02em;margin-bottom:calc(16px * var(--deck-scale));"><span class="nb">ooo run</span> 한 번이면 바깥엔 툴 콜 하나, 안엔 에이전트가 돈다</h2>
     <div class="figure-wrap" aria-label="ooo run 내부 오케스트레이션">
       <svg viewBox="0 0 1080 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="ooo-run-inside">
-        <title id="ooo-run-inside">ooo run 내부 — 런타임이 콜 하나를 던지면 MCP 안에서 세션들이 돈다</title>
+        <title id="ooo-run-inside">ooo run 내부: 런타임이 콜 하나를 던지면 MCP 안에서 세션들이 돈다</title>
         <defs>
           <marker id="oiArrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#1a1a1a"/></marker>
         </defs>
@@ -585,7 +585,7 @@
     <h2>방향을 뒤집으니 셋이 동시에 풀렸다</h2>
     <div class="cards">
       <div class="card"><div class="num">01</div><h3>런타임 독립</h3><p><span class="nb">AgentRuntime</span> + <span class="nb">LLMAdapter</span> 두 층을 두니 Claude Code든 Codex든 같은 워크플로우가 돈다. 설계 하나로 여러 플랫폼.</p></div>
-      <div class="card"><div class="num">02</div><h3>Hook 대체</h3><p>이제 Codex에도 Hook이 생겼지만 훅 방식은 런타임마다 다르다. <strong>MCP 자체의 이벤트로 훅 역할을 대체</strong>하면 프로바이더 모두에서 같은 방식으로 순서를 강제할 수 있다 — 런타임 공통.</p></div>
+      <div class="card"><div class="num">02</div><h3>Hook 대체</h3><p>이제 Codex에도 Hook이 생겼지만 훅 방식은 런타임마다 다르다. <strong>MCP 자체의 이벤트로 훅 역할을 대체</strong>하면 프로바이더 모두에서 같은 방식으로 순서를 강제할 수 있다. 런타임이 달라도 방식은 같다.</p></div>
       <div class="card"><div class="num">03</div><h3>호출 구조 확정</h3><p>LLM 출력은 비결정이다. 그래도 언제·무엇이·어떤 순서로 호출되는지는 코드가 정한다. 안에서 뭐라 답하든 파이프라인은 동일하게 흐른다.</p></div>
     </div>
   </div>
@@ -593,7 +593,7 @@
 </section>
 <aside class="notes" data-for="15">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 15 / 60</span></div>
-  <p>하나의 실용적 동기(context 절약)에서 시작했는데 세 문제가 같이 풀렸다는 게 핵심 메시지다. 추상화가 올바른 층위에 놓이면 이렇게 된다. OS 비유는 "새 걸 만든 게 아니라 검증된 프로세스 모델을 재발견한 것"이라는 안심을 준다 — Coordinator가 스케줄러, 각 AC 세션이 프로세스, MCP가 IPC다. 이어서 stateless 전환과 capability matrix로 들어가면 "프로토콜도 같은 방향(capability 우선)으로 움직인다"가 자연스럽게 연결된다.</p>
+  <p>하나의 실용적 동기(context 절약)에서 시작했는데 세 문제가 같이 풀렸다는 게 핵심 메시지다. 추상화가 올바른 층위에 놓이면 이렇게 된다. OS 비유는 "새 걸 만든 게 아니라 검증된 프로세스 모델을 재발견한 것"이라는 안심을 준다. Coordinator가 스케줄러, 각 AC 세션이 프로세스, MCP가 IPC다. 이어서 stateless 전환과 capability matrix로 들어가면 "프로토콜도 같은 방향(capability 우선)으로 움직인다"가 자연스럽게 연결된다.</p>
 </aside>
 
 <!-- ============================================================ -->
@@ -605,13 +605,13 @@
     <span>5-2 · CONTEXT</span>
   </div>
   <div class="body">
-    <h2>MCP는 도구 통신 표준 — 7/28부터 stateless 방식으로 바뀐다</h2>
+    <h2>MCP는 도구 통신 표준이다. 7/28부터 stateless 방식으로 바뀐다</h2>
     <div class="cards">
       <div class="card"><div class="num">MCP의 본질</div><h3>headless 시대의 도구 통신 규약</h3>
         <p>모델이 외부 도구를 호출하는 표준. "어떤 모델"이 아니라 "어떤 도구를 어떻게 부르나"의 규약이다.</p>
       </div>
       <div class="card"><div class="num">7/28의 본질</div><h3>stateful → stateless 전환</h3>
-        <p>sticky session + store + LB로 운영하던 구조가 사라지고 요청마다 완결된다 — 일반 HTTP 인프라 위에서 돈다. 최종 2026-07-28.</p>
+        <p>sticky session + store + LB로 운영하던 구조가 사라지고 요청마다 완결된다. 일반 HTTP 인프라 위에서 돈다. 최종 2026-07-28.</p>
       </div>
     </div>
   </div>
@@ -619,7 +619,7 @@
 </section>
 <aside class="notes" data-for="16">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 16 / 60</span></div>
-  <p>이 한 장에서 두 가지를 동시에 짚는다 — MCP가 무엇인지, 그리고 왜 7/28이 단순한 스펙 업데이트가 아닌지. 둘이 한 화면에 있어야 "MCP는 곧 stateless 방식으로 바뀐다 — 그러니 도구를 capability로 추상화해서 알려야 한다"는 5-2의 핵심으로 연결된다.</p>
+  <p>이 한 장에서 두 가지를 동시에 짚는다. MCP가 무엇인지, 그리고 왜 7/28이 단순한 스펙 업데이트가 아닌지. 둘이 한 화면에 있어야 "MCP는 곧 stateless 방식으로 바뀐다. 그러니 도구를 capability로 추상화해서 알려야 한다"는 5-2의 핵심으로 연결된다.</p>
   <p>출처는 modelcontextprotocol.io의 2026-07-28 최종 공지(RC 2026-05-21). 변경 폭이 매우 커서 Tier 1 SDK도 10주 안에 지원 구현이 필요하다. 운영팀 입장에선 stateless로 가면 sticky session / session store / sticky load balancer가 다 사라지는 게 가장 큰 이득.</p>
 </aside>
 
@@ -649,7 +649,7 @@
 </section>
 <aside class="notes" data-for="17">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 17 / 60</span></div>
-  <p>이 세 변화가 왜 capability 사고를 강제하는지 짚는다. handshake가 사라지면 매번 capability를 묻는 식으로 가야 하고, session ID가 사라지면 상태는 handle로 명시적으로 들고 다녀야 하고, handle 패턴은 결국 "이 도구가 무엇을 할 수 있고 어떤 입력이 들어오는지"가 호출마다 분명해야 한다는 뜻이다. 셋이 같은 방향을 가리킨다 — capability를 명시적으로.</p>
+  <p>이 세 변화가 왜 capability 사고를 강제하는지 짚는다. handshake가 사라지면 매번 capability를 묻는 식으로 가야 하고, session ID가 사라지면 상태는 handle로 명시적으로 들고 다녀야 하고, handle 패턴은 결국 "이 도구가 무엇을 할 수 있고 어떤 입력이 들어오는지"가 호출마다 분명해야 한다는 뜻이다. 셋이 같은 방향을 가리킨다. capability를 명시적으로 드러내라는 것이다.</p>
   <p>예시 멘트: 지금까지는 "MCP 서버에 연결한다"로 시작했지만, 앞으론 "이 capability를 가진 서버를 호출한다"로 시작한다. 서버 자체가 아니라 capability가 단위가 된다.</p>
 </aside>
 
@@ -678,7 +678,7 @@
 </section>
 <aside class="notes" data-for="18">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 18 / 60</span></div>
-  <p>이 표는 강의 진행에서 빠르게 넘어가도 된다. 핵심은 "5개 모두 결국 capability + handle 사고로 수렴"이라는 점. 운영 입장에선 ⑤ Tasks lifecycle 재설계가 가장 크다 — 비동기 장시간 작업을 어떻게 다룰지가 2026-07-28 이후 완전히 바뀌니까 기존 구현이 있다면 마이그레이션 일정을 잡아야 한다.</p>
+  <p>이 표는 강의 진행에서 빠르게 넘어가도 된다. 핵심은 "5개 모두 결국 capability + handle 사고로 수렴"이라는 점. 운영 입장에선 ⑤ Tasks lifecycle 재설계가 가장 크다. 비동기 장시간 작업을 어떻게 다룰지가 2026-07-28 이후 완전히 바뀌니까 기존 구현이 있다면 마이그레이션 일정을 잡아야 한다.</p>
   <p>본인 업무에서 MCP 서버를 만들거나 운영하고 있다면 이 표를 별도로 따로 두고 ⑤⑦이 우선이다. 강의 본문은 ③ explicit handle만 따로 더 짚는다.</p>
 </aside>
 
@@ -705,7 +705,7 @@
 </section>
 <aside class="notes" data-for="19">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 19 / 60</span></div>
-  <p>왜 capability가 단위가 되는가 — 매 호출이 독립이라 "이 서버 / 이 세션에서 이전에 뭘 했는지"가 사라진다. 그러면 매 호출은 "이 capability를 가진 누군가에게 이 입력으로 요청"하는 한 패킷이다. capability를 모르면 호출이 불가능. handle도 결국 capability를 가진 서버가 발급한다.</p>
+  <p>왜 capability가 단위가 되는가? 매 호출이 독립이라 "이 서버 / 이 세션에서 이전에 뭘 했는지"가 사라진다. 그러면 매 호출은 "이 capability를 가진 누군가에게 이 입력으로 요청"하는 한 패킷이다. capability를 모르면 호출이 불가능. handle도 결국 capability를 가진 서버가 발급한다.</p>
   <p>여기서 다음 슬라이드(런타임이 여러 개)로 자연스럽게 넘어간다. capability 사고는 MCP 안에만 국한되는 게 아니라 런타임 전체에 적용된다. ouroboros가 그 framing의 reference.</p>
 </aside>
 
@@ -718,7 +718,7 @@
     <span>5-2 · RUNTIMES</span>
   </div>
   <div class="body">
-    <h2>런타임은 이미 6개 + 추가 adapter — 하나에 종속되면 안 된다</h2>
+    <h2>런타임은 이미 6개 + 추가 adapter다. 하나에 종속되면 안 된다</h2>
     <div class="cards">
       <div class="card"><div class="num">01</div><h3>Claude Code</h3><p>Claude(Anthropic) · Max Plan · 기본 파일·Bash 도구</p></div>
       <div class="card"><div class="num">02</div><h3>Codex CLI</h3><p>GPT-5.4+ · OpenAI API key · per-token</p></div>
@@ -747,7 +747,7 @@
     <span>5-2 · MATRIX</span>
   </div>
   <div class="body">
-    <h2 style="margin-bottom:calc(18px * var(--deck-scale))">무엇이 같고 무엇이 런타임마다 다른가 — 3 레이어</h2>
+    <h2 style="margin-bottom:calc(18px * var(--deck-scale))">무엇이 같고 무엇이 런타임마다 다른가? 3 레이어로 나눠 본다</h2>
     <div class="figure-wrap" aria-label="3 레이어 비교: Workflow는 어디서나 같고 Runtime·Integration은 런타임마다 다르다">
       <svg viewBox="0 0 1080 336" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="matrix3">
         <title id="matrix3">Workflow Layer는 모든 런타임에서 같고, Runtime Layer와 Integration Surface는 런타임마다 다르다</title>
@@ -779,8 +779,8 @@
 </section>
 <aside class="notes" data-for="21">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 21 / 60</span></div>
-  <p>이 표가 5-2의 중심이다. "워크플로우 자체는 같다 — 런타임만 다르다." 이게 ouroboros가 6개 런타임을 native로 지원하면서 (Gemini 등은 추가 adapter) 보여주는 그림이다. 핵심은 Workflow Layer를 코드형 통제로 고정하고, Runtime Layer는 adapter로 분리하는 구조다.</p>
-  <p>본인 업무의 capability matrix를 그릴 때도 같은 세 레이어로 본다 — 무엇은 어디서나 같아야 하는가(workflow), 무엇이 런타임마다 달라도 되는가(runtime), 무엇이 호출 방식이 다르더라도 결과가 같으면 되는가(integration). 실습 2005-2-3에 이 세 칸이 그대로 들어간다.</p>
+  <p>이 표가 5-2의 중심이다. "워크플로우 자체는 같다, 런타임만 다르다." 이게 ouroboros가 6개 런타임을 native로 지원하면서 (Gemini 등은 추가 adapter) 보여주는 그림이다. 핵심은 Workflow Layer를 코드형 통제로 고정하고, Runtime Layer는 adapter로 분리하는 구조다.</p>
+  <p>본인 업무의 capability matrix를 그릴 때도 같은 세 레이어로 본다. 무엇은 어디서나 같아야 하는가(workflow), 무엇이 런타임마다 달라도 되는가(runtime), 무엇이 호출 방식이 다르더라도 결과가 같으면 되는가(integration). 실습 2005-2-3에 이 세 칸이 그대로 들어간다.</p>
 </aside>
 
 <!-- ============================================================ -->
@@ -792,7 +792,7 @@
     <span>5-2 · CAPABILITIES</span>
   </div>
   <div class="body">
-    <h2 style="margin-bottom:calc(14px * var(--deck-scale))">런타임이 선언하는 capability — 누가 무엇을 지원하나</h2>
+    <h2 style="margin-bottom:calc(14px * var(--deck-scale))">런타임이 선언하는 capability: 누가 무엇을 지원하나</h2>
     <div class="figure-wrap" aria-label="capability별 런타임 지원: skill_dispatch는 6개 모두, targeted_resume·structured_output은 Kiro·Copilot 미지원">
       <svg viewBox="0 0 1080 296" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="capgrid">
         <title id="capgrid">skill_dispatch는 6개 런타임 모두 지원, targeted_resume와 structured_output은 Kiro와 Copilot이 미지원</title>
@@ -831,7 +831,7 @@
         </g>
       </svg>
     </div>
-    <p style="text-align:center;font-size:calc(13px * var(--deck-scale));color:var(--ink-2);margin-top:calc(10px * var(--deck-scale))">호출하는 쪽은 추측하지 않는다 — 런타임이 <strong>선언한</strong> capability에 맞춰 호출 방식을 정한다.</p>
+    <p style="text-align:center;font-size:calc(13px * var(--deck-scale));color:var(--ink-2);margin-top:calc(10px * var(--deck-scale))">호출하는 쪽은 추측하지 않는다. 런타임이 <strong>선언한</strong> capability에 맞춰 호출 방식을 정한다.</p>
   </div>
   <div class="meta-bottom"><span>5-2. Capability Graph와 MCP 아키텍처</span><span><span class="num">22</span> / 60</span></div>
 </section>
@@ -850,14 +850,14 @@
     <span>5-2 · ADAPTER</span>
   </div>
   <div class="body">
-    <h2 style="margin-bottom:calc(16px * var(--deck-scale))">Adapter 패턴 — 런타임을 갈아끼우는 한 층</h2>
+    <h2 style="margin-bottom:calc(16px * var(--deck-scale))">Adapter 패턴: 런타임을 갈아끼우는 한 층</h2>
     <div class="figure-wrap" aria-label="AgentRuntime protocol 아래로 6개 native adapter가 교체형으로 꽂히고, Workflow Layer는 그대로 돈다">
       <svg viewBox="0 0 1080 344" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="adapter">
         <title id="adapter">Workflow Layer는 그대로 돌고, AgentRuntime protocol 아래로 6개 native adapter가 교체형으로 꽂힌다</title>
         <defs><marker id="adArrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#1a1a1a"/></marker></defs>
         <g font-family="Pretendard Variable, Pretendard, sans-serif">
           <rect x="40" y="26" width="1000" height="58" fill="rgba(241,238,229,.6)" stroke="#1a1a1a" stroke-width="1.6"/>
-          <text x="540" y="61" text-anchor="middle" font-size="15.5" font-weight="700">WORKFLOW LAYER — 어느 런타임에서도 그대로 돈다</text>
+          <text x="540" y="61" text-anchor="middle" font-size="15.5" font-weight="700">WORKFLOW LAYER: 어느 런타임에서도 그대로 돈다</text>
           <line x1="540" y1="84" x2="540" y2="116" stroke="#1a1a1a" stroke-width="1.3" marker-end="url(#adArrow)"/>
           <rect x="40" y="118" width="1000" height="62" fill="#fff" stroke="#9b6b3f" stroke-width="2"/>
           <text x="540" y="146" text-anchor="middle" font-size="16.5" font-weight="700">AgentRuntime protocol</text>
@@ -889,7 +889,7 @@
 </aside>
 
 <!-- ============================================================ -->
-<!-- 41 · 스킬 추상화 — SKILL.md                                     -->
+<!-- 41 · 스킬 추상화: SKILL.md                                     -->
 <!-- ============================================================ -->
 <section id="chapter-05-skill-abstraction" class="slide" data-num="24" data-curriculum="curriculum.md rows 53-55">
   <div class="meta-top">
@@ -905,7 +905,7 @@
         <g font-family="Pretendard Variable, Pretendard, sans-serif">
           <rect x="360" y="22" width="360" height="76" fill="#1a1a1a"/>
           <text x="540" y="56" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">SKILL.md</text>
-          <text x="540" y="80" text-anchor="middle" font-size="12.5" fill="#cfc8b8">capability contract — 안 바뀐다</text>
+          <text x="540" y="80" text-anchor="middle" font-size="12.5" fill="#cfc8b8">capability contract: 안 바뀐다</text>
           <line x1="460" y1="98" x2="210" y2="182" stroke="#9b6b3f" stroke-width="1.5" marker-end="url(#skArrow)"/>
           <line x1="540" y1="98" x2="540" y2="182" stroke="#9b6b3f" stroke-width="1.5" marker-end="url(#skArrow)"/>
           <line x1="620" y1="98" x2="870" y2="182" stroke="#9b6b3f" stroke-width="1.5" marker-end="url(#skArrow)"/>
@@ -927,7 +927,7 @@
 </section>
 <aside class="notes" data-for="24">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 24 / 60</span></div>
-  <p>스킬 추상화의 핵심은 "capability contract는 안 바꾼다 — 호출 방식이 런타임마다 다르다"는 점이다. 5장이 더하는 건 adapter가 호출을 책임지는 한 층이다.</p>
+  <p>스킬 추상화의 핵심은 "capability contract는 안 바꾼다, 호출 방식이 런타임마다 다르다"는 점이다. 5장이 더하는 건 adapter가 호출을 책임지는 한 층이다.</p>
   <p>이게 가능한 이유는 SKILL.md가 명시적인 spec이고, hook은 hook 자체가 런타임 무관(쉘 스크립트 또는 Python)이기 때문이다. 즉 4-4 프로젝트 2에서 만든 분업형 하네스가 5장의 Capability Graph 입력이 된다.</p>
 </aside>
 
@@ -1018,7 +1018,7 @@
           <rect x="708" y="322" width="150" height="56" fill="#fff" stroke="#1a1a1a" stroke-width="1.1"/><text x="783" y="355" text-anchor="middle" font-size="13.5">Kiro</text>
           <rect x="870" y="322" width="150" height="56" fill="#fff" stroke="#1a1a1a" stroke-width="1.1"/><text x="945" y="355" text-anchor="middle" font-size="13.5">Copilot</text>
           <rect x="40" y="418" width="1000" height="40" fill="#fff" stroke="#1a1a1a" stroke-width="1.2" stroke-dasharray="5 3"/>
-          <text x="540" y="443" text-anchor="middle" font-size="13"><tspan font-weight="700" fill="#9b6b3f">MCP</tspan><tspan fill="#1a1a1a"> — 외부 도구 호출 통로 · 2026-07-28 stateless 전환 적용 지점</tspan></text>
+          <text x="540" y="443" text-anchor="middle" font-size="13"><tspan font-weight="700" fill="#9b6b3f">MCP</tspan><tspan fill="#1a1a1a">: 외부 도구 호출 통로 · 2026-07-28 stateless 전환 적용 지점</tspan></text>
         </g>
       </svg>
     </div>
@@ -1040,10 +1040,10 @@
     <span>5-2 · APPLY</span>
   </div>
   <div class="body">
-    <h2>본인 업무에 적용 — 두 가지 질문</h2>
+    <h2>본인 업무에 적용: 두 가지 질문</h2>
     <div class="cards">
       <div class="card"><div class="num">Q1</div><h3>본인 업무는 지금 어느 런타임에서 도는가</h3>
-        <p>다른 런타임으로 바꾸면 어디가 깨지는가 — 모델·도구·인증·세션 중. <strong>한 런타임에 묶여 있으면 정책 변화 한 번에 무너진다.</strong></p>
+        <p>다른 런타임으로 바꾸면 어디가 깨지는가? 모델·도구·인증·세션 중에서. <strong>한 런타임에 묶여 있으면 정책 변화 한 번에 무너진다.</strong></p>
       </div>
       <div class="card"><div class="num">Q2</div><h3>무엇은 같고 무엇은 다른가</h3>
         <p>같아야 할 것(workflow)과 달라도 될 것(runtime)을 나눈다. <strong>같은 건 capability node로, 다른 건 adapter로.</strong></p>
@@ -1075,7 +1075,7 @@
 <aside class="notes" data-for="27">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 27 / 60</span></div>
   <p>이 두 질문은 실습 직전 워밍업이다. Q1은 본인이 어떤 락인 상태인지 인지하게 만들고, Q2는 본인 업무를 capability matrix 세 레이어로 분해하게 만든다. 본인이 답을 못 적으면 실습에서 채워진다.</p>
-  <p>5-1에서 만든 MCP Candidate Flow가 입력이다. 거기서 MCP 후보로 고른 업무 한 개를 5-2 실습에서 capability matrix로 분해한다 — 무엇은 어디서나 같고, 무엇이 런타임 의존이고, 무엇이 스킬 묶음으로 묶일 수 있는가.</p>
+  <p>5-1에서 만든 MCP Candidate Flow가 입력이다. 거기서 MCP 후보로 고른 업무 한 개를 5-2 실습에서 capability matrix로 분해한다. 무엇은 어디서나 같고, 무엇이 런타임 의존이고, 무엇이 스킬 묶음으로 묶일 수 있는가.</p>
 </aside>
 
 <!-- ============================================================ -->
@@ -1107,7 +1107,7 @@
 </section>
 <aside class="notes" data-for="28">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 28 / 60</span></div>
-  <p>실습 안내는 두 부분으로 나뉜다. §1~6은 기존 안 / 밖 책임 + 단계 + 상태 + 재시도 + 출력 contract. §7~8은 새로 추가 — capability matrix 한 표와 skill bundle 한 표. 시간 배분은 기존 25분 + 신규 10분 = 총 35분.</p>
+  <p>실습 안내는 두 부분으로 나뉜다. §1~6은 기존 안 / 밖 책임 + 단계 + 상태 + 재시도 + 출력 contract. §7~8은 새로 추가한다. capability matrix 한 표와 skill bundle 한 표다. 시간 배분은 기존 25분 + 신규 10분 = 총 35분.</p>
   <p>핵심은 §7과 §8이 §1~6의 정리를 다른 각도에서 보는 것이지 새 작업이 아니라는 점이다. §3 Inside의 단계 / 도구 호출이 §7 Workflow Layer / Runtime Layer로 분류되고, §3의 묶음 단위가 §8 SKILL.md 후보로 정해진다.</p>
 </aside>
 
@@ -1120,7 +1120,7 @@
     <span>2005-2-3 · TEMPLATE</span>
   </div>
   <div class="body">
-    <h2>실습 산출물 — 8 섹션 한눈에</h2>
+    <h2>실습 산출물: 8 섹션 한눈에</h2>
     <div style="display:flex;gap:calc(36px * var(--deck-scale));align-items:flex-start">
       <table style="flex:1">
         <thead><tr><th>§</th><th>섹션</th><th>핵심 질문</th></tr></thead>
@@ -1166,8 +1166,8 @@
 </section>
 <aside class="notes" data-for="30">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 30 / 60</span></div>
-  <p>5-2를 마무리할 때 한 문장으로 — capability matrix + adapter + SKILL.md, 이 셋이 런타임 독립의 도구다. 2026-07-28 MCP stateless는 외부 사건이지만, 이 셋을 갖춰 두면 어긋나지 않는다.</p>
-  <p>5-3 stop rule로 자연스럽게 — capability matrix와 스킬 묶음으로 어디서나 도는 묶음을 만들었으면, 그 묶음이 어디서 멈춰야 하는지가 다음 질문이다. 무한 루프는 capability가 잘못 선언됐을 때 가장 먼저 드러난다.</p>
+  <p>5-2를 마무리할 때 한 문장으로 묶으면, capability matrix + adapter + SKILL.md, 이 셋이 런타임 독립의 도구다. 2026-07-28 MCP stateless는 외부 사건이지만, 이 셋을 갖춰 두면 어긋나지 않는다.</p>
+  <p>5-3 stop rule로 자연스럽게 이어진다. capability matrix와 스킬 묶음으로 어디서나 도는 묶음을 만들었으면, 그 묶음이 어디서 멈춰야 하는지가 다음 질문이다. 무한 루프는 capability가 잘못 선언됐을 때 가장 먼저 드러난다.</p>
 </aside>
 <section id="chapter-05-module-03" class="slide layout-divider" data-num="31" data-curriculum="curriculum.md rows 56-58">
   <div class="meta-top">
@@ -1400,12 +1400,12 @@
     <span>5-3 · SCENARIO</span>
   </div>
   <div class="body">
-    <h2>예시: 출력은 나왔지만 기준이 비어 있을 때</h2>
+    <h2>예시: 1page 초안 하나를 두고 끝낼지·다시 돌릴지·물어볼지 정한다</h2>
     <div class="cards">
-      <div class="card"><div class="num">01</div><h3>종료 가능</h3><p>목표와 성공기준을 만족했고 남은 개선의 업무 가치가 작다.</p></div>
-      <div class="card"><div class="num">02</div><h3>재시도 필요</h3><p>형식이나 검증이 실패했지만 입력과 기준은 충분하다.</p></div>
-      <div class="card"><div class="num">03</div><h3>재질문 필요</h3><p>목표, 우선순위, 수용 기준이 비어 반복해도 판단할 수 없다.</p></div>
-      <div class="card"><div class="num">04</div><h3>기록</h3><p>결과, 실패 사유, 복귀 지점, 남은 질문을 운영 기록으로 남긴다.</p></div>
+      <div class="card"><div class="num">종료 · exit</div><h3>결정권자가 바로 쓴다</h3><p>1page가 결정·배경·성공기준을 담아 다음 결정으로 넘어간다. 더 다듬을 여지는 남은 불확실성으로만 적는다.</p></div>
+      <div class="card"><div class="num">재시도 · retry</div><h3>형식이 틀어졌다</h3><p>제목 누락·표 깨짐처럼 형식이 실패했다. 회의록 입력은 충분하니 작업 체크포인트로 돌아간다.</p></div>
+      <div class="card"><div class="num">재질문 · ask-back</div><h3>기준이 비어 있다</h3><p>회의록에 성공 기준도, 누가 읽을지도 없다. 몇 번을 돌려도 톤이 안 정해지면 사람에게 묻는다.</p></div>
+      <div class="card"><div class="num">기록 · operate</div><h3>판단을 남긴다</h3><p>어떤 판단으로 끝냈는지, 복귀 지점, 남은 질문을 운영 기록에 남긴다.</p></div>
     </div>
   </div>
   <div class="meta-bottom"><span>5-3. Satisfice 멈춤 기준</span><span><span class="num">37</span> / 60</span></div>
@@ -1414,9 +1414,10 @@
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 37 / 60</span></div>
   <h4>예시 해설</h4>
   <ul>
-    <li>이 예시는 같은 산출물을 보고도 종료, 재시도, 재질문이 갈라질 수 있다는 점을 보여준다.</li>
-    <li>목표와 성공기준을 만족하면 종료한다. 남은 개선은 남은 불확실성으로 기록하고, 무조건 다음 루프를 열지 않는다.</li>
-    <li>형식이나 검증 실패처럼 입력이 충분한 실패는 체크포인트로 돌아가는 재시도다. 목표나 우선순위가 비어 있는 실패는 사람에게 묻는 재질문이다.</li>
+    <li>회의록 → 1page 초안 하나를 놓고도 종료·재시도·재질문이 달라질 수 있다. 출력이 나왔다고 끝이 아니라는 게 satisfice의 핵심이다.</li>
+    <li>종료(exit): 1page가 결정·배경·성공기준을 담아 결정권자가 바로 다음 결정으로 간다면 끝낸다. 더 다듬을 여지는 남은 불확실성으로만 기록하고 다음 루프를 자동으로 열지 않는다.</li>
+    <li>재시도(retry): 제목 누락이나 표 깨짐처럼 형식이 틀어진 실패는 회의록 입력이 충분하니 작업 체크포인트로 돌아간다.</li>
+    <li>재질문(ask-back): 회의록에 성공 기준이나 "누가 읽을지"가 비어 몇 번을 돌려도 톤이 안 정해지면, 사람에게 묻거나 2장 인터뷰 하네스로 돌아간다.</li>
     <li>전환 멘트: 이제 각자 Harness Graph의 단계마다 이 세 기준을 붙인다.</li>
   </ul>
   <p class="cite">Primary source: curriculum.md rows 56-58.</p>
@@ -1431,10 +1432,10 @@
   <div class="body">
     <h2>적용 질문: 무엇을 보면 멈출 수 있나</h2>
     <div class="cards">
-      <div class="card"><div class="num">01</div><h3>exit condition</h3><p>마무리해도 되는 output 신호 — 목표·성공 신호에 연결</p></div>
+      <div class="card"><div class="num">01</div><h3>exit condition</h3><p>마무리해도 되는 output 신호. 목표·성공 신호에 연결한다</p></div>
       <div class="card"><div class="num">02</div><h3>retry route</h3><p>어떤 실패는 같은 입력으로 checkpoint에서 다시 실행해도 되는가?</p></div>
       <div class="card"><div class="num">03</div><h3>ask-back route</h3><p>어떤 불확실성은 사람이 답하기 전까지 진행하면 안 되는가?</p></div>
-      <div class="card"><div class="num">04</div><h3>checkpoint</h3><p>retry가 돌아갈 node — 처음이 아니라 가까운 지점</p></div>
+      <div class="card"><div class="num">04</div><h3>checkpoint</h3><p>retry가 돌아갈 node. 처음이 아니라 가까운 지점</p></div>
     </div>
   </div>
   <div class="meta-bottom"><span>5-3. Satisfice 멈춤 기준</span><span><span class="num">38</span> / 60</span></div>
@@ -1787,7 +1788,7 @@
   <ul>
     <li>아키텍처의 중심은 interview → seed → execute → evaluate → evolve를 정해진 순서로 통과시키는 전체 연결 파이프라인이다. 좋은 프롬프트를 이어 붙인 것이 아니라, 각 단계의 입력, 산출물, 다음 단계 진입 조건을 코드형 경계로 둔다.</li>
     <li><code>src/ouroboros/bigbang/</code>과 Seed 관련 흐름은 입력 정제층이다. Socratic Interview로 사람의 암묵지를 꺼내고, Seed와 AC Tree로 실행 가능한 데이터 구조와 검수 단위를 만든다.</li>
-    <li><code>src/ouroboros/execution/</code>과 <code>src/ouroboros/evaluation/</code>은 실행과 검수를 분리하는 검수 경계이다. 실행 결과가 바로 완료로 처리되지 않고 검수 단계별 평가 게이트를 거쳐 종료, 재시도, 재질문으로 갈라진다.</li>
+    <li><code>src/ouroboros/execution/</code>과 <code>src/ouroboros/evaluation/</code>은 실행과 검수를 분리하는 검수 경계이다. 실행 결과가 바로 완료로 처리되지 않고 검수 단계별 평가 게이트를 거쳐 종료, 재시도, 재질문으로 나뉜다.</li>
     <li><code>src/ouroboros/evolution/</code>과 <code>src/ouroboros/persistence/</code>는 반복을 추적 가능한 반복 추적 경계로 바꾼다. Wonder/Reflect 재정의 흐름, convergence detection, event store, checkpoints, rewind가 있어 같은 실패를 반복하지 않고 이전 결정 지점으로 돌아갈 수 있다.</li>
     <li><code>src/ouroboros/mcp/</code>는 외부 도구 호출의 의미와 진입점을 제한하는 도구 호출 경계이고, <code>src/ouroboros/orchestrator/</code>는 Claude Code, Codex CLI 같은 런타임 차이를 흡수하는 실행 환경 경계다. 학습자는 도구 호출 자체보다 호출 전 조건, 상태 기록, 실패 후 복귀 지점이 어디에 남는지 본다.</li>
     <li>따라서 Ouroboros의 MCP형 하네스 설계 핵심은 모든 판단을 안쪽에 넣는 것이 아니다. curriculum.md의 5-2 기준처럼 순서, 상태, 재시도, 체크포인트는 안쪽에 두고, 문제 정의와 최종 수용 판단은 바깥에 남긴다.</li>
@@ -1826,22 +1827,22 @@
           <text x="540" y="210" text-anchor="middle" font-size="22" font-weight="800" fill="#fff">Ouroboros</text>
           <text x="540" y="236" text-anchor="middle" font-size="12.5" fill="#cfc8b8">한 코드베이스</text>
           <rect x="40" y="34" width="438" height="112" fill="#fff" stroke="#1a1a1a" stroke-width="1.6"/>
-          <text x="62" y="66" font-size="16" font-weight="700"><tspan fill="#9b6b3f">①</tspan> 4C — 분업의 네 경계</text>
+          <text x="62" y="66" font-size="16" font-weight="700"><tspan fill="#9b6b3f">①</tspan> 4C: 분업의 네 경계</text>
           <text x="456" y="66" text-anchor="end" font-size="11.5" fill="#9b6b3f">4장</text>
           <text x="62" y="96" font-size="14" fill="#1a1a1a">Contract · Context · Control · Confidence</text>
           <text x="62" y="122" font-size="12.5" fill="#5b5b5b">분업 경계가 코드 어디에 구현됐나</text>
           <rect x="602" y="34" width="438" height="112" fill="#fff" stroke="#1a1a1a" stroke-width="1.6"/>
-          <text x="624" y="66" font-size="16" font-weight="700"><tspan fill="#9b6b3f">②</tspan> Capability Matrix — 런타임 독립</text>
+          <text x="624" y="66" font-size="16" font-weight="700"><tspan fill="#9b6b3f">②</tspan> Capability Matrix: 런타임 독립</text>
           <text x="1018" y="66" text-anchor="end" font-size="11.5" fill="#9b6b3f">5-2</text>
           <text x="624" y="96" font-size="14" fill="#1a1a1a">workflow · runtime · integration 레이어</text>
           <text x="624" y="122" font-size="12.5" fill="#5b5b5b">무엇이 같고 무엇이 런타임마다 다른가</text>
           <rect x="40" y="286" width="438" height="112" fill="#fff" stroke="#1a1a1a" stroke-width="1.6"/>
-          <text x="62" y="318" font-size="16" font-weight="700"><tspan fill="#9b6b3f">③</tspan> 스킬 추상화 — 묶음 독립</text>
+          <text x="62" y="318" font-size="16" font-weight="700"><tspan fill="#9b6b3f">③</tspan> 스킬 추상화: 묶음 독립</text>
           <text x="456" y="318" text-anchor="end" font-size="11.5" fill="#9b6b3f">5-2</text>
           <text x="62" y="348" font-size="14" fill="#1a1a1a">SKILL.md 한 장으로 런타임 무관</text>
           <text x="62" y="374" font-size="12.5" fill="#5b5b5b">어떤 묶음이 그대로 재사용되나</text>
           <rect x="602" y="286" width="438" height="112" fill="#fff" stroke="#1a1a1a" stroke-width="1.6"/>
-          <text x="624" y="318" font-size="16" font-weight="700"><tspan fill="#9b6b3f">④</tspan> Stop rule — 멈춤 기준</text>
+          <text x="624" y="318" font-size="16" font-weight="700"><tspan fill="#9b6b3f">④</tspan> Stop rule: 멈춤 기준</text>
           <text x="1018" y="318" text-anchor="end" font-size="11.5" fill="#9b6b3f">5-3</text>
           <text x="624" y="348" font-size="14" fill="#1a1a1a">exit · consensus · drift · regression</text>
           <text x="624" y="374" font-size="12.5" fill="#5b5b5b">무한 루프를 막는 네 곳이 어디인가</text>
@@ -1854,7 +1855,7 @@
 <aside class="notes" data-for="46">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 46 / 60</span></div>
   <p>5-4의 한 줄은 "Ouroboros를 4관점으로 본다"이다. 사례 자체를 외우는 게 아니라, 같은 사례를 네 번 다른 각도로 읽는 연습이다. 본인 업무에 옮길 때도 같은 네 관점을 한 폴더 안에 채운다.</p>
-  <p>관점 4개의 출처가 분명하다 — ① 4C는 4장 중심축, ② Capability Matrix와 ③ 스킬 추상화는 5-2 핵심, ④ Stop rule은 5-3 중심 질문. 5-4는 1~3장의 누적을 한 사례로 합치는 자리.</p>
+  <p>관점 4개의 출처가 분명하다. ① 4C는 4장 중심축, ② Capability Matrix와 ③ 스킬 추상화는 5-2 핵심, ④ Stop rule은 5-3 중심 질문. 5-4는 1~3장의 누적을 한 사례로 합치는 자리.</p>
 </aside>
 
 <!-- ============================================================ -->
@@ -1866,19 +1867,19 @@
     <span>5-4 · 4C 분업 경계</span>
   </div>
   <div class="body">
-    <h2>① 4C × Ouroboros — 분업형의 네 경계가 코드 안에 있다</h2>
+    <h2>① 4C × Ouroboros: 4장에서 만든 네 경계가 코드 안에 그대로 있다</h2>
     <div class="cards">
-      <div class="card"><div class="num">C₁ Contract</div><h3><span class="nb">Seed</span> · <span class="nb">AC Tree</span> · <code>core/</code></h3>
-        <p>실행 전 무엇을 할지 immutable 계약으로 잠근다. <strong>= 4-1 말단 카드.</strong></p>
+      <div class="card"><div class="num">C₁ Contract · 계약</div><h3><span class="nb">Seed</span> · <span class="nb">AC Tree</span></h3>
+        <p>실행 전에 무엇을 할지 못 바꾸게 고정한다. 4장에서 만든 <strong><span class="nb">리프</span></strong>(목적·입력·범위·완료)와 같은 칸이다.</p>
       </div>
-      <div class="card"><div class="num">C₂ Context</div><h3>event store · <code>persistence/</code></h3>
-        <p>세션이 끝나도 결정·실패 이력이 남아 다음 입력이 된다. <strong>= 4-2 handoff.</strong></p>
+      <div class="card"><div class="num">C₂ Context · 맥락</div><h3>event store</h3>
+        <p>세션이 끝나도 결정·실패 이력이 남아 다음 입력이 된다. 4장 <strong><span class="nb">handoff 양식</span></strong>이 하던 일이다.</p>
       </div>
-      <div class="card"><div class="num">C₃ Control</div><h3>execute · evaluate</h3>
-        <p>기계 체크 → LLM 리뷰 → consensus 3단이 통과·재작업·재질문을 나눈다. <strong>= 4-3 3단 검수.</strong></p>
+      <div class="card"><div class="num">C₃ Control · 통제</div><h3>execute → evaluate</h3>
+        <p>만드는 단계와 판정하는 단계를 섞지 않는다. 4장 <strong>3단 검수</strong>(형식·증거·보정)와 같다.</p>
       </div>
-      <div class="card"><div class="num">C₄ Confidence</div><h3>consensus · drift</h3>
-        <p>평가가 같은 방향인지 + Seed에서 어긋났는지 보고 위임 가능성 판정. <strong>= 4-3 verdict.</strong></p>
+      <div class="card"><div class="num">C₄ Confidence · 신뢰</div><h3>consensus · drift</h3>
+        <p>평가가 한 방향인지, 원래 목적에서 벗어났는지 보고 맡겨도 될지 정한다. 4장 <strong>verdict</strong>(통과·재작업·재질문·종료)와 같다.</p>
       </div>
     </div>
   </div>
@@ -1899,19 +1900,19 @@
     <span>5-4 · Capability 레이어</span>
   </div>
   <div class="body">
-    <h2>② Capability Matrix × Ouroboros — 같은 워크플로우, 6 native 런타임</h2>
+    <h2>② Capability Matrix × Ouroboros: 같은 워크플로우, 6 native 런타임</h2>
     <div class="cards">
-      <div class="card"><div class="num">Workflow Layer</div><h3>identical · <code>core/</code></h3>
-        <p>Seed · AC tree · event store · 평가 원칙. 6 native 런타임 모두 같은 코드가 돈다.</p>
+      <div class="card"><div class="num">Workflow Layer</div><h3>모두 같다 · <code>core/</code></h3>
+        <p>Seed · AC tree · event store · 평가 원칙. 6 native 런타임이 같은 코드를 쓴다.</p>
       </div>
-      <div class="card"><div class="num">Runtime Layer</div><h3>differs · <code>providers/</code> adapter</h3>
-        <p>Native 6개 + 추가 4개. 각 adapter가 인증·도구·권한을 protocol 한 인터페이스로 정리.</p>
+      <div class="card"><div class="num">Runtime Layer</div><h3>런타임마다 다르다 · <code>providers/</code></h3>
+        <p>각 adapter가 인증·도구·권한을 한 인터페이스로 정리한다. Native 6 + 추가 4.</p>
       </div>
-      <div class="card"><div class="num">Integration</div><h3>UX differs · <code>mcp/</code> · <code>cli/</code> · <code>tui/</code></h3>
-        <p>같은 워크플로우가 세 진입점으로 노출 — 안쪽 core는 동일.</p>
+      <div class="card"><div class="num">Integration</div><h3>진입점만 다르다 · <code>mcp/</code>·<code>cli/</code>·<code>tui/</code></h3>
+        <p>같은 워크플로우가 세 진입점으로 노출된다. 안쪽은 같다.</p>
       </div>
-      <div class="card"><div class="num">Declared capability</div><h3>3가지를 명시 선언</h3>
-        <p><code>skill_dispatch</code> · <code>targeted_resume</code> · <code>structured_output</code> — 호출 측이 추측하지 않는다.</p>
+      <div class="card"><div class="num">Declared capability</div><h3>능력을 명시 선언</h3>
+        <p><code>skill_dispatch</code> · <code>targeted_resume</code> · <code>structured_output</code>. 호출 측이 추측하지 않는다.</p>
       </div>
     </div>
   </div>
@@ -1920,7 +1921,7 @@
 <aside class="notes" data-for="48">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 48 / 60</span></div>
   <p>관점 2는 5-2의 핵심 구조가 실제 코드에서 어떻게 분리되어 있는지 보여준다. <code>core/</code> · <code>providers/</code> · <code>mcp/</code> 세 폴더가 capability matrix 세 레이어와 1대1 대응. 본인 폴더에서도 같은 세 분리를 두면, 런타임을 갈아끼울 수 있게 된다.</p>
-  <p>발화: 본인이 만들 폴더에서 가장 어려운 건 Workflow Layer와 Runtime Layer를 섞지 않는 것이다. 사람들이 자주 하는 실수는 Claude의 도구 호출 코드와 핵심 워크플로우를 한 함수에 섞는 것 — 그러면 Codex로 옮길 때 전부 다시 짜야 한다.</p>
+  <p>발화: 본인이 만들 폴더에서 가장 어려운 건 Workflow Layer와 Runtime Layer를 섞지 않는 것이다. 사람들이 자주 하는 실수는 Claude의 도구 호출 코드와 핵심 워크플로우를 한 함수에 섞는 것이다. 그러면 Codex로 옮길 때 전부 다시 짜야 한다.</p>
 </aside>
 
 <!-- ============================================================ -->
@@ -1932,10 +1933,10 @@
     <span>5-4 · SKILL.md 묶음</span>
   </div>
   <div class="body">
-    <h2>③ 스킬 추상화 × Ouroboros — 묶음 단위로 런타임 독립</h2>
+    <h2>③ 스킬 추상화 × Ouroboros: 묶음 단위로 런타임 독립</h2>
     <div class="cards">
       <div class="card"><div class="num">묶음 위치</div><h3><code>skills/*/SKILL.md</code></h3>
-        <p>SKILL.md + hooks + references가 한 폴더로 묶여 있다 — 3장 워크스페이스와 같은 구조.</p>
+        <p>SKILL.md + hooks + references가 한 폴더로 묶여 있다. 3장 워크스페이스와 같은 구조다.</p>
       </div>
       <div class="card"><div class="num">호출 진입점</div><h3><code>commands/</code> · <code>plugin/skills/</code></h3>
         <p>같은 SKILL.md가 Claude는 <code>ooo &lt;skill&gt;</code>, Codex는 <code>~/.codex/skills/</code>로 배치.</p>
@@ -1943,8 +1944,8 @@
       <div class="card"><div class="num">capability 매칭</div><h3><code>skill_dispatch</code></h3>
         <p>선언했으면 dispatcher로 라우팅, 아니면 SKILL.md를 인라인 prompt로 흡수.</p>
       </div>
-      <div class="card"><div class="num">3장 → 5장</div><h3>워크스페이스는 그대로</h3>
-        <p>3장 SKILL.md+hooks가 그대로 재사용 — 변하는 건 호출 통로(adapter)뿐.</p>
+      <div class="card"><div class="num">재사용 자산</div><h3>3장 워크스페이스는 그대로</h3>
+        <p>3장 SKILL.md+hooks가 그대로 재사용된다. 변하는 건 호출 통로(adapter)뿐이다.</p>
       </div>
     </div>
   </div>
@@ -1952,7 +1953,7 @@
 </section>
 <aside class="notes" data-for="49">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 49 / 60</span></div>
-  <p>관점 3은 3장을 5장에 연결한다. 본인이 3장에서 만든 SKILL.md + hooks 폴더가 그대로 자산이라는 점이 핵심. 5장에서 더하는 건 그 위 한 층뿐 — adapter.</p>
+  <p>관점 3은 3장을 5장에 연결한다. 본인이 3장에서 만든 SKILL.md + hooks 폴더가 그대로 자산이라는 점이 핵심. 5장에서 더하는 건 그 위 한 층, adapter뿐이다.</p>
   <p>발화: 본인 SKILL.md를 잘 짜 두면 런타임이 바뀌어도 폴더는 그대로다. 호출 방식만 adapter가 알아서 흡수한다. 2026-06-15 · 2026-07-28 같은 외부 사건이 와도 본인 자산은 안 어긋난다.</p>
 </aside>
 
@@ -1965,7 +1966,7 @@
     <span>5-4 · Stop rule 멈춤</span>
   </div>
   <div class="body">
-    <h2>④ Stop rule × Ouroboros — 무한 루프를 막는 네 곳</h2>
+    <h2>④ Stop rule × Ouroboros: 무한 루프를 막는 네 곳</h2>
     <div class="cards">
       <div class="card"><div class="num">exit conditions</div><h3><code>core/</code> 종료 로직</h3>
         <p>AC가 모두 passed면 종료. <strong>본인: 단계별 통과 조건 명시.</strong></p>
@@ -1985,7 +1986,7 @@
 </section>
 <aside class="notes" data-for="50">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 50 / 60</span></div>
-  <p>관점 4는 5-3을 5-4에 연결한다. stop rule이 한 함수가 아니라 네 곳에 분산되어 있다는 점이 학습자에게 가장 새로운 인식이다. exit · consensus · drift · regression — 각각 다른 종류의 멈춤.</p>
+  <p>관점 4는 5-3을 5-4에 연결한다. stop rule이 한 함수가 아니라 네 곳에 분산되어 있다는 점이 학습자에게 가장 새로운 인식이다. exit · consensus · drift · regression, 각각 다른 종류의 멈춤이다.</p>
   <p>발화: 본인 루프에서 가장 자주 빠지는 함정은 "consensus만 보고 종료"하는 것이다. drift 점검을 안 하면 본래 목적에서 벗어난 채 같은 합의에 머무를 수 있다. 네 축을 함께 본다는 점이 5-3 satisfice의 진짜 framing.</p>
 </aside>
 
@@ -2056,19 +2057,19 @@
     <span>5-4 · NEXT PRACTICE</span>
   </div>
   <div class="body">
-    <h2>다음 실습 — Ouroboros 코드를 직접 뜯어본다</h2>
+    <h2>다음 실습: Ouroboros 코드를 직접 뜯어본다</h2>
     <div class="cards">
       <div class="card"><div class="num">무엇을 하나</div><h3>repo를 직접 읽는다</h3>
         <p>Ouroboros repo를 열고 4-4 분업형 하네스를 옆에 둔다. 설치·실행 없이 README와 디렉토리 구조만 본다.</p>
       </div>
       <div class="card"><div class="num">무엇을 찾나</div><h3>코드에서 네 가지를 한 줄씩</h3>
-        <p style="font-size:calc(13.5px * var(--deck-scale));line-height:1.65">① 분업 네 경계 — Contract·Context·Control·Confidence<br/>② workflow / runtime / integration 분리<br/>③ SKILL.md 묶음 위치<br/>④ 멈춤 로직 네 곳 — exit·consensus·drift·regression</p>
+        <p style="font-size:calc(13.5px * var(--deck-scale));line-height:1.65">① 분업 네 경계: Contract·Context·Control·Confidence<br/>② workflow / runtime / integration 분리<br/>③ SKILL.md 묶음 위치<br/>④ 멈춤 로직 네 곳: exit·consensus·drift·regression</p>
       </div>
       <div class="card"><div class="num">입력</div><h3>4-4 + 5-2 산출물</h3>
         <p>4장 분업형 하네스 v1 + 5-2 런타임 독립 하네스 그래프. 이게 분석의 출발점이다.</p>
       </div>
-      <div class="card"><div class="num">출력 · 25분</div><h3>최종 하네스 설계의 첫 입력</h3>
-        <p>네 항목에 한 줄씩 표시한 분석이 다음 '최종 하네스 설계' 실습의 첫 칸이 된다. 모르는 건 "다시 물을 질문"으로.</p>
+      <div class="card"><div class="num">출력 → 빌드 재료</div><h3><code>providers/</code> 의 Claude·Codex 어댑터 한 쌍</h3>
+        <p>두 어댑터가 공통 <code>complete()</code> 하나를 공유한다 — 같은 인터페이스, 런타임만 다름. 네 항목 분석은 4-2 설계도로, 이 어댑터 한 쌍은 4-3 <code>review_parallel</code> 빌드 재료로 넘어간다.</p>
       </div>
     </div>
   </div>
@@ -2077,7 +2078,8 @@
 <aside class="notes" data-for="52">
   <div class="head"><span><span class="accent">●</span> SPEAKER NOTES</span><span>SLIDE 52 / 60</span></div>
   <p>이 슬라이드는 실습 2005-4-1 안내로 바로 이어진다. 학습자가 실습으로 들어가기 전 "왜 4관점인지 / 어떤 입력으로 / 어떤 출력으로 / 25분 안 무엇을 본다"를 한 화면에 잡는다.</p>
-  <p>발화 멘트: 본인이 4-4에서 만든 분업형 하네스 v1이 있을 것이다. 그걸 펴 놓고 ouroboros repo를 옆에 두면 — "내 네 칸이 ouroboros 어디에 있을까"가 자연스럽게 보인다. 그게 실습의 첫 단계.</p>
+  <p>발화 멘트: 본인이 4-4에서 만든 분업형 하네스 v1이 있을 것이다. 그걸 펴 놓고 ouroboros repo를 옆에 두면, "내 네 칸이 ouroboros 어디에 있을까"가 자연스럽게 보인다. 그게 실습의 첫 단계.</p>
+  <p>마무리는 <code>providers/</code>에서 닫는다. <code>base.py</code>의 <code>complete()</code> 하나에 <code>claude_code_adapter</code>·<code>codex_cli_adapter</code> 두 구현 — "같은 인터페이스, 런타임만 다름"을 눈으로 확인시키고, 이 어댑터 한 쌍이 4-3 <code>review_parallel</code>(인용 ∥ 사실 병렬 검수) 빌드 재료임을 분명히 한다. 4관점 관찰이 곧바로 "내가 쓸 어댑터"로 수렴한다.</p>
 </aside>
 <section id="chapter-05-ouroboros-applied-walkthrough" class="slide layout-table" data-num="53" data-curriculum="curriculum.md rows 59-61">
   <div class="meta-top">
@@ -2089,10 +2091,10 @@
     <table>
       <thead><tr><th>관찰 단계</th><th>Ouroboros 참조</th><th>내 하네스 번역</th></tr></thead>
       <tbody>
-        <tr><td class="k">질문 고정</td><td>Socratic Interview → Seed</td><td>실행 전 비어 있으면 안 되는 입력을 gate로 둔다.</td></tr>
-        <tr><td class="k">기준 분해</td><td>Seed → AC Tree</td><td>목표, 제약, 성공기준을 작업 단위 옆에 붙인다.</td></tr>
-        <tr><td class="k">검수 분리</td><td>Execute → Evaluate</td><td>만드는 단계와 판정하는 단계를 섞지 않는다.</td></tr>
-        <tr><td class="k">운영 기록</td><td>Event store → Rewind</td><td>실패 사유, 결정, 복귀 지점을 다음 실행 입력으로 남긴다.</td></tr>
+        <tr><td class="k">인터뷰 · gate</td><td>Socratic Interview → Seed</td><td>실행 전 비어 있으면 안 되는 입력을 막아 둔다.</td></tr>
+        <tr><td class="k">명세 · spec</td><td>Seed → AC Tree</td><td>목표, 제약, 성공기준을 작업 단위 옆에 붙인다.</td></tr>
+        <tr><td class="k">작업·검수 · review</td><td>Execute → Evaluate</td><td>만드는 단계와 판정하는 단계를 섞지 않는다.</td></tr>
+        <tr><td class="k">운영 · operate</td><td>Event store → Rewind</td><td>실패 사유, 결정, 복귀 지점을 다음 실행 입력으로 남긴다.</td></tr>
       </tbody>
     </table>
   </div>
@@ -2108,10 +2110,10 @@
   </ul>
   <ul>
     <li>이 슬라이드는 5-4의 별도 적용 워크스루 섹션이다. 앞 슬라이드가 Ouroboros를 사례로 소개했다면, 여기서는 같은 구조를 본인의 최종 하네스 설계 언어로 번역한다.</li>
-    <li>첫 행은 질문 고정이다. interview.md의 Socratic Interview와 Seed 설명, 그리고 <code>src/ouroboros/bigbang/</code> 관찰을 바탕으로 "실행 전에 비어 있으면 안 되는 입력"을 gate로 낮춰 설명한다.</li>
-    <li>둘째 행은 기준 분해다. Seed와 AC Tree는 제품 기능 소개가 아니라 목표, 제약, 성공기준을 다음 실행 단위가 읽을 수 있게 만드는 관찰 언어로 쓴다.</li>
-    <li>셋째 행은 검수 분리다. <code>src/ouroboros/execution/</code>과 <code>src/ouroboros/evaluation/</code>은 설치나 실행 보장 없이, 작업과 판정의 경계가 어디에 놓이는지 읽는 참고 경로로만 다룬다.</li>
-    <li>넷째 행은 운영 기록이다. <code>src/ouroboros/persistence/</code>와 rewind 표현은 실패 사유와 복귀 지점을 다음 실행 입력으로 남기는 구조를 설명할 때만 사용한다.</li>
+    <li>첫 행은 인터뷰(gate)다. interview.md의 Socratic Interview와 Seed 설명, 그리고 <code>src/ouroboros/bigbang/</code> 관찰을 바탕으로 "실행 전에 비어 있으면 안 되는 입력"을 gate로 낮춰 설명한다.</li>
+    <li>둘째 행은 명세(spec)다. Seed와 AC Tree는 제품 기능 소개가 아니라 목표, 제약, 성공기준을 다음 실행 단위가 읽을 수 있게 만드는 관찰 언어로 쓴다.</li>
+    <li>셋째 행은 작업·검수(review)다. <code>src/ouroboros/execution/</code>과 <code>src/ouroboros/evaluation/</code>은 설치나 실행 보장 없이, 작업과 판정의 경계가 어디에 놓이는지 읽는 참고 경로로만 다룬다.</li>
+    <li>넷째 행은 운영(operate)이다. <code>src/ouroboros/persistence/</code>와 rewind 표현은 실패 사유와 복귀 지점을 다음 실행 입력으로 남기는 구조를 설명할 때만 사용한다.</li>
     <li>라이브 진행은 한 행씩 "Ouroboros 이름 → 내 하네스 질문 → 설계도에 적을 문장" 순서로 말한다. 예를 들어 Seed는 "AI가 임의로 채우면 안 되는 입력은 무엇인가"로 번역하고, event store는 "다음 운영자가 반드시 알아야 할 결정은 무엇인가"로 번역한다.</li>
     <li>source-fidelity guardrail: repo 설치, 런타임 성공, 성능, 채택 규모, 별점은 말하지 않는다. curriculum.md rows 59-61, interview.md, 승인된 repo path 관찰 범위에 머문다.</li>
   </ul>
@@ -2151,7 +2153,7 @@
     <li>통제 질문은 세 가지다. 첫째, 새 제안이 기존 성공기준 안에 있는가. 둘째, 새 작업이 들어오면 완료 기준이 어떻게 바뀌는가. 셋째, 지금 진행 중인 흐름은 이어갈지, 중단하고 재질문할지, 체크포인트로 돌아갈지 결정했는가.</li>
     <li>Ouroboros 관찰 언어로 풀면 Seed는 원래 요청과 제약, AC Tree는 완료 판단, event store는 "왜 방향을 바꾸기로 했는지"의 기록, rewind는 이전 결정 지점으로 돌아가는 복귀 경로다.</li>
     <li>본인 번역 문장: "내 하네스가 새 아이디어를 발견했을 때, 바로 실행하지 않고 현재 목표의 변경인지 별도 과제인지 판정하는 칸이 있는가?"라고 묻는다.</li>
-    <li>전환 멘트: 이 예시를 보고 나면, 다음 슬라이드에서 그 파이프라인이 한 단계라도 끊기면 무엇이 무너지는지 본다 — 단순한 순서도가 아니라 발산을 통제하는 운영 구조라는 점이 드러난다.</li>
+    <li>전환 멘트: 이 예시를 보고 나면, 다음 슬라이드에서 그 파이프라인이 한 단계라도 끊기면 무엇이 무너지는지 본다. 단순한 순서도가 아니라 발산을 통제하는 운영 구조라는 점이 드러난다.</li>
   </ul>
   <p class="cite">Primary source: curriculum.md rows 59-61.</p>
   <p class="cite">Supporting reference: interview.md lines 39-40 for the Ouroboros drift anecdote and lines 45-48 for non-cloning framing.</p>
@@ -2165,10 +2167,10 @@
   <div class="body">
     <h2>한 단계가 끊기면 그 다음이 무너진다</h2>
     <div class="cards">
-      <div class="card"><div class="num">interview 누락</div><h3>추측이 시작된다</h3><p>다음 단계가 쓸 질문·결정이 없어 빈자리를 임의로 채운다.</p></div>
-      <div class="card"><div class="num">spec 누락</div><h3>목표가 흐려진다</h3><p>제약·성공기준이 비어 execute가 알아서 추측한다.</p></div>
-      <div class="card"><div class="num">review 누락</div><h3>검수가 사라진다</h3><p>판정 없이 완료 처리돼 오류가 그대로 나간다.</p></div>
-      <div class="card"><div class="num">operate 누락</div><h3>같은 실패 반복</h3><p>결정·복귀 지점 기록이 없어 다음 실행이 처음부터 시작한다.</p></div>
+      <div class="card"><div class="num">인터뷰(gate) 누락</div><h3>추측이 시작된다</h3><p>다음 단계가 쓸 질문·결정이 없어 빈자리를 임의로 채운다.</p></div>
+      <div class="card"><div class="num">명세(spec) 누락</div><h3>목표가 흐려진다</h3><p>제약·성공기준이 비어 작업 단계가 알아서 추측한다.</p></div>
+      <div class="card"><div class="num">검수(review) 누락</div><h3>검수가 사라진다</h3><p>판정 없이 완료 처리돼 오류가 그대로 나간다.</p></div>
+      <div class="card"><div class="num">운영(operate) 누락</div><h3>같은 실패 반복</h3><p>결정·복귀 지점 기록이 없어 다음 실행이 처음부터 시작한다.</p></div>
     </div>
   </div>
   <div class="meta-bottom"><span>5-4. 최종 프로젝트 및 케이스 스터디</span><span><span class="num">55</span> / 60</span></div>
@@ -2202,7 +2204,7 @@
   </ul>
   <h4>본인이 던질 확인 질문</h4>
   <ul>
-    <li>내 하네스에서 interview가 반드시 받아야 하는 입력은 무엇인가?</li>
+    <li>내 하네스에서 인터뷰 단계에 반드시 들어와야 하는 입력은 무엇인가?</li>
     <li>seed / spec에 고정하지 않으면 AI가 임의로 채울 위험이 큰 결정은 무엇인가?</li>
     <li>execute 결과를 review가 판정할 때 형식, 의미, 목적 기준은 어디에 적혀 있는가?</li>
     <li>operate 단계에서 다음 실행을 위해 남겨야 하는 결정, 실패, 복귀 지점은 무엇인가?</li>
@@ -2217,20 +2219,21 @@
     <span>2005-4-2</span>
   </div>
   <div class="body">
-    <h2>구조: 4C → Capability Graph → MCP 하네스로 연결하기</h2>
+    <h2>구조: 2~5장에서 만든 하네스를 회의록 → 1page 한 줄로 잇는다</h2>
     <div class="cards">
       <div class="card"><div class="num">01</div><h3>실습 목표</h3><p>하네스를 단순 프롬프트 묶음이 아닌 파이프라인으로 엮기</p></div>
-      <div class="card"><div class="num">02</div><h3>수행 과제</h3><p>질문, 명세, 실행, 검수, 종료 기준을 한 흐름으로 연결한다.</p></div>
+      <div class="card"><div class="num">02</div><h3>수행 과제</h3><p>2~5장의 인터뷰·명세·작업·검수·운영을 한 파이프라인으로 잇는다.</p></div>
       <div class="card"><div class="num">03</div><h3>산출물</h3><p>Final Harness Graph</p></div>
       <div class="card"><div class="num">04</div><h3>완료 기준</h3><p>각 단계의 입력, 출력, 실패 시 복귀 지점이 보인다.</p></div>
     </div>
     <div class="practice-checklist requirement-table" aria-label="Final Harness Graph 구성">
-      <h3>Final Harness Graph 구성</h3>
+      <h3>Final Harness Graph 구성 — 회의록 → 1page</h3>
       <ul>
-        <li><strong>인터뷰</strong>질문과 재질문 조건으로 모호함을 줄인다.</li>
-        <li><strong>명세</strong>목표, 제약, 성공기준을 실행 가능한 입력으로 고정한다.</li>
-        <li><strong>작업</strong>분해, handoff, 상태 저장 지점을 단계별로 둔다.</li>
-        <li><strong>검수</strong>평가, 재시도, 종료 기준과 복귀 지점을 연결한다.</li>
+        <li><strong>인터뷰 · 2장</strong>"이 1page를 누가, 어떤 결정을 위해 읽는가"를 인터뷰 하네스로 물어 요구사항·Define을 만든다.</li>
+        <li><strong>명세 · 3장</strong>그 Define을 회의록→1page 변환 규칙(고정·남김·질문)으로 옮겨 매번 같은 형식으로 잠근다.</li>
+        <li><strong>작업 · 4장</strong>ask·build·review sub agent로 회의록을 1page 초안까지 끌고 간다.</li>
+        <li><strong>검수 · 4→5장</strong>인용 검사(Claude)·사실 검사(Codex)를 MCP로 병렬 실행(review_parallel)→merge해 통과·재작업·재질문을 나눈다.</li>
+        <li><strong>운영 · 5장</strong>순서·상태·재시도·멈춤(exit·retry·ask-back)을 코드로 강제한다. ask-back이면 2장 인터뷰 하네스로 돌아가 spec을 갱신한다.</li>
       </ul>
     </div>
   </div>
@@ -2265,10 +2268,11 @@
   <ul>
     <li>실습 목표: 하네스를 단순 프롬프트 묶음이 아닌 파이프라인으로 엮기.</li>
     <li>수행 과제: 인터뷰 질문, 명세 항목, 작업 분해, 검수 기준, Loop Protocol을 하나의 설계도로 연결한다.</li>
-    <li>수행 절차 1: 2장의 인터뷰 산출물, 4장의 작업 분해 산출물, 5장의 MCP flow/graph/loop를 한곳에 모은다.</li>
+    <li>수행 절차 1: 2장 인터뷰 하네스 산출물(요구사항·Define), 3장 회의록→1page 변환 규칙, 4장 sub agent 분업·검수, 5장 MCP flow/graph/loop를 한곳에 모은다. 이 넷이 한 파이프라인의 인터뷰·명세·작업·검수·운영 다섯 단계가 된다.</li>
     <li>수행 절차 2: 각 산출물이 다음 단계의 입력이 되도록 인터뷰, 명세, 작업, 검수, 종료 흐름을 화살표로 잇는다.</li>
     <li>수행 절차 3: 흐름이 끊기는 지점에는 추가 질문, handoff, 재시도 기준 중 어떤 장치가 필요한지 표시한다.</li>
     <li>수행 절차 4: 각 단계 옆에 입력, 출력, 저장할 상태, 실패 시 복귀 지점, 사람이 판단할 조건을 한 줄씩 적는다.</li>
+    <li>인터뷰 하네스(2장)는 두 곳에 끼운다 — 변환 전 "이 1page는 무엇을 위한 것인가"를 정하는 앞 gate, 그리고 검수가 ask-back을 띄울 때 다시 돌려 spec을 갱신하는 재질문 지점.</li>
     <li>산출물 이름: Final Harness Graph.</li>
     <li>체크포인트: 인터뷰 단계는 모호함을 줄이고, 명세 단계는 What을 고정하며, 작업 단계는 실행 단위를 나누고, 검수 단계는 결과가 목적에 맞는지 판정해야 한다.</li>
     <li>체크포인트: 각 단계가 다음 단계의 입력을 만든다는 점이 보여야 한다. 단순히 좋은 프롬프트를 순서대로 모은 문서가 되면 안 된다.</li>
@@ -2313,7 +2317,7 @@
   <p class="cite">Supporting reference: interview.md deterministic execution, Seed, AC Tree, Ralph loop, event store, rewind, and Ouroboros framing.</p>
 </aside>
 
-<section id="chapter-05-final-demo" class="slide layout-grid cols-2 compact-practice" data-num="58" data-curriculum="curriculum.md rows 59-61">
+<section id="chapter-05-final-demo" class="slide layout-grid cols-2 compact-practice final-demo-slide" data-num="58" data-curriculum="curriculum.md rows 59-61">
   <div class="meta-top">
     <span class="deck-title"><span class="mark"></span> FAST CAMPUS · CHAPTER 05 · KEYNOTE</span>
     <span>2005-4-3</span>
@@ -2322,7 +2326,7 @@
     <h2>[최종 프로젝트] 내 업무용 런타임 독립 하네스 실행 데모</h2>
     <div class="cards">
       <div class="card"><div class="num">01</div><h3>실습 목표</h3><p>수강 후 바로 가져갈 실무용 최종 결과물 완성</p></div>
-      <div class="card"><div class="num">02</div><h3>수행 과제</h3><p>내 업무용 하네스를 완성하고 실행 흐름을 데모한다.</p></div>
+      <div class="card"><div class="num">02</div><h3>수행 과제</h3><p>내 업무용 하네스를 완성하고, 검수를 MCP로 병렬 실행하는 흐름까지 데모한다.</p></div>
       <div class="card"><div class="num">03</div><h3>산출물</h3><p>런타임 독립 하네스 실행 데모</p></div>
       <div class="card"><div class="num">04</div><h3>완료 신호</h3><p>사용 조건, 실행 순서, 실패 대응, exit/retry/ask-back route가 설명된다.</p></div>
     </div>
@@ -2334,8 +2338,8 @@
         </thead>
         <tbody>
           <tr><td class="k">exit</td><td>목표와 success signal을 만족하고 남은 개선이 업무 가치에 비해 작다.</td><td>결과를 확정한다.</td><td>verdict 근거와 남은 uncertainty</td></tr>
-          <tr><td class="k">retry</td><td>형식, 검증, 실행 중 하나가 실패했지만 입력은 충분하다.</td><td>checkpoint로 돌아간다.</td><td>실패 사유와 복귀 node</td></tr>
-          <tr><td class="k">ask-back</td><td>요구사항이나 판단 신호가 비어 반복해도 수렴하지 않는다.</td><td>사람에게 묻고 spec을 갱신한다.</td><td>질문과 갱신된 condition</td></tr>
+          <tr><td class="k">retry</td><td>형식, 검증, 실행 중 하나가 실패했지만 입력은 충분하다.</td><td>checkpoint로 돌아가 실패한 검사만 다시 돌린다(통과 결과 보존).</td><td>실패 사유와 복귀 node</td></tr>
+          <tr><td class="k">ask-back</td><td>요구사항이나 판단 신호가 비어 반복해도 수렴하지 않는다.</td><td>2장 인터뷰 하네스를 다시 돌려 spec을 갱신한다.</td><td>질문과 갱신된 condition</td></tr>
         </tbody>
       </table>
     </div>
@@ -2372,9 +2376,10 @@
     <li>수행 과제: 앞에서 만든 MCP Candidate Flow, Runtime-independent Harness Graph, Loop Protocol, Final Harness Graph를 하나로 묶어 데모 가능한 형태로 정리한다.</li>
     <li>수행 절차 1: 앞 실습 산출물을 최종 하네스 본문, 실행 순서, 운영 가이드 섹션으로 재배치한다.</li>
     <li>수행 절차 2: 실제 업무 요청 하나를 넣었을 때 시작 입력, 중간 상태, 검수, 종료까지 설명할 데모 흐름을 만든다.</li>
+    <li>검수 단계는 인용·사실 검사를 MCP(review_parallel)로 병렬 실행→merge하는 것으로 데모한다. 인용은 Claude(Anthropic 메시지 API), 사실은 Codex(codex exec)로 — 같은 프롬프트·다른 런타임이라 5-2 런타임 독립이 코드로 드러난다. 바깥에선 콜 하나, 안에선 두 세션이 병렬로 도는 것을 보여주고, 한쪽만 실패하면 통과 결과를 보존한 채 실패한 검사만 다시 돌린다는 점을 짚는다. 실습 자료(2005-4-3)에 import 없이 바로 돌아가는 최소 스켈레톤이 들어 있다.</li>
     <li>수행 절차 3: 실패했을 때 재시도할 지점과 사람이 다시 판단해야 할 조건을 운영 가이드에 남긴다.</li>
     <li>수행 절차 4: 데모 마지막에는 결과물뿐 아니라 어떤 기준으로 멈췄는지, 다음 운영자가 어디를 보면 되는지까지 설명한다.</li>
-    <li>실행 기준 섹션: 본문 Loop Protocol처럼 exit, retry, ask-back을 나누고 각 route의 condition, next action, operation log를 채운다.</li>
+    <li>실행 기준 섹션: 본문 Loop Protocol처럼 exit, retry, ask-back을 나누고 각 route의 condition, next action, operation log를 채운다. ask-back은 사람에게 막연히 묻는 대신 2장 인터뷰 하네스를 다시 돌려 spec을 갱신하는 단계로 연결한다.</li>
     <li>산출물 이름: [산출물] 런타임 독립 하네스 실행 데모.</li>
     <li>체크포인트: 운영 가이드에는 시작 입력, 실행 순서, 상태 기록 위치, 실패 대응, exit condition, 사람이 다시 판단해야 하는 ask-back condition이 들어가야 한다.</li>
     <li>체크포인트: interview.md에 적힌 강의 목표는 보충 기준으로만 사용한다. "Ouroboros 복사본"을 만드는 것이 아니라, 본인 도메인에 맞는 하네스를 계속 진화시킬 수 있는 판단 구조를 남긴다.</li>
@@ -2390,7 +2395,9 @@
     <span>5-4 · SUMMARY</span>
   </div>
   <div class="body">
-    <h2>5-4 정리: 복제보다 운영 가능한 구조를 남긴다</h2>
+    <div class="eyebrow">1장에서 5장까지</div>
+    <h2>하네스 엔지니어링은 비결정적인 AI를 deterministic하게 묶어 원하는 결과를 얻어낸다</h2>
+    <div class="lede">markdown으로 규칙을 잠그고, sub agent로 일을 나누고, MCP로 순서를 코드로 강제했다. 도구는 매 장 단단해졌지만 목표는 하나였다 — 매번 달라지는 모델에서 매번 같은 결과를 뽑아낸다.</div>
   </div>
   <div class="meta-bottom"><span>5-4. 최종 프로젝트 및 케이스 스터디</span><span><span class="num">59</span> / 60</span></div>
 </section>
@@ -2399,11 +2406,12 @@
   <h4>요약 / 전환</h4>
   <h4>시간 큐 / 레퍼런스 주석</h4>
   <ul>
-    <li>진행 시간: 18:30-19:30. 30초는 "복제보다 운영 가능한 구조"를 반복하고, 20초는 최종 산출물 체크리스트, 10초는 6장의 팀 확장으로 전환한다.</li>
+    <li>진행 시간: 18:30-19:30. 30초는 화면의 한 줄 — "비결정적인 AI를 deterministic하게 묶는 일" — 을 짚고, 20초는 markdown→sub agent→MCP 1~5장 회고, 10초는 6장의 팀 확장으로 전환한다.</li>
     <li>근거: curriculum.md rows 59-61과 interview.md lines 45-48의 도메인별 하네스 판단 프레임을 결론으로 사용한다.</li>
   </ul>
   <ul>
-    <li>5-4의 결론은 Ouroboros를 그대로 복제하는 것이 아니라, 그 설계 사고를 자기 업무의 순서, 상태, 재시도, 멈춤 기준으로 번역하는 것이다.</li>
+    <li>화면 메시지: 하네스 엔지니어링은 비결정적인 AI를 deterministic하게 묶어 원하는 결과를 얻는 일이다. markdown으로 규칙을 잠근 1~3장, sub agent로 일을 나눈 4장, MCP로 순서를 코드로 강제한 5장이 같은 목표의 세 단계였다고 한 번에 회고한다.</li>
+    <li>그 위에 interview.md의 결론을 얹는다 — Ouroboros 복제가 아니라, 그 설계 사고를 자기 업무의 순서·상태·재시도·멈춤 기준으로 번역하는 것이 이 강의가 남기는 능력이다.</li>
     <li>최종 하네스와 운영 가이드에는 사용 조건, 실행 순서, 저장할 상태, 실패 대응, 종료 기준, 데모 흐름이 남아야 한다.</li>
     <li>다음 장에서는 이 개인 하네스를 팀의 공유 인프라, 관측, 플레이그라운드 관점으로 확장한다.</li>
   </ul>

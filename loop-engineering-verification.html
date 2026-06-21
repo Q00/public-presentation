@@ -1,0 +1,897 @@
+<!doctype html>
+<html lang="ko" data-language="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loop Engineering, 핵심은 검증</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&family=Noto+Sans+KR:wght@200;300;400;500;600;700;800&family=Noto+Sans:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#fafaf8;
+    --paper-rgb:250,250,248;
+    --ink:#0a0a0a;
+    --ink-rgb:10,10,10;
+    --grey-1:#f0f0ee;
+    --grey-2:#d4d4d2;
+    --grey-3:#737373;
+    --accent:#002FA7;
+    --accent-rgb:0,47,167;
+    --accent-on:#ffffff;
+    --accent-bright:#5B7BFF;
+    --text-primary:#0a0a0a;
+    --text-secondary:#525252;
+    --text-helper:#737373;
+    --text-placeholder:#a3a3a3;
+    --text-on-color:#ffffff;
+    --border-subtle:#e0e0e0;
+    --border-strong:#a3a3a3;
+    --font-en:"Inter","Helvetica Neue","Helvetica","Arial",system-ui,-apple-system,sans-serif;
+    --font-ko:"SUIT","Pretendard","Noto Sans KR","Noto Sans","Inter","Helvetica Neue","Arial",system-ui,-apple-system,sans-serif;
+    --sans:var(--font-en);
+    --mono:"JetBrains Mono","IBM Plex Mono","SF Mono","Cascadia Code","Consolas","Courier New",ui-monospace,monospace;
+    --sp-3:8px;
+    --sp-4:12px;
+    --sp-5:16px;
+    --sp-6:24px;
+    --sp-7:32px;
+    --sp-8:40px;
+    --sp-9:48px;
+    --sp-10:64px;
+    --sp-11:80px;
+    --sp-12:96px;
+    --sp-13:160px;
+    --ease-prod:cubic-bezier(.2,0,.38,.9);
+    --ease-entry:cubic-bezier(0,0,.3,1);
+    --nav-safe-bottom:8vh;
+  }
+  html[data-language="ko"]{--sans:var(--font-ko)}
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:100%;height:100%;overflow:hidden;background:var(--paper);color:var(--ink);font-family:var(--sans)}
+  body{font-weight:300;letter-spacing:0;font-size:24px}
+  button{font:inherit;color:inherit}
+  img{display:block;max-width:100%}
+
+  #deck{position:fixed;inset:0;overflow:hidden;background:var(--paper)}
+  .slide{position:absolute;inset:0;display:none;background:var(--paper);color:var(--ink)}
+  .slide.active{display:block}
+  .slide.dark{background:var(--ink);color:var(--text-on-color)}
+  .slide.accent{background:var(--accent);color:var(--accent-on)}
+  .slide.split .canvas-card{padding:0;display:grid;grid-template-columns:1fr 1fr}
+  .canvas-card{width:100vw;height:100vh;padding:5.6vh 5vw 4.4vh;display:flex;flex-direction:column;position:relative;overflow:hidden;background:inherit;color:inherit}
+
+  .chrome-min{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-bottom:var(--sp-9);font:500 11px/1 var(--mono);text-transform:uppercase;letter-spacing:.16em;color:var(--text-helper)}
+  .dark .chrome-min,.accent .chrome-min{color:rgba(255,255,255,.78)}
+  .foot{margin-top:auto;font:400 11px/1.5 var(--mono);text-transform:uppercase;letter-spacing:.12em;color:var(--text-helper)}
+
+  .t-meta{font:500 11px/1 var(--mono);text-transform:uppercase;letter-spacing:.18em;color:var(--text-helper)}
+  .t-cat{font:600 13px/1.1 var(--sans);text-transform:uppercase;letter-spacing:.08em;color:var(--accent)}
+  .lead{font:300 22px/1.45 var(--sans);color:var(--text-secondary);max-width:58ch}
+  .body{font:300 18px/1.6 var(--sans);color:var(--text-secondary)}
+  .body-sm{font:300 15px/1.55 var(--sans);color:var(--text-secondary)}
+  .mono{font-family:var(--mono);font-feature-settings:"tnum";overflow-wrap:anywhere}
+  .accent-text{color:var(--accent)}
+
+  .h-hero{font:200 88px/.96 var(--sans);letter-spacing:0}
+  .h-statement{font:200 76px/.98 var(--sans);letter-spacing:0}
+  .h-xl{font:200 58px/1 var(--sans);letter-spacing:0}
+  .h-md{font:300 34px/1.08 var(--sans);letter-spacing:0}
+  .num-mega{font:200 120px/.9 var(--sans);letter-spacing:0}
+
+  .grid-12{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+  .grid-16{display:grid;grid-template-columns:repeat(16,1fr);gap:16px}
+  .span-2{grid-column:span 2}.span-3{grid-column:span 3}.span-4{grid-column:span 4}.span-5{grid-column:span 5}.span-6{grid-column:span 6}.span-7{grid-column:span 7}.span-8{grid-column:span 8}.span-9{grid-column:span 9}.span-10{grid-column:span 10}.span-12{grid-column:span 12}
+
+  .hr-hairline{height:1px;background:currentColor;opacity:.22}
+  .card-fill,.brief-card,.matrix-cell,.force-card{background:var(--grey-1);padding:24px;color:var(--ink)}
+  .card-ink{background:var(--ink);color:var(--text-on-color);padding:24px}
+  .card-accent{background:var(--accent);color:var(--accent-on);padding:24px}
+  .card-outlined{border:1px solid var(--border-subtle);padding:24px;background:transparent}
+  .dark .card-fill{background:#161616;color:#fff}
+
+  .cover-row{display:grid;grid-template-columns:minmax(120px,22vw) 1fr;gap:3vw;align-items:end;border-top:1px solid currentColor;padding:2.4vh 0}
+  .cover-row .nb{font:200 86px/.92 var(--sans);letter-spacing:0}
+
+  .half{padding:5.6vh 3.6vw 4.4vh;display:flex;flex-direction:column;position:relative;overflow:hidden}
+  .b-ink{background:var(--ink);color:#fff}
+  .b-paper{background:var(--paper);color:var(--ink)}
+  .b-accent{background:var(--accent);color:var(--accent-on)}
+
+  .sub-grid-3-2{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);gap:1px;background:var(--border-subtle)}
+  .sub-grid-3-2>*{background:var(--paper);padding:24px}
+  .stack-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .kpi-row-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .kpi-tower-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:end}
+  .bar-tower{height:var(--h,34vh);background:var(--accent)}
+
+  .timeline-v{display:grid;gap:24px;position:relative}
+  .tl-node{display:grid;grid-template-columns:24px 1fr;gap:20px;align-items:start}
+  .tl-axis{position:relative}
+  .tl-axis:before{content:"";position:absolute;left:11px;top:0;bottom:-24px;border-left:1px dashed var(--border-strong)}
+  .dot{position:relative;z-index:1;width:8px;height:8px;margin:4px 0 0 8px;background:var(--accent)}
+
+  .timeline-h{position:relative;display:grid;grid-template-columns:repeat(var(--count,5),1fr);gap:16px;padding-top:10vh}
+  .timeline-h:before{content:"";position:absolute;left:0;right:0;top:calc(10vh + 4px);height:1px;background:var(--border-strong)}
+  .tl-h-node{position:relative;padding-top:28px}
+  .tl-h-node:before{content:"";position:absolute;top:0;left:0;width:8px;height:8px;background:var(--accent)}
+
+  .h-bar-chart{display:grid;gap:14px}
+  .bar-row{display:grid;grid-template-columns:minmax(140px,22vw) 1fr auto;gap:16px;align-items:center}
+  .bar-fill{height:8px;background:var(--accent);width:var(--w,50%)}
+
+  .duo-compare{display:grid;grid-template-columns:1fr 1px 1fr;gap:4vw;align-items:stretch;flex:1}
+  .duo-compare:has(.vrule){grid-template-columns:1fr 1px 1fr}
+  .vrule{width:1px;background:var(--border-subtle)}
+
+  .manifesto-top{display:grid;grid-template-columns:7fr 5fr;gap:4vw;align-items:start}
+  .ink-banner-full{margin:auto -5vw -4.4vh;padding:6vh 5vw;background:var(--ink);color:#fff}
+  .three-forces{display:grid;grid-template-columns:5fr 11fr;gap:16px;flex:1}
+  .hero-ink-col{background:var(--ink);color:#fff;padding:32px;display:flex;flex-direction:column;justify-content:space-between}
+  .force-num{font:200 76px/.9 var(--sans);color:var(--accent)}
+
+  .loop-diagram{display:grid;grid-template-columns:5fr 7fr;gap:4vw;align-items:center;flex:1}
+  .loop-steps{display:grid;gap:16px}
+
+  .matrix-fill{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .hero-stat-bottom{margin-top:auto;display:flex;align-items:end;justify-content:space-between;gap:24px}
+  .brief-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);gap:16px}
+  .brief-card{min-height:20vh;display:flex;flex-direction:column;justify-content:space-between}
+  .brief-card.is-accent{background:var(--accent);color:var(--accent-on)}
+
+  .system-diagram{display:grid;grid-template-columns:5fr 7fr;gap:4vw;align-items:center;flex:1}
+  .sys-label{border-top:1px solid var(--border-subtle);padding-top:12px}
+  .why-now-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:stretch}
+  .why-col{display:flex;flex-direction:column;min-height:50vh;border-top:1px solid var(--ink);padding-top:18px}
+  .why-num-bottom{margin-top:auto;font:200 86px/.9 var(--sans);letter-spacing:0}
+  .four-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .fc-col{border-top:1px solid var(--ink);padding-top:16px}
+  .stacked-ledger{display:grid;gap:0}
+  .ledger-row{display:grid;grid-template-columns:minmax(180px,28vw) 1fr auto;gap:24px;align-items:end;border-bottom:1px solid var(--border-subtle);padding:1.8vh 0}
+  .ledger-num{font:200 90px/.9 var(--sans);letter-spacing:0}
+  .tech-spec{display:grid;grid-template-columns:5fr 7fr;gap:4vw;flex:1}
+  .spec-kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .spec-bars{display:flex;align-items:end;gap:8px;min-height:22vh}
+  .bar-vert{width:16px;height:var(--h,18vh);background:var(--accent)}
+
+  .frame-img{position:relative;overflow:hidden;background:var(--paper)}
+  .frame-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center}
+  .fit-contain img{object-fit:contain}
+  .r-21x9{aspect-ratio:21/9}
+  .r-16x10{aspect-ratio:16/10}
+  .r-16x9{aspect-ratio:16/9}
+  .h-22{height:22vh}
+  .h-26{height:26vh}
+  .image-hero-body{display:grid;grid-template-columns:4fr 8fr;gap:4vw;padding:4vh 5vw 0}
+  .image-hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+
+  .dot-mat,.ring-mat,.cross-mat{position:absolute;pointer-events:none;opacity:.18}
+  .dot-mat{background-image:radial-gradient(currentColor 1px, transparent 1px);background-size:14px 14px}
+  .ring-mat{background-image:radial-gradient(transparent 4px,currentColor 4px,currentColor 5px,transparent 5px);background-size:20px 20px}
+  .cross-mat{background-image:linear-gradient(45deg,transparent 47%,currentColor 48%,currentColor 52%,transparent 53%),linear-gradient(-45deg,transparent 47%,currentColor 48%,currentColor 52%,transparent 53%);background-size:18px 18px}
+
+  .ascii-bg{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.35}
+  .canvas-card>*:not(.ascii-bg),.half>*:not(.ascii-bg){position:relative;z-index:1}
+  .nav-safe-bottom{padding-bottom:var(--nav-safe-bottom)}
+  .nav-safe-bottom-tight{padding-bottom:4vh}
+
+  #hint{position:fixed;right:18px;bottom:18px;z-index:50;font:500 11px/1 var(--mono);text-transform:uppercase;letter-spacing:.12em;color:rgba(10,10,10,.55);pointer-events:none}
+  .slide.dark~#hint,.slide.accent~#hint{color:rgba(255,255,255,.7)}
+  #nav{position:fixed;left:50%;bottom:2vh;transform:translateX(-50%);z-index:60;display:flex;gap:8px}
+  #nav button{width:8px;height:8px;border:0;background:rgba(10,10,10,.22);border-radius:0;padding:0;cursor:pointer}
+  #nav button.active{background:var(--accent)}
+  .accent~#nav button.active{background:#fff}
+  .dark~#nav button{background:rgba(255,255,255,.28)}
+
+  #index{position:fixed;inset:0;z-index:80;display:none;background:rgba(250,250,248,.96);padding:4vh 4vw;overflow:auto}
+  #index.open{display:block}
+  .index-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}
+  .index-card{border:1px solid var(--border-subtle);background:#fff;padding:14px;cursor:pointer}
+  .index-card .n{font:600 11px var(--mono);color:var(--accent);margin-bottom:8px}
+  .index-card .t{font:400 16px/1.3 var(--sans)}
+
+  body.low-power *,body.low-power *:before,body.low-power *:after{animation:none!important;transition:none!important}
+  [data-anim]{opacity:1}
+
+  @media (max-width:800px){
+    .canvas-card{padding:32px 22px}
+    .slide.split .canvas-card,.duo-compare,.manifesto-top,.three-forces,.loop-diagram,.system-diagram,.tech-spec,.image-hero-body{grid-template-columns:1fr}
+    .grid-12,.grid-16,.sub-grid-3-2,.stack-row,.kpi-row-4,.kpi-tower-row,.brief-grid,.why-now-grid,.four-cards,.matrix-fill{grid-template-columns:1fr}
+    .h-hero{font-size:46px}
+    .h-xl{font-size:38px}
+  }
+
+  .t-meta,.t-cat,.chrome-min,.foot,#hint{letter-spacing:0}
+  .chrome-min{font-size:14px}
+  .foot{font-size:15px;line-height:1.45}
+  .t-meta{font-size:16px;line-height:1.2}
+  .t-cat{font-size:20px;line-height:1.15}
+  .lead{font-size:30px;line-height:1.35}
+  .body{font-size:24px;line-height:1.45}
+  .body-sm{font-size:20px;line-height:1.38}
+  .h-hero{font-size:96px;line-height:.96;letter-spacing:0}
+  .h-statement{font-size:80px;line-height:.98;letter-spacing:0}
+  .h-xl{font-size:64px;line-height:1.04;letter-spacing:0}
+  .h-md{font-size:38px;line-height:1.08;letter-spacing:0}
+  .num-mega{font-size:120px;line-height:.9;letter-spacing:0}
+  .cover-row .nb{font-size:86px;line-height:.92;letter-spacing:0}
+  .card-fill,.brief-card,.matrix-cell,.force-card,.card-outlined{padding:26px}
+  @media (max-width:800px){
+    .lead{font-size:20px}
+    .body{font-size:18px}
+    .body-sm{font-size:16px}
+    .h-hero{font-size:46px}
+    .h-statement{font-size:42px}
+    .h-xl{font-size:38px}
+    .h-md{font-size:26px}
+    .num-mega{font-size:64px}
+    .cover-row .nb{font-size:42px}
+  }
+</style>
+</head>
+<body>
+<div id="deck">
+  <section class="slide accent active" data-layout="S01" data-animate="hero">
+    <div class="canvas-card">
+      <canvas class="ascii-bg" aria-hidden="true"></canvas>
+      <div class="chrome-min">
+        <div class="l">Loop Engineering Seminar</div>
+        <div class="r">01 / 22</div>
+      </div>
+      <div style="flex:1;display:grid;align-content:center;gap:3vh">
+        <div class="t-meta" style="color:rgba(255,255,255,.78)">프롬프트에서 검증 가능한 루프까지</div>
+        <h1 class="h-hero">Loop Engineering,<br>핵심은 검증</h1>
+        <p class="lead" style="color:rgba(255,255,255,.86)">늘 하던 구현·테스트·수정을 AI가 스스로 반복하고 검증하게 만든 것.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide split" data-layout="S03" data-animate="split-statement">
+    <div class="canvas-card">
+      <div class="half b-ink">
+        <div class="chrome-min">
+          <div class="l">Thesis</div>
+          <div class="r">02 / 22</div>
+        </div>
+        <div style="margin-top:auto">
+          <h2 class="h-statement">검증과 멈춤</h2>
+        </div>
+      </div>
+      <div class="half b-paper">
+        <div class="chrome-min">
+          <div class="l">핵심 문장</div>
+          <div class="r">1 hour</div>
+        </div>
+        <div style="display:grid;gap:26px;margin:auto 0">
+          <p class="lead">기록하고 검증해 다음 입력으로 되돌리고, 멈출 수 있게 만드는 것.</p>
+          <div class="card-fill">
+            <div class="t-meta">오늘의 기준</div>
+            <p class="body">핵심은 두 가지. 확실한 검증, 그리고 잘 멈추는 구조.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-layout="S11" data-animate="timeline">
+    <div class="canvas-card">
+      <div class="chrome-min">
+        <div class="l">Part 1 · 0-20분</div>
+        <div class="r">03 / 22</div>
+      </div>
+      <div class="t-meta">옛날부터 우리는 루프 안에 있었다</div>
+      <h2 class="h-xl" style="max-width:980px;margin-top:14px">코딩, 이미 하나의 반복 구조</h2>
+      <div class="timeline-h" style="--count:5;margin-top:8vh">
+        <div class="tl-h-node">
+          <div class="t-cat">01</div>
+          <h3 class="h-md">이해</h3>
+          <p class="body-sm">요구사항을 듣고 모호한 부분을 줄인다.</p>
+        </div>
+        <div class="tl-h-node">
+          <div class="t-cat">02</div>
+          <h3 class="h-md">구현</h3>
+          <p class="body-sm">작게 만들고 실제 코드에 붙인다.</p>
+        </div>
+        <div class="tl-h-node">
+          <div class="t-cat">03</div>
+          <h3 class="h-md">테스트</h3>
+          <p class="body-sm">실행 결과로 확인한다.</p>
+        </div>
+        <div class="tl-h-node">
+          <div class="t-cat">04</div>
+          <h3 class="h-md">수정</h3>
+          <p class="body-sm">실패한 지점을 다음 입력으로 바꾼다.</p>
+        </div>
+        <div class="tl-h-node">
+          <div class="t-cat">05</div>
+          <h3 class="h-md">리뷰</h3>
+          <p class="body-sm">다른 관점으로 완료 주장을 검증한다.</p>
+        </div>
+      </div>
+      <p class="foot">AI가 와도 사라지지 않는다. 자동화될 뿐.</p>
+    </div>
+  </section>
+  <section class="slide" data-layout="S08" data-animate="compare">
+    <div class="canvas-card">
+      <div class="chrome-min"><div class="l">같은 구조</div><div class="r">04 / 22</div></div>
+      <div class="t-meta">이미 익숙한 일</div>
+      <h2 class="h-xl" style="max-width:1040px;margin-top:14px">사람 루프와 AI 루프, 같은 구조</h2>
+      <div style="margin-top:7vh;display:flex;flex-direction:column;gap:14px">
+        <div style="display:grid;grid-template-columns:140px repeat(4,1fr);gap:12px;align-items:center"><div class="t-cat">사람이 하던 일</div><div class="card-fill" style="text-align:center"><h3 class="h-md">계획</h3></div><div class="card-fill" style="text-align:center"><h3 class="h-md">구현</h3></div><div class="card-fill" style="text-align:center"><h3 class="h-md">테스트</h3></div><div class="card-fill" style="text-align:center"><h3 class="h-md">수정</h3></div></div>
+        <div style="display:grid;grid-template-columns:140px repeat(4,1fr);gap:12px;text-align:center;color:var(--accent);font-size:24px"><div></div><div>=</div><div>=</div><div>=</div><div>=</div></div>
+        <div style="display:grid;grid-template-columns:140px repeat(4,1fr);gap:12px;align-items:center"><div class="t-cat accent-text">AI 루프</div><div class="card-ink" style="text-align:center"><h3 class="h-md">목표</h3></div><div class="card-ink" style="text-align:center"><h3 class="h-md">개발</h3></div><div class="card-ink" style="text-align:center"><h3 class="h-md">검증</h3></div><div class="card-ink" style="text-align:center"><h3 class="h-md">피드백</h3></div></div>
+      </div>
+      <p class="foot">하던 일은 그대로다. AI 시스템이 이 과정을 스스로 반복할 뿐이다.</p>
+    </div>
+  </section>
+
+
+  <section class="slide" data-layout="S11" data-animate="timeline">
+    <div class="canvas-card">
+      <div class="chrome-min">
+        <div class="l">Very Short History</div>
+        <div class="r">05 / 22</div>
+      </div>
+      <div class="t-meta">AI 역사도 쉽게 보면</div>
+      <h2 class="h-xl" style="max-width:1020px;margin-top:14px">규칙에서 학습, 그리고 생성</h2>
+      <div class="timeline-h" style="--count:5;margin-top:7vh">
+        <div class="tl-h-node">
+          <div class="t-cat">1950s</div>
+          <h3 class="h-md">AI의 출발</h3>
+          <p class="body-sm">사람처럼 추론하는 기계를 만들자는 질문이 시작된다.</p>
+        </div>
+        <div class="tl-h-node">
+          <div class="t-cat">1970s</div>
+          <h3 class="h-md">규칙</h3>
+          <p class="body-sm">if A then B 같은 규칙을 많이 쌓는다.</p>
+        </div>
+        <div class="tl-h-node">
+          <div class="t-cat">1980s</div>
+          <h3 class="h-md">전문가 시스템</h3>
+          <p class="body-sm">특정 분야 지식을 룰과 데이터로 운영한다.</p>
+        </div>
+        <div class="tl-h-node">
+          <div class="t-cat">2010s</div>
+          <h3 class="h-md">딥러닝</h3>
+          <p class="body-sm">데이터에서 패턴을 학습한다.</p>
+        </div>
+        <div class="tl-h-node">
+          <div class="t-cat">2020s</div>
+          <h3 class="h-md">LLM</h3>
+          <p class="body-sm">답을 그럴듯하게 생성하지만 완료 검증은 별개다.</p>
+        </div>
+      </div>
+      <p class="foot">방식은 바뀌었지만 “어떻게 믿을 것인가”는 계속 남았다.</p>
+    </div>
+  </section>
+
+  <section class="slide" data-layout="S08" data-animate="compare">
+    <div class="canvas-card">
+      <div class="chrome-min">
+        <div class="l">Generation vs Verification</div>
+        <div class="r">06 / 22</div>
+      </div>
+      <div class="t-meta">헷갈리면 안 되는 두 문제</div>
+      <h2 class="h-xl" style="max-width:1040px;margin-top:14px">생성과 검증, 다른 문제</h2>
+      <div class="duo-compare" style="margin-top:6vh">
+        <div class="card-fill" style="display:flex;flex-direction:column;gap:18px">
+          <div class="t-cat">예전 AI</div>
+          <h3 class="h-md">검증은 쉬운 편</h3>
+          <p class="body">왜 그런 답인지 추적하기 쉽다. 현실을 다 규칙으로 쓰긴 어렵다.</p>
+          <p class="body-sm mono">강점: 설명 가능성<br>약점: 생성력과 유연성</p>
+        </div>
+        <div class="vrule"></div>
+        <div class="card-fill" style="display:flex;flex-direction:column;gap:18px">
+          <div class="t-cat">현재 LLM</div>
+          <h3 class="h-md accent-text">생성은 강한 편</h3>
+          <p class="body">빠르게 만들어낸다. 맞는지는 따로 확인해야 한다.</p>
+          <p class="body-sm mono">강점: 생성력과 범용성<br>약점: 자기 검증의 불안정성</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide split" data-layout="S03" data-animate="split-statement">
+    <div class="canvas-card">
+      <div class="half b-accent">
+        <canvas class="ascii-bg" aria-hidden="true"></canvas>
+        <div class="chrome-min">
+          <div class="l">Part 2 · 20-40분</div>
+          <div class="r">07 / 22</div>
+        </div>
+        <div style="margin-top:auto">
+          <h2 class="h-statement">프롬프트에서<br>루프로</h2>
+        </div>
+      </div>
+      <div class="half b-paper">
+        <div class="chrome-min">
+          <div class="l">전환점</div>
+          <div class="r">References</div>
+        </div>
+        <div style="display:grid;gap:24px;margin:auto 0">
+          <p class="lead">에이전트에게 일을 맡기는 작은 시스템을 설계한다.</p>
+          <div class="hr-hairline"></div>
+          <p class="body">일을 맡기고, 확인하고, 기록하는 구조를 짜는 일. Boris, Peter Steinberger, Addy Osmani가 말하는 루프다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-layout="S08" data-animate="compare">
+    <div class="canvas-card">
+      <div class="chrome-min">
+        <div class="l">Prompt Engineering vs Loop Engineering</div>
+        <div class="r">08 / 22</div>
+      </div>
+      <div class="t-meta">단위가 바뀐다</div>
+      <h2 class="h-xl" style="max-width:980px;margin-top:14px">한 번의 지시에서, 반복 구조</h2>
+      <div class="duo-compare" style="margin-top:6vh">
+        <div class="card-fill" style="display:flex;flex-direction:column;gap:18px">
+          <div class="t-cat">Prompt Engineering</div>
+          <h3 class="h-md">내가 계속 잡고 있다</h3>
+          <p class="body">내가 묻고 읽고 다시 지시한다. 판단이 사람 머릿속에 있다.</p>
+          <p class="body-sm mono">단위: 한 번의 프롬프트<br>위험: 매번 맥락 재설명</p>
+        </div>
+        <div class="vrule"></div>
+        <div class="card-fill" style="display:flex;flex-direction:column;gap:18px">
+          <div class="t-cat">Loop Engineering</div>
+          <h3 class="h-md accent-text">시스템이 반복한다</h3>
+          <p class="body">목표·검증·기록·정지를 설계한다. 사람은 루프의 설계자가 된다.</p>
+          <p class="body-sm mono">단위: 검증 가능한 반복<br>위험: 잘못 설계하면 자동화된 오류</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-layout="S04" data-animate="grid">
+    <div class="canvas-card">
+      <div class="chrome-min">
+        <div class="l">Addy’s Building Blocks</div>
+        <div class="r">09 / 22</div>
+      </div>
+      <div class="t-meta">어렵게 말하면 구성요소, 쉽게 말하면 장치</div>
+      <h2 class="h-xl" style="max-width:1040px;margin-top:14px">Loop engineering을 이루는 것들</h2>
+      <div class="sub-grid-3-2" style="margin-top:5vh;flex:1">
+        <div>
+          <div class="t-cat">자동 실행</div>
+          <h3 class="h-md">언제 돌릴까</h3>
+          <p class="body-sm">매일, 실패 후, PR마다 같은 조건으로 루프를 시작한다.</p>
+        </div>
+        <div>
+          <div class="t-cat">작업 격리</div>
+          <h3 class="h-md">어디서 할까</h3>
+          <p class="body-sm">작업마다 공간을 나눠, 서로 덮어쓰지 않게 한다.</p>
+        </div>
+        <div>
+          <div class="t-cat">Skills</div>
+          <h3 class="h-md">무엇을 기억할까</h3>
+          <p class="body-sm">프로젝트 규칙, 빌드 방법, 금지된 선택을 매번 다시 설명하지 않는다.</p>
+        </div>
+        <div>
+          <div class="t-cat">Connectors</div>
+          <h3 class="h-md">무엇과 연결할까</h3>
+          <p class="body-sm">GitHub, Linear, Slack, DB처럼 실제 업무 도구와 붙는다.</p>
+        </div>
+        <div>
+          <div class="t-cat">Sub-agents</div>
+          <h3 class="h-md">누가 확인할까</h3>
+          <p class="body-sm">만든 사람과 검사하는 사람을 나눠 자기 합리화를 줄인다.</p>
+        </div>
+        <div>
+          <div class="t-cat">Memory</div>
+          <h3 class="h-md">어디에 남길까</h3>
+          <p class="body-sm">대화 밖에 상태를 남겨 다음 실행이 이어받게 한다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-layout="S14" data-animate="loop">
+    <div class="canvas-card">
+      <div class="chrome-min">
+        <div class="l">Loop Shape</div>
+        <div class="r">10 / 22</div>
+      </div>
+      <div class="t-meta">한 번의 루프를 풀어보면</div>
+      <h2 class="h-xl" style="max-width:1180px;margin-top:14px">다음 입력이 되는 검증 결과</h2>
+      <div style="margin-top:5vh;display:flex;flex-direction:column;gap:24px;flex:1;justify-content:center"><div style="display:flex;align-items:stretch"><div class="card-fill" style="flex:1"><div class="t-meta">01</div><h3 class="h-md">찾기</h3><p class="body-sm">무엇을 할지 정한다.</p></div><div style="display:flex;align-items:center;padding:0 8px;color:var(--accent);font-size:26px;font-weight:300">&rarr;</div><div class="card-fill" style="flex:1"><div class="t-meta">02</div><h3 class="h-md">맡기기</h3><p class="body-sm">에이전트에 넘긴다.</p></div><div style="display:flex;align-items:center;padding:0 8px;color:var(--accent);font-size:26px;font-weight:300">&rarr;</div><div class="card-fill" style="flex:1"><div class="t-meta">03</div><h3 class="h-md">확인하기</h3><p class="body-sm">검증한다.</p></div><div style="display:flex;align-items:center;padding:0 8px;color:var(--accent);font-size:26px;font-weight:300">&rarr;</div><div class="card-fill" style="flex:1"><div class="t-meta">04</div><h3 class="h-md">남기기</h3><p class="body-sm">기록하고 다음을 정한다.</p></div></div><div style="display:flex;align-items:center;gap:14px"><div style="flex:1;height:2px;background:var(--accent);opacity:.45"></div><div class="t-cat" style="white-space:nowrap">&#8634; 검증 결과가 다음 입력이 된다</div><div style="flex:1;height:2px;background:var(--accent);opacity:.45"></div></div></div><p class="foot">검증 결과가 다음 입력으로 돌아간다는 점이 핵심.</p>
+    </div>
+  </section>
+
+  <section class="slide" data-layout="S08" data-animate="compare">
+    <div class="canvas-card">
+      <div class="chrome-min">
+        <div class="l">Good Loop / Bad Loop</div>
+        <div class="r">11 / 22</div>
+      </div>
+      <div class="t-meta">여기서 품질이 갈린다</div>
+      <h2 class="h-xl" style="max-width:980px;margin-top:14px">좋은 루프, 나쁜 루프</h2>
+      <div class="duo-compare" style="margin-top:6vh">
+        <div class="card-fill" style="display:flex;flex-direction:column;gap:18px">
+          <div class="t-cat">나쁜 루프</div>
+          <h3 class="h-md">그냥 계속 돌린다</h3>
+          <p class="body">목표는 모호하고, 검증자도 정지 조건도 없다.</p>
+          <p class="body-sm mono">증상: 토큰만 쓰고 품질은 흔들림</p>
+        </div>
+        <div class="vrule"></div>
+        <div class="card-fill" style="display:flex;flex-direction:column;gap:18px">
+          <div class="t-cat">좋은 루프</div>
+          <h3 class="h-md accent-text">검증 가능하게 돈다</h3>
+          <p class="body">목표·검증·기록·정지가 있다. 다음 입력이 검증 결과에서 나온다.</p>
+          <p class="body-sm mono">증상: 실패해도 어디서 왜 실패했는지 남음</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide split" data-layout="S03" data-animate="split-statement">
+    <div class="canvas-card">
+      <div class="half b-ink">
+        <div class="chrome-min">
+          <div class="l">Part 3 · 40-60분</div>
+          <div class="r">12 / 22</div>
+        </div>
+        <div style="margin-top:auto">
+          <h2 class="h-statement">루프로서의<br>Ouroboros</h2>
+        </div>
+      </div>
+      <div class="half b-paper">
+        <div class="chrome-min">
+          <div class="l">쉽게 말하면</div>
+          <div class="r">Ouroboros</div>
+        </div>
+        <div style="display:grid;gap:24px;margin:auto 0">
+          <p class="lead">묻고·만들고·검증하고·고치기를 반복하는 구조다.</p>
+          <div class="card-fill">
+            <div class="t-meta">보는 기준</div>
+            <p class="body">검증 결과가 다음 입력이 되고, 모든 과정을 기록하며, 스스로 멈춘다.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-layout="S14" data-animate="loop">
+    <div class="canvas-card">
+      <div class="chrome-min">
+        <div class="l">Ouroboros Loop</div>
+        <div class="r">13 / 22</div>
+      </div>
+      <div class="t-meta">기본 구조</div>
+      <h2 class="h-xl" style="max-width:1120px;margin-top:14px">Ouroboros의 기본 루프</h2>
+      <div style="margin-top:5vh;display:flex;flex-direction:column;gap:24px;flex:1;justify-content:center"><div style="display:flex;align-items:stretch"><div class="card-fill" style="flex:1"><div class="t-meta">01</div><h3 class="h-md">묻기</h3><p class="body-sm">모호함을 줄인다.</p></div><div style="display:flex;align-items:center;padding:0 8px;color:var(--accent);font-size:26px;font-weight:300">&rarr;</div><div class="card-fill" style="flex:1"><div class="t-meta">02</div><h3 class="h-md">명세</h3><p class="body-sm">목표를 고정한다.</p></div><div style="display:flex;align-items:center;padding:0 8px;color:var(--accent);font-size:26px;font-weight:300">&rarr;</div><div class="card-fill" style="flex:1"><div class="t-meta">03</div><h3 class="h-md">실행·검증</h3><p class="body-sm">만들고 검증한다.</p></div><div style="display:flex;align-items:center;padding:0 8px;color:var(--accent);font-size:26px;font-weight:300">&rarr;</div><div class="card-fill" style="flex:1"><div class="t-meta">04</div><h3 class="h-md">진화</h3><p class="body-sm">검증을 다음에 반영한다.</p></div></div><div style="display:flex;align-items:center;gap:14px"><div style="flex:1;height:2px;background:var(--accent);opacity:.45"></div><div class="t-cat" style="white-space:nowrap">&#8634; 검증이 다음 명세가 된다</div><div style="flex:1;height:2px;background:var(--accent);opacity:.45"></div></div></div><p class="foot">핵심은 데이터 흐름. 검증 결과가 다음 입력이 된다.</p>
+    </div>
+  </section>
+
+  <section class="slide" data-layout="S21" data-animate="tech">
+    <div class="canvas-card">
+      <div class="chrome-min">
+        <div class="l">쉽게 말하면</div>
+        <div class="r">14 / 22</div>
+      </div>
+      <div class="tech-spec">
+        <div class="spec-title-col" style="display:flex;flex-direction:column;gap:24px">
+          <div>
+            <div class="t-meta">안에는 이런 장치들</div>
+            <h2 class="h-xl" style="margin-top:14px">Ouroboros 속 같은 루프</h2>
+          </div>
+          <p class="lead">만들고 검증하고 멈추기를 반복한다.</p>
+          <div class="spec-kpi-grid">
+            <div class="card-fill"><div class="t-cat">143</div><p class="body-sm">통과한 테스트</p></div>
+            <div class="card-fill"><div class="t-cat">3단계</div><p class="body-sm">검증 과정</p></div>
+            <div class="card-fill"><div class="t-cat">0.95</div><p class="body-sm">이 정도면 멈춤</p></div>
+          </div>
+        </div>
+        <div style="display:grid;gap:12px">
+          <div class="card-outlined">
+            <div class="t-cat">반복해서 만들기</div>
+            <p class="body-sm">계속 만들고, 충분히 좋아졌는지 확인한다.</p>
+          </div>
+          <div class="card-outlined">
+            <div class="t-cat">멈추는 조건</div>
+            <p class="body-sm">통과하거나, 오래 걸리거나, 제자리걸음이면 멈춘다.</p>
+          </div>
+          <div class="card-outlined">
+            <div class="t-cat">3단계 검증</div>
+            <p class="body-sm">기계적으로, 의미로, 여러 관점으로 확인한다.</p>
+          </div>
+          <div class="card-outlined">
+            <div class="t-cat">과정 기록</div>
+            <p class="body-sm">모든 과정을 저장해 언제든 되짚어본다.</p>
+          </div>
+          <div class="card-outlined">
+            <div class="t-cat">멈춤 판단</div>
+            <p class="body-sm">목표를 채웠는지 확인해 멈출지 정한다.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+    <section class="slide" data-layout="S19" data-animate="cards">
+    <div class="canvas-card">
+      <div class="chrome-min"><div class="l">Addy Osmani 요약</div><div class="r">15 / 22</div></div>
+      <div class="t-meta">정의를 그대로 옮기면</div>
+      <h2 class="h-xl" style="max-width:1040px;margin-top:14px">Addy Osmani가 말하는 루프</h2>
+      <div style="margin-top:4vh;display:flex;flex-direction:column;gap:22px;flex:1;justify-content:center">
+        <div class="card-ink">
+          <div class="t-cat" style="color:var(--accent-bright)">핵심 정의</div>
+          <p class="lead" style="color:#fff;max-width:none;margin-top:8px">“프롬프트하는 사람을 그만두고, 그 일을 하는 루프를 설계하라.”</p>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+          <div class="fc-col"><div class="t-cat">recursive goal</div><h3 class="h-md">목적만 정한다</h3><p class="body-sm">목적을 정하면 완료까지 AI가 반복한다.</p></div>
+          <div class="fc-col"><div class="t-cat">maker / checker</div><h3 class="h-md">검증을 나눈다</h3><p class="body-sm">만든 에이전트는 자기 일을 잘 못 본다. 다른 에이전트가 검증한다.</p></div>
+          <div class="fc-col"><div class="t-cat">state file</div><h3 class="h-md">상태를 남긴다</h3><p class="body-sm">어제 멈춘 곳에서 오늘 이어간다.</p></div>
+        </div>
+      </div>
+      <p class="foot">앞의 여섯 장치(자동 실행·격리·스킬·연결·검증·기억)가 이 정의를 이루는 부품이다.</p>
+    </div>
+  </section>
+
+  <section class="slide" data-layout="S19" data-animate="cards">
+    <div class="canvas-card">
+      <div class="chrome-min">
+        <div class="l">Checklist</div>
+        <div class="r">16 / 22</div>
+      </div>
+      <div class="t-meta">검증 가능한 루프 만들기</div>
+      <h2 class="h-xl" style="max-width:980px;margin-top:14px">좋은 루프를 볼 때 묻는 질문</h2>
+      <div class="four-cards" style="margin-top:7vh">
+        <div class="fc-col">
+          <div class="t-cat">Goal</div>
+          <h3 class="h-md">목표가 명확한가</h3>
+          <p class="body-sm">무엇을 완료라고 부를지 먼저 정한다.</p>
+        </div>
+        <div class="fc-col">
+          <div class="t-cat">State</div>
+          <h3 class="h-md">상태가 남는가</h3>
+          <p class="body-sm">파일, DB, 이벤트 로그에 남긴다.</p>
+        </div>
+        <div class="fc-col">
+          <div class="t-cat">Checker</div>
+          <h3 class="h-md">검증자가 분리됐는가</h3>
+          <p class="body-sm">만든 모델이 혼자 완료 선언하지 않게 한다.</p>
+        </div>
+        <div class="fc-col">
+          <div class="t-cat">Stop</div>
+          <h3 class="h-md">멈출 수 있는가</h3>
+          <p class="body-sm">통과, 실패, timeout, 회귀, 반복 정체 조건이 있어야 한다.</p>
+        </div>
+      </div>
+      <p class="foot">루프의 품질은 무엇을 근거로 다음 결정을 했느냐에서 나온다.</p>
+    </div>
+  </section>
+
+  <section class="slide" data-layout="S14" data-animate="loop">
+    <div class="canvas-card">
+      <div class="chrome-min"><div class="l">직접 해보기</div><div class="r">17 / 22</div></div>
+      <div class="t-meta">리뷰 점수로 멈추는 루프</div>
+      <h2 class="h-xl" style="max-width:1040px;margin-top:14px">가장 쉬운 루프, /goal</h2>
+      <div style="margin-top:6vh;display:flex;flex-direction:column;gap:24px;flex:1;justify-content:center">
+        <div style="display:flex;align-items:stretch"><div class="card-fill" style="flex:1"><div class="t-cat">목표</div><h3 class="h-md">/goal</h3><p class="body-sm">하고 싶은 일을 한 줄로 적는다.</p></div><div style="display:flex;align-items:center;padding:0 8px;color:var(--accent);font-size:26px;font-weight:300">&rarr;</div><div class="card-fill" style="flex:1"><div class="t-cat">sub-agent &times; N</div><h3 class="h-md">계획·개발</h3><p class="body-sm">여러 에이전트가 나눠 만든다.</p></div><div style="display:flex;align-items:center;padding:0 8px;color:var(--accent);font-size:26px;font-weight:300">&rarr;</div><div class="card-fill" style="flex:1"><div class="t-cat">reviewer &times; N</div><h3 class="h-md">리뷰</h3><p class="body-sm">N명이 10점 만점으로 채점한다.</p></div><div style="display:flex;align-items:center;padding:0 8px;color:var(--accent);font-size:26px;font-weight:300">&rarr;</div><div class="card-accent" style="flex:1"><div class="t-cat" style="color:rgba(255,255,255,.82)">정지 조건</div><h3 class="h-md">평균 &ge; 8점?</h3><p class="body-sm" style="color:rgba(255,255,255,.85)">넘으면 멈춘다.</p></div></div>
+        <div style="display:flex;align-items:center;gap:14px"><div style="flex:1;height:2px;background:var(--accent);opacity:.45"></div><div class="t-cat" style="white-space:nowrap">&#8634; 8점 미만이면, 리뷰를 반영해 다시 개발</div><div style="flex:1;height:2px;background:var(--accent);opacity:.45"></div></div>
+      </div>
+      <p class="foot">검증은 리뷰 점수, 정지 조건은 기준 점수. 루프 엔지니어링의 가장 쉬운 형태다.</p>
+    </div>
+  </section>
+
+  <section class="slide split" data-layout="S03" data-animate="split-statement">
+    <div class="canvas-card">
+      <div class="half b-ink">
+        <div class="chrome-min"><div class="l">Part 4 · 한 걸음 더</div><div class="r">18 / 22</div></div>
+        <div style="margin-top:auto"><h2 class="h-statement">믿을 수 있는<br>검증</h2></div>
+      </div>
+      <div class="half b-paper">
+        <div class="chrome-min"><div class="l">다음 질문</div><div class="r">검증의 종류</div></div>
+        <div style="display:grid;gap:24px;margin:auto 0">
+          <p class="lead">방금은 리뷰 점수로 멈췄죠. 그 점수는 무엇을 근거로 믿을 수 있을까요?</p>
+          <div class="card-fill"><div class="t-meta">핵심</div><p class="body">가장 믿을 수 있는 건 규칙으로 딱 떨어지는 “결정론적 검증”.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-layout="S19" data-animate="cards">
+    <div class="canvas-card">
+      <div class="chrome-min"><div class="l">검증의 종류</div><div class="r">19 / 22</div></div>
+      <div class="t-meta">시험 채점에 빗대보면</div>
+      <h2 class="h-xl" style="max-width:1040px;margin-top:14px">검증의 네 가지 방법</h2>
+      <div class="four-cards" style="margin-top:7vh">
+        <div class="fc-col"><div class="t-cat">결과 검증</div><h3 class="h-md">답을 본다</h3><p class="body-sm">정답과 맞는지만 본다. 과정은 모른다.</p></div>
+        <div class="fc-col"><div class="t-cat">활동량 측정</div><h3 class="h-md">양을 본다</h3><p class="body-sm">횟수·길이만 본다. 질은 못 본다.</p></div>
+        <div class="fc-col"><div class="t-cat">결정론적 · VPRM</div><h3 class="h-md">규칙과 대조</h3><p class="body-sm">정답 규칙과 맞춘다. 정확하지만 분야가 좁다.</p></div>
+        <div class="fc-col"><div class="t-cat">AI 검증 · GEPA</div><h3 class="h-md accent-text">AI가 읽고 본다</h3><p class="body-sm">넓게 쓰지만 검증이 AI라 한계가 있다.</p></div>
+      </div>
+      <p class="foot">규칙에 가까울수록 정확하고, AI에 가까울수록 넓게 쓴다.</p>
+    </div>
+  </section>
+
+  <section class="slide" data-layout="S19" data-animate="cards">
+    <div class="canvas-card">
+      <div class="chrome-min"><div class="l">스스로 고치는 AI · Hermes</div><div class="r">20 / 22</div></div>
+      <div class="t-meta">검증 결과로 자기를 고치는 루프</div>
+      <h2 class="h-xl" style="max-width:1100px;margin-top:14px">검증으로 자라는 Hermes</h2>
+      <div class="four-cards" style="margin-top:7vh">
+        <div class="fc-col"><div class="t-cat">실행</div><h3 class="h-md">해본다</h3><p class="body-sm">일을 시켜 결과를 만든다. 과정이 남는다.</p></div>
+        <div class="fc-col"><div class="t-cat">검증</div><h3 class="h-md">확인한다</h3><p class="body-sm">만든 쪽과 검증하는 쪽을 나눈다.</p></div>
+        <div class="fc-col"><div class="t-cat">개선</div><h3 class="h-md accent-text">고친다</h3><p class="body-sm">틀린 곳을 찾아 스킬을 다시 쓴다.</p></div>
+        <div class="fc-col"><div class="t-cat">반영</div><h3 class="h-md">올린다</h3><p class="body-sm">사람이 확인한 뒤 반영한다.</p></div>
+      </div>
+      <p class="foot">앞에서 본 루프와 같은 구조. 재학습 없이 한 번에 몇 천 원.</p>
+    </div>
+  </section>
+
+  <section class="slide" data-layout="S08" data-animate="compare">
+    <div class="canvas-card">
+      <div class="chrome-min"><div class="l">AI 검증 vs 규칙 검증</div><div class="r">21 / 22</div></div>
+      <div class="t-meta">같은 기록, 다른 검증</div>
+      <h2 class="h-xl" style="max-width:1040px;margin-top:14px">AI 검증 vs 규칙 검증</h2>
+      <div class="duo-compare" style="margin-top:6vh">
+        <div class="card-fill" style="display:flex;flex-direction:column;gap:18px">
+          <div class="t-cat">GEPA</div><h3 class="h-md">AI가 읽고 검증</h3>
+          <p class="body">과정을 읽고 개선점을 찾는다. 거의 모든 분야에 쓰지만, 검증이 AI라 한계가 있다.</p>
+          <p class="body-sm mono">범위: 넓음 · 검증: AI</p>
+        </div>
+        <div class="vrule"></div>
+        <div class="card-fill" style="display:flex;flex-direction:column;gap:18px">
+          <div class="t-cat">VPRM</div><h3 class="h-md accent-text">규칙으로 검증</h3>
+          <p class="body">규칙과 단계별로 대조한다. 우회는 어렵지만, 규칙을 정의할 수 있는 분야에서만 된다.</p>
+          <p class="body-sm mono">범위: 좁음 · 검증: 규칙</p>
+        </div>
+      </div>
+      <p class="foot">둘은 보완 관계. 핵심은 검증을 어디까지 규칙으로 만드느냐다.</p>
+    </div>
+  </section>
+
+  <section class="slide split" data-layout="S10" data-animate="split-statement">
+    <div class="canvas-card">
+      <div class="half b-accent">
+        <canvas class="ascii-bg" aria-hidden="true"></canvas>
+        <div class="chrome-min">
+          <div class="l">Closing</div>
+          <div class="r">22 / 22</div>
+        </div>
+        <div style="margin-top:auto">
+          <h2 class="h-statement">루프를 만드는<br>엔지니어</h2>
+        </div>
+      </div>
+      <div class="half b-paper">
+        <div class="chrome-min">
+          <div class="l">Takeaways</div>
+          <div class="r">End</div>
+        </div>
+        <div style="display:grid;gap:24px;margin:auto 0">
+          <div class="card-fill"><div class="t-meta">01</div><h3 class="h-md">이미 하던 일을 시스템에 맡기는 것</h3><p class="body-sm">사람이 하던 반복 판단을 시스템 경계 안으로 옮긴 것이다.</p></div>
+          <div class="card-fill"><div class="t-meta">02</div><h3 class="h-md">Ouroboros는 루프다</h3><p class="body-sm">명세, 실행, 평가, 진화, 상태 재구성, 정지 조건을 구현한다.</p></div>
+          <div class="card-fill"><div class="t-meta">03</div><h3 class="h-md accent-text">핵심은 검증 가능성</h3><p class="body-sm">기록하고 검증하고 멈출 수 있게 돌리는 것.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<div id="nav" aria-label="Slide navigation"></div>
+<div id="hint">←/→ 이동 | B 정적 모드 | Esc 목차</div>
+<div id="index" aria-hidden="true"></div>
+
+<script>
+(() => {
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const nav = document.getElementById('nav');
+  const hint = document.getElementById('hint');
+  const index = document.getElementById('index');
+  const key = 'tightened-slide-low-power';
+  let current = Math.max(0, slides.findIndex(s => s.classList.contains('active')));
+  let wheelLock = false;
+  let startX = 0;
+
+  function updateHint(){
+    hint.textContent = `←/→ 이동 | B: ${document.body.classList.contains('low-power') ? '모션' : '정적'} | Esc 목차`;
+  }
+
+  function setLowPower(on){
+    document.body.classList.toggle('low-power', on);
+    localStorage.setItem(key, on ? '1' : '0');
+    updateHint();
+  }
+
+  function renderNav(){
+    nav.innerHTML = '';
+    slides.forEach((_, i) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.setAttribute('aria-label', `Go to slide ${i + 1}`);
+      button.addEventListener('click', () => show(i));
+      nav.appendChild(button);
+    });
+  }
+
+  function show(i){
+    current = Math.max(0, Math.min(i, slides.length - 1));
+    slides.forEach((slide, idx) => slide.classList.toggle('active', idx === current));
+    Array.from(nav.children).forEach((button, idx) => button.classList.toggle('active', idx === current));
+    window.__currentSlideIndex = current;
+  }
+
+  function openIndex(){
+    const cards = slides.map((slide, i) => {
+      const title = slide.querySelector('h1,h2,.h-hero,.h-xl,.h-statement')?.textContent?.trim() || `Slide ${i + 1}`;
+      return `<button class="index-card" type="button" data-go="${i}"><div class="n">${String(i + 1).padStart(2,'0')}</div><div class="t">${title}</div></button>`;
+    }).join('');
+    index.innerHTML = `<div class="index-grid">${cards}</div>`;
+    index.classList.add('open');
+    index.setAttribute('aria-hidden','false');
+  }
+
+  function closeIndex(){
+    index.classList.remove('open');
+    index.setAttribute('aria-hidden','true');
+  }
+
+  document.addEventListener('keydown', event => {
+    if(event.key === 'ArrowRight' || event.key === 'PageDown') show(current + 1);
+    if(event.key === 'ArrowLeft' || event.key === 'PageUp') show(current - 1);
+    if(event.key === 'Escape') index.classList.contains('open') ? closeIndex() : openIndex();
+    if(event.key.toLowerCase() === 'b') setLowPower(!document.body.classList.contains('low-power'));
+  });
+
+  document.addEventListener('wheel', event => {
+    if(wheelLock || Math.abs(event.deltaY) < 20) return;
+    wheelLock = true;
+    show(current + (event.deltaY > 0 ? 1 : -1));
+    setTimeout(() => { wheelLock = false; }, 450);
+  }, {passive:true});
+
+  document.addEventListener('pointerdown', event => { startX = event.clientX; }, {passive:true});
+  document.addEventListener('pointerup', event => {
+    const dx = event.clientX - startX;
+    if(Math.abs(dx) > 50) show(current + (dx < 0 ? 1 : -1));
+  }, {passive:true});
+
+  index.addEventListener('click', event => {
+    const target = event.target.closest('[data-go]');
+    if(!target) return;
+    closeIndex();
+    show(Number(target.dataset.go));
+  });
+
+  function startAscii(){
+    const canvases = Array.from(document.querySelectorAll('.ascii-bg'));
+    if(!canvases.length) return;
+    const chars = '01/|+-';
+    const contexts = canvases.map(canvas => {
+      const ctx = canvas.getContext('2d');
+      return {canvas, ctx};
+    });
+    function draw(time){
+      contexts.forEach(({canvas, ctx}) => {
+        const rect = canvas.getBoundingClientRect();
+        const scale = window.devicePixelRatio || 1;
+        const w = Math.max(1, Math.floor(rect.width * scale));
+        const h = Math.max(1, Math.floor(rect.height * scale));
+        if(canvas.width !== w || canvas.height !== h){canvas.width = w; canvas.height = h}
+        ctx.clearRect(0,0,w,h);
+        ctx.font = `${14 * scale}px JetBrains Mono, monospace`;
+        ctx.fillStyle = 'rgba(255,255,255,.18)';
+        const step = 22 * scale;
+        for(let y = step; y < h; y += step){
+          for(let x = step; x < w; x += step){
+            const n = Math.floor(Math.abs(Math.sin(x * .004 + y * .006 + time * .001)) * chars.length) % chars.length;
+            ctx.fillText(chars[n], x, y);
+          }
+        }
+      });
+      if(!document.body.classList.contains('low-power')) requestAnimationFrame(draw);
+    }
+    requestAnimationFrame(draw);
+  }
+
+  if(localStorage.getItem(key) === '1') document.body.classList.add('low-power');
+  renderNav();
+  show(current);
+  updateHint();
+  startAscii();
+})();
+</script>
+</body>
+</html>

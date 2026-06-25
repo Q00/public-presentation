@@ -228,6 +228,32 @@
     .num-mega{font-size:64px}
     .cover-row .nb{font-size:42px}
   }
+
+  /* Promo: gold envelope FAB + coupon modal */
+  .promo-fab{position:fixed;right:22px;bottom:64px;z-index:70;width:58px;height:58px;border:0;border-radius:50%;cursor:pointer;display:grid;place-items:center;background:linear-gradient(145deg,#fbe8a6 0%,#e7c14b 45%,#c8951f 100%);box-shadow:0 6px 16px rgba(176,128,20,.45),inset 0 0 0 1px rgba(255,255,255,.45);animation:promo-glow 1.5s ease-in-out infinite}
+  .promo-fab:hover{transform:translateY(-2px)}
+  .promo-fab svg{width:30px;height:30px;display:block;position:relative;z-index:2}
+  .promo-fab .ping{position:absolute;inset:0;border-radius:50%;border:2px solid #f3d469;opacity:0;animation:promo-ping 1.5s ease-out infinite}
+  .promo-fab .tag{position:absolute;top:-10px;right:-8px;z-index:3;background:#b91c1c;color:#fff;font:600 10px/1 var(--mono);letter-spacing:.04em;padding:4px 6px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+  @keyframes promo-glow{0%,100%{box-shadow:0 6px 16px rgba(176,128,20,.4),0 0 6px 2px rgba(245,215,110,.5),inset 0 0 0 1px rgba(255,255,255,.45)}50%{box-shadow:0 6px 24px rgba(176,128,20,.7),0 0 24px 9px rgba(245,215,110,.95),inset 0 0 0 1px rgba(255,255,255,.6)}}
+  @keyframes promo-ping{0%{transform:scale(.8);opacity:.7}100%{transform:scale(1.55);opacity:0}}
+
+  .promo-modal{position:fixed;inset:0;z-index:90;display:none;align-items:center;justify-content:center;padding:5vh 5vw;background:rgba(10,10,10,.66)}
+  .promo-modal.open{display:flex}
+  .promo-card{position:relative;width:min(540px,94vw);max-height:90vh;overflow:auto;background:var(--paper);color:var(--ink);padding:42px 38px 36px;border-top:4px solid #d4af37;box-shadow:0 24px 64px rgba(0,0,0,.35)}
+  .promo-card .x{position:absolute;top:14px;right:14px;width:34px;height:34px;border:1px solid var(--border-subtle);background:#fff;color:var(--ink);cursor:pointer;font-size:18px;line-height:1;display:grid;place-items:center}
+  .promo-card .x:hover{background:var(--grey-1)}
+  .promo-copyright{font:300 13px/1.65 var(--sans);color:var(--text-helper);border-bottom:1px solid var(--border-subtle);padding-bottom:18px;margin-bottom:22px}
+  .promo-card h3{font:300 26px/1.2 var(--sans);margin-bottom:6px}
+  .promo-card .course{font:300 16px/1.5 var(--sans);color:var(--text-secondary);margin-bottom:20px}
+  .promo-kv{display:grid;grid-template-columns:auto 1fr;gap:12px 18px;align-items:center;margin-bottom:24px}
+  .promo-kv dt{font:600 12px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--text-helper)}
+  .promo-kv dd{font:500 15px/1.3 var(--sans)}
+  .promo-code{font:600 17px var(--mono);color:var(--accent);background:var(--grey-1);padding:4px 10px;display:inline-block}
+  .promo-foot{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+  .promo-qr{width:120px;height:120px;border:1px solid var(--border-subtle);background:#fff;padding:6px;flex:0 0 auto}
+  .promo-cta{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;padding:14px 22px;text-decoration:none;font:500 16px var(--sans)}
+  .promo-cta:hover{filter:brightness(1.08)}
 </style>
 </head>
 <body>
@@ -769,10 +795,67 @@
       </div>
     </div>
   </section>
+
+  <section class="slide accent" data-layout="S23" data-animate="cta">
+    <div class="canvas-card">
+      <canvas class="ascii-bg" aria-hidden="true"></canvas>
+      <div class="chrome-min">
+        <div class="l">More Resources</div>
+        <div class="r">Bonus</div>
+      </div>
+      <div style="flex:1;display:grid;grid-template-columns:1.05fr .95fr;gap:4vw;align-items:center">
+        <div style="display:grid;gap:3vh">
+          <div class="t-meta" style="color:rgba(255,255,255,.82)">더 많은 자료가 궁금하시다면?</div>
+          <h2 class="h-statement" style="font-size:58px;line-height:1.02">실전 하네스<br>엔지니어링 A to Z</h2>
+          <p class="lead" style="color:rgba(255,255,255,.88);max-width:none">랄프톤 1위 개발자가 알려주는 실전 하네스 엔지니어링 A to Z<br>(with Claude Code, Codex)</p>
+          <a class="promo-cta" style="width:fit-content" href="https://fastcampus.co.kr/data_online_harnessa2z" target="_blank" rel="noopener">강의 보러가기 &rarr;</a>
+        </div>
+        <div style="background:var(--paper);color:var(--ink);padding:28px;display:grid;gap:18px;justify-items:center;text-align:center">
+          <img style="width:160px;height:160px;border:1px solid var(--border-subtle);padding:6px;background:#fff" src="assets/fastcampus-qr.png" alt="강의 QR 코드">
+          <div>
+            <div class="t-meta">쿠폰코드</div>
+            <div class="promo-code" style="margin-top:8px">2026년은하네스</div>
+          </div>
+          <div style="display:flex;gap:28px">
+            <div><div class="t-meta">할인액</div><div style="font:500 18px var(--sans);margin-top:6px">3만원</div></div>
+            <div><div class="t-meta">사용기간</div><div style="font:500 18px var(--sans);margin-top:6px">~7/5(일) 23:59</div></div>
+          </div>
+        </div>
+      </div>
+      <p class="foot" style="color:rgba(255,255,255,.74);max-width:none">*본 자료는 세미나 수강생분들에게만 제공되는 강의 자료로, 저작권은 패스트캠퍼스와 작성자에게 있습니다. 무단 공유·게시 시 저작권법 위반에 해당할 수 있습니다.</p>
+    </div>
+  </section>
 </div>
 <div id="nav" aria-label="Slide navigation"></div>
 <div id="hint">←/→ 이동 | B 정적 모드 | Esc 목차</div>
 <div id="index" aria-hidden="true"></div>
+
+<button id="promoFab" class="promo-fab" type="button" aria-label="강의 쿠폰 보기" title="강의 쿠폰 보기">
+  <span class="ping" aria-hidden="true"></span>
+  <span class="tag" aria-hidden="true">혜택</span>
+  <svg viewBox="0 0 24 24" fill="none" stroke="#3a2c05" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <rect x="3" y="5" width="18" height="14" rx="1.5"/>
+    <path d="M3.5 6.5 L12 13 L20.5 6.5"/>
+  </svg>
+</button>
+
+<div id="promoModal" class="promo-modal" role="dialog" aria-modal="true" aria-label="강의 쿠폰 안내" aria-hidden="true">
+  <div class="promo-card">
+    <button class="x" type="button" data-close aria-label="닫기">&times;</button>
+    <p class="promo-copyright">*본 자료는 세미나 수강생분들에게만 제공되는 강의 자료로, 저작권은 패스트캠퍼스와 작성자에게 있으므로 본 저작물을 무단으로 공유 및 게시할 시 저작권법 위반에 해당할 수 있습니다.</p>
+    <h3>더 많은 자료가 궁금하시다면?</h3>
+    <p class="course">➡️ 랄프톤 1위 개발자가 알려주는 실전 하네스 엔지니어링 A to Z (with. Claude Code, Codex)</p>
+    <dl class="promo-kv">
+      <dt>쿠폰코드</dt><dd><span class="promo-code">2026년은하네스</span></dd>
+      <dt>할인액</dt><dd>3만원</dd>
+      <dt>사용기간</dt><dd>~26/7/5(일요일) 23:59</dd>
+    </dl>
+    <div class="promo-foot">
+      <img class="promo-qr" src="assets/fastcampus-qr.png" alt="강의 QR 코드">
+      <a class="promo-cta" href="https://fastcampus.co.kr/data_online_harnessa2z" target="_blank" rel="noopener">강의 보러가기 &rarr;</a>
+    </div>
+  </div>
+</div>
 
 <script>
 (() => {
@@ -891,6 +974,21 @@
   show(current);
   updateHint();
   startAscii();
+})();
+
+(() => {
+  const fab = document.getElementById('promoFab');
+  const modal = document.getElementById('promoModal');
+  if(!fab || !modal) return;
+  const open = () => { modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); };
+  const close = () => { modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); };
+  fab.addEventListener('click', open);
+  modal.addEventListener('click', event => {
+    if(event.target === modal || event.target.closest('[data-close]')) close();
+  });
+  document.addEventListener('keydown', event => {
+    if(event.key === 'Escape' && modal.classList.contains('open')){ event.stopPropagation(); close(); }
+  }, true);
 })();
 </script>
 </body>

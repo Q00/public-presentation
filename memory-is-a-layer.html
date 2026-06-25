@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Memory is a Layer</title>
+<meta name="description" content="Why the memory layer must be separated from the data layer, and what enterprise agents actually need." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Noto+Sans+KR:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --paper: #f7f4ed;
+    --ink: #171717;
+    --muted: #6b665d;
+    --faint: #a39b8e;
+    --line: #ddd6ca;
+    --charcoal: #20242b;
+    --blue: #2864d8;
+    --green: #17885d;
+    --amber: #b66b12;
+    --red: #b73d4a;
+    --violet: #7146b8;
+    --panel: rgba(255, 252, 246, 0.82);
+    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+    --sans: "Noto Sans KR", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+  body, .slide * {
+    word-break: normal;
+    overflow-wrap: break-word;
+  }
+  h1, h2, h3, .lead { text-wrap: balance; }
+  .nb { white-space: nowrap; }
+  body {
+    background:
+      linear-gradient(90deg, rgba(23, 23, 23, 0.04) 1px, transparent 1px),
+      linear-gradient(rgba(23, 23, 23, 0.035) 1px, transparent 1px),
+      var(--paper);
+    background-size: 48px 48px;
+    color: var(--ink);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 18% 20%, rgba(40, 100, 216, 0.10), transparent 28%),
+      radial-gradient(circle at 80% 22%, rgba(23, 136, 93, 0.10), transparent 26%),
+      radial-gradient(circle at 76% 82%, rgba(182, 107, 18, 0.10), transparent 30%);
+  }
+
+  .deck {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 28px;
+    padding: 44px 64px 36px;
+    opacity: 0;
+    transform: translateX(28px);
+    transition: opacity 360ms ease, transform 360ms ease;
+    pointer-events: none;
+  }
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+  .slide.out {
+    opacity: 0;
+    transform: translateX(-28px);
+  }
+  .topline, .footer, .kicker, .tag, .small, .source, .code, .formula, .svg-label {
+    font-family: var(--mono);
+  }
+  .topline {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    color: var(--muted);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--faint);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+  }
+  .progress {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    height: 4px;
+    width: 0;
+    background: linear-gradient(90deg, var(--blue), var(--green), var(--amber));
+    z-index: 10;
+    transition: width 240ms ease;
+  }
+  main {
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+  }
+  h1, h2, h3, p { margin: 0; }
+  h1 {
+    max-width: 1120px;
+    font-size: clamp(40px, 6vw, 80px);
+    line-height: 1.02;
+    letter-spacing: 0;
+    font-weight: 800;
+  }
+  h2 {
+    max-width: 1080px;
+    font-size: clamp(30px, 3.9vw, 50px);
+    line-height: 1.08;
+    letter-spacing: 0;
+    font-weight: 800;
+  }
+  h3 {
+    font-size: clamp(20px, 2.2vw, 30px);
+    line-height: 1.16;
+    font-weight: 800;
+  }
+  .kicker {
+    margin-bottom: 14px;
+    color: var(--blue);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .lead {
+    margin-top: 22px;
+    max-width: 920px;
+    color: var(--muted);
+    font-size: clamp(17px, 1.7vw, 23px);
+    line-height: 1.48;
+    font-weight: 500;
+  }
+  .cover-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 280px;
+    gap: 48px;
+    align-items: end;
+  }
+  .cover-stamp {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 22px;
+    background: rgba(255, 252, 246, 0.76);
+    font-family: var(--mono);
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.7;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .split {
+    display: grid;
+    grid-template-columns: minmax(0, 1.02fr) minmax(340px, 0.98fr);
+    gap: 44px;
+    align-items: center;
+  }
+  .grid-2, .grid-3, .grid-4 {
+    display: grid;
+    gap: 18px;
+    margin-top: 26px;
+  }
+  .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .card, .panel, .step, .ledger-cell {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--panel);
+    box-shadow: 0 18px 50px rgba(41, 34, 23, 0.08);
+  }
+  .card { padding: 24px; }
+  .panel { padding: 26px; }
+  .card h3 { font-size: 22px; }
+  .card p, li {
+    color: var(--muted);
+    font-size: 17px;
+    line-height: 1.55;
+  }
+  .card p { margin-top: 12px; }
+  ul { margin: 18px 0 0; padding-left: 1.1em; }
+  li + li { margin-top: 10px; }
+  .plain-list {
+    list-style: none;
+    padding: 0;
+    margin: 18px 0 0;
+  }
+  .plain-list li {
+    position: relative;
+    padding-left: 20px;
+    color: var(--muted);
+  }
+  .plain-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.82em;
+    width: 9px;
+    height: 2px;
+    background: currentColor;
+  }
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    width: fit-content;
+    margin-bottom: 16px;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .blue { color: var(--blue); }
+  .green { color: var(--green); }
+  .amber { color: var(--amber); }
+  .red { color: var(--red); }
+  .violet { color: var(--violet); }
+  .bigline {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px 22px;
+    margin-top: 34px;
+    font-size: clamp(24px, 3vw, 44px);
+    font-weight: 800;
+    line-height: 1.1;
+  }
+  .arrow {
+    color: var(--faint);
+    font-weight: 600;
+  }
+  .formula {
+    margin-top: 28px;
+    border: 1px solid #353a42;
+    border-radius: 8px;
+    background: var(--charcoal);
+    color: #e9edf2;
+    padding: 24px;
+    font-size: clamp(18px, 2vw, 28px);
+    line-height: 1.55;
+    white-space: pre-wrap;
+    font-family: var(--mono);
+  }
+  .source {
+    margin-top: 16px;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .compare-board {
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    gap: 36px;
+    margin-top: 26px;
+    align-items: stretch;
+  }
+  .divider-line { background: var(--ink); opacity: 0.4; }
+  .flow {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 26px;
+  }
+  .step {
+    min-height: 160px;
+    padding: 22px;
+  }
+  .step strong {
+    display: block;
+    font-size: 20px;
+    line-height: 1.2;
+  }
+  .step span {
+    display: block;
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .stat {
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+  .stat .num {
+    font-size: clamp(64px, 11vw, 150px);
+    font-weight: 800;
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+  }
+  .stat .unit {
+    font-size: clamp(20px, 2.4vw, 30px);
+    font-weight: 700;
+    color: var(--muted);
+    max-width: 340px;
+    line-height: 1.25;
+  }
+  .small {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .portrait {
+    display: grid;
+    grid-template-columns: 86px 1fr;
+    gap: 18px;
+    align-items: center;
+    margin-top: 20px;
+  }
+  .portrait img {
+    width: 86px;
+    height: 86px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--line);
+  }
+
+  @media (max-width: 900px) {
+    .slide { padding: 34px 24px 32px; gap: 18px; }
+    .split, .grid-2, .grid-3, .grid-4, .flow, .cover-grid { grid-template-columns: 1fr; }
+    .compare-board { grid-template-columns: 1fr; }
+    .divider-line { display: none; }
+    .card p, li { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+  <!-- 01 · Cover -->
+  <section class="slide active">
+    <div class="topline"><span>Agent Architecture</span><span>Memory Layer</span></div>
+    <main>
+      <div class="cover-grid">
+        <div>
+          <div class="kicker">The layer agents are missing</div>
+          <h1>Memory is a layer.<br />Not a bigger context window.</h1>
+          <p class="lead">Graphs, LLM wikis, gBrain, RAG &mdash; that is the <strong>data layer</strong>.<br />Memory is a different thing, and an agent needs both kept apart.</p>
+        </div>
+        <div>
+          <div class="cover-stamp">data layer<br />memory layer<br />audit &amp; permission<br />theta profile</div>
+          <div class="portrait">
+            <img src="./assets/speaker.jpeg" alt="Jaegyu Lee" />
+            <p class="small">Jaegyu Lee &middot; Q00<br />Ouroboros maintainer</p>
+          </div>
+        </div>
+      </div>
+    </main>
+    <div class="footer"><span>github.com/Q00</span><span>01</span></div>
+  </section>
+
+  <!-- 02 · Two layers -->
+  <section class="slide">
+    <div class="topline"><span>First principle</span><span>Separation</span></div>
+    <main>
+      <div class="kicker">Why they must split</div>
+      <h2>The data layer and the memory layer<br />are not the same layer</h2>
+      <p class="lead">The data layer stores what is true. The memory layer decides what to do with it,<br />shaped to the input in front of the agent right now.</p>
+      <div class="compare-board">
+        <div class="card">
+          <span class="tag blue">Data layer</span>
+          <h3>What is true</h3>
+          <ul class="plain-list">
+            <li>Graph, LLM wiki, gBrain, RAG</li>
+            <li>Retrieval, indexing, ground truth</li>
+            <li>Shared, durable, queryable by anyone</li>
+          </ul>
+        </div>
+        <div class="divider-line"></div>
+        <div class="card">
+          <span class="tag green">Memory layer</span>
+          <h3>What to do with it</h3>
+          <ul class="plain-list">
+            <li>A conclusion fit to this input, now</li>
+            <li>Per-agent judgment, not a lookup</li>
+            <li>Personal, situational, decaying over time</li>
+          </ul>
+        </div>
+      </div>
+    </main>
+    <div class="footer"><span>data ≠ memory</span><span>02</span></div>
+  </section>
+
+  <!-- 03 · Mailbox -->
+  <section class="slide">
+    <div class="topline"><span>A common mistake</span><span>More ≠ better</span></div>
+    <main>
+      <div class="kicker">The inbox trap</div>
+      <h2>Handing an agent your whole inbox<br />does not make it work better</h2>
+      <p class="lead">More data in context is not more competence.<br />An agent drowning in your mailbox is still a new hire &mdash; it reads everything and concludes nothing.</p>
+      <div class="bigline">
+        <span class="blue">Whole inbox</span>
+        <span class="arrow">&rarr;</span>
+        <span>more tokens</span>
+        <span class="arrow">&rarr;</span>
+        <span class="red">same shallow answer</span>
+      </div>
+      <p class="source">The problem is not access to data. It is the absence of a layer that turns data into a decision.</p>
+    </main>
+    <div class="footer"><span>access is not judgment</span><span>03</span></div>
+  </section>
+
+  <!-- 04 · What agents need -->
+  <section class="slide">
+    <div class="topline"><span>What actually helps</span><span>Skills · RAG · Memory</span></div>
+    <main>
+      <div class="kicker">The real requirement</div>
+      <h2>Not a skill that forces a flow.<br />Not RAG that dumps data. Memory that concludes.</h2>
+      <p class="lead">To do good work an agent needs to read the situation and commit to a conclusion &mdash;<br />matched to the input, not to a fixed script or a pile of retrieved chunks.</p>
+      <div class="grid-3">
+        <div class="card"><span class="tag amber">Skills</span><h3>Force a flow</h3><p>Good for guardrails. But a fixed path can&rsquo;t bend to a situation it didn&rsquo;t anticipate.</p></div>
+        <div class="card"><span class="tag blue">RAG &middot; Data</span><h3>Retrieve facts</h3><p>Brings the right chunks. Still hands you raw material, not a decision.</p></div>
+        <div class="card"><span class="tag green">Memory</span><h3>Reach a conclusion</h3><p>Reads this input against past judgment and decides what to do next, here, now.</p></div>
+      </div>
+    </main>
+    <div class="footer"><span>memory closes the loop</span><span>04</span></div>
+  </section>
+
+  <!-- 05 · Industry signal -->
+  <section class="slide">
+    <div class="topline"><span>Industry signal</span><span>The race is on</span></div>
+    <main>
+      <div class="kicker">Where the field is moving</div>
+      <h2>Everyone is racing toward<br />the memory layer</h2>
+      <p class="lead">The frontier labs have already moved past retrieval.<br />The open question is no longer &ldquo;what do we store&rdquo; but &ldquo;how does an agent remember.&rdquo;</p>
+      <div class="grid-3">
+        <div class="card"><span class="tag blue">San Francisco</span><h3>Memory tuned for pull</h3><p>Building memory systems shaped to pull harder on FOMO &mdash; engagement as the design target.</p></div>
+        <div class="card"><span class="tag violet">Meta</span><h3>Store the intent</h3><p>Saving <em>why</em> the data was made, to make recall efficient &mdash; a vision for agentic memory beyond the developer&rsquo;s lens.</p></div>
+        <div class="card"><span class="tag red">Reality today</span><h3>Still entangled</h3><p>In most stacks the data layer and the agent layer are not cleanly separated yet.</p></div>
+      </div>
+    </main>
+    <div class="footer"><span>retrieval → memory</span><span>05</span></div>
+  </section>
+
+  <!-- 06 · Enterprise #1 -->
+  <section class="slide">
+    <div class="topline"><span>Enterprise · 1</span><span>Audit &amp; permission</span></div>
+    <main>
+      <div class="kicker">Requirement one</div>
+      <h2>Every request needs an audit<br />of who is allowed to ask</h2>
+      <p class="lead">An enterprise agent must know the caller&rsquo;s authority before it answers.<br />A line employee can ask the CEO agent a confidential question &mdash; the response and the file search must be scoped to their permission.</p>
+      <div class="bigline">
+        <span>Request</span>
+        <span class="arrow">&rarr;</span>
+        <span class="blue">Who is asking?</span>
+        <span class="arrow">&rarr;</span>
+        <span class="amber">Scope answer + file search</span>
+        <span class="arrow">&rarr;</span>
+        <span class="green">Respond</span>
+      </div>
+      <p class="source">Permission is not a wrapper around the agent. It is a gate inside every retrieval and every answer.</p>
+    </main>
+    <div class="footer"><span>authority before answer</span><span>06</span></div>
+  </section>
+
+  <!-- 07 · Enterprise #2 -->
+  <section class="slide">
+    <div class="topline"><span>Enterprise · 2</span><span>Agent-facing docs</span></div>
+    <main>
+      <div class="kicker">Requirement two</div>
+      <h2>A Notion for agents<br />does not need CRDT</h2>
+      <p class="lead">CRDT solves humans editing the same doc at the same time.<br />Agents don&rsquo;t need that. They need to produce clean markdown and HTML, with permission management on top. That&rsquo;s the whole spec.</p>
+      <div class="compare-board">
+        <div class="card">
+          <span class="tag red">Built for humans</span>
+          <h3>CRDT &amp; live cursors</h3>
+          <ul class="plain-list">
+            <li>Real-time concurrent editing</li>
+            <li>Conflict-free merge machinery</li>
+            <li>Heavy, and beside the point for agents</li>
+          </ul>
+        </div>
+        <div class="divider-line"></div>
+        <div class="card">
+          <span class="tag green">Built for agents</span>
+          <h3>Markdown + HTML + ACL</h3>
+          <ul class="plain-list">
+            <li>Generate clean markdown and HTML well</li>
+            <li>Permission management on every doc</li>
+            <li>Nothing more &mdash; that is the product</li>
+          </ul>
+        </div>
+      </div>
+    </main>
+    <div class="footer"><span>drop the CRDT</span><span>07</span></div>
+  </section>
+
+  <!-- 08 · Enterprise #3 · memory architecture -->
+  <section class="slide">
+    <div class="topline"><span>Enterprise · 3</span><span>Memory architecture</span></div>
+    <main>
+      <div class="kicker">Requirement three &middot; the research layer</div>
+      <h2>Short-term &rarr; hippocampus &rarr; long-term</h2>
+      <p class="lead">The hippocampus runs a <strong>memory advisory</strong>; long-term holds a <strong>theta profile</strong>.<br />A time axis tells the agent how it grew &mdash; injected as first-class memory so it knows the shortcut.</p>
+      <div class="flow">
+        <div class="step"><strong>① Short-term</strong><span>The live session. Raw context and working memory, still unsorted.</span></div>
+        <div class="step"><strong>② Hippocampus &middot; advisory</strong><span>During idle, decide: durable knowledge, or work residue? An advisory scores meaning &mdash; tier = quality.</span></div>
+        <div class="step"><strong>③ Long-term &middot; theta profile</strong><span>A time-axis trace of how the agent grew, injected first-class as a shortcut at the next decision.</span></div>
+      </div>
+      <p class="source">The time axis is the point: the agent carries who it became, not just what it once saw.</p>
+    </main>
+    <div class="footer"><span>advisory + theta profile</span><span>08</span></div>
+  </section>
+
+  <!-- 09 · Benchmark -->
+  <section class="slide">
+    <div class="topline"><span>Benchmark</span><span>It pays off</span></div>
+    <main>
+      <div class="kicker">Measured result</div>
+      <h2>A memory system pays for itself<br />in fewer tool calls</h2>
+      <div class="stat">
+        <span class="num green">&minus;1.74</span>
+        <span class="unit">tool calls per task vs. an agent with no memory system</span>
+      </div>
+      <p class="lead" style="margin-top:30px">Over roughly a day of context data, the agent reached the same outcome with 1.74 fewer tool calls on average &mdash; because the shortcut was already in memory.</p>
+      <p class="source">Fewer calls is not just speed. It is the agent knowing where to look before it looks.</p>
+    </main>
+    <div class="footer"><span>≈ one day of context</span><span>09</span></div>
+  </section>
+
+  <!-- 10 · Closing -->
+  <section class="slide">
+    <div class="topline"><span>Closing</span><span>Takeaway</span></div>
+    <main>
+      <div class="split">
+        <div>
+          <div class="kicker">Takeaway</div>
+          <h2>Keep the data shared.<br />Give every agent its own memory.</h2>
+          <p class="lead">The data layer stays one shared, queryable source of truth.<br />The memory layer is personal, situational, and decides &mdash; that is the line between a new hire and a senior.</p>
+        </div>
+        <div class="panel">
+          <div class="formula" style="margin-top:0">agentic memory =
+  shared data layer
++ per-agent memory layer
++ audit &amp; permission gate
++ theta profile over time</div>
+          <p class="source">Don&rsquo;t bolt memory onto your data. Build it as its own layer.</p>
+        </div>
+      </div>
+    </main>
+    <div class="footer"><span>Thank you</span><span>10</span></div>
+  </section>
+
+</div>
+<div class="progress" id="progress"></div>
+<script>
+  const slides = Array.from(document.querySelectorAll(".slide"));
+  const progress = document.getElementById("progress");
+  let index = 0;
+
+  function show(next) {
+    if (next < 0 || next >= slides.length || next === index) return;
+    slides[index].classList.remove("active");
+    slides[index].classList.add("out");
+    index = next;
+    slides[index].classList.remove("out");
+    slides[index].classList.add("active");
+    progress.style.width = `${((index + 1) / slides.length) * 100}%`;
+    history.replaceState(null, "", `#${index + 1}`);
+  }
+
+  function move(delta) {
+    show(index + delta);
+  }
+
+  window.addEventListener("keydown", (event) => {
+    if (["ArrowRight", "ArrowDown", " ", "PageDown"].includes(event.key)) {
+      event.preventDefault();
+      move(1);
+    }
+    if (["ArrowLeft", "ArrowUp", "PageUp"].includes(event.key)) {
+      event.preventDefault();
+      move(-1);
+    }
+    if (event.key === "Home") show(0);
+    if (event.key === "End") show(slides.length - 1);
+  });
+
+  let touchStart = null;
+  window.addEventListener("touchstart", (event) => {
+    touchStart = event.changedTouches[0].clientX;
+  }, { passive: true });
+  window.addEventListener("touchend", (event) => {
+    if (touchStart === null) return;
+    const dx = event.changedTouches[0].clientX - touchStart;
+    if (Math.abs(dx) > 48) move(dx < 0 ? 1 : -1);
+    touchStart = null;
+  }, { passive: true });
+
+  const hashIndex = Number(window.location.hash.replace("#", "")) - 1;
+  if (Number.isInteger(hashIndex) && hashIndex >= 0 && hashIndex < slides.length) {
+    slides[0].classList.remove("active");
+    index = hashIndex;
+    slides[index].classList.add("active");
+  }
+  progress.style.width = `${((index + 1) / slides.length) * 100}%`;
+</script>
+</body>
+</html>

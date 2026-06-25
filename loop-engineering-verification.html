@@ -229,6 +229,70 @@
     .cover-row .nb{font-size:42px}
   }
 
+  /* Mobile: shrink type + stack horizontal diagrams without breaking structure */
+  @media (max-width:768px){
+    body{font-size:18px}
+    .h-hero{font-size:40px}
+    .h-statement{font-size:32px}
+    .h-xl{font-size:28px}
+    .h-md{font-size:20px}
+    .lead{font-size:17px;line-height:1.4}
+    .body{font-size:15px}
+    .body-sm{font-size:13.5px;line-height:1.45}
+    .t-cat{font-size:15px}
+    .t-meta{font-size:12px}
+    .num-mega{font-size:54px}
+    .force-num{font-size:46px}
+    .ledger-num{font-size:52px}
+    .why-num-bottom{font-size:46px}
+    .cover-row .nb{font-size:38px}
+    .foot{font-size:13px}
+
+    .canvas-card{padding:26px 18px}
+    .half{padding:26px 18px}
+    .card-fill,.brief-card,.matrix-cell,.force-card,.card-outlined,.card-ink,.card-accent{padding:16px}
+    .chrome-min{margin-bottom:20px}
+
+    /* horizontal loop rows (S14) -> stack vertically, arrows point down */
+    .slide[data-animate="loop"] [style*="align-items:stretch"]{flex-direction:column !important;gap:10px}
+    .slide[data-animate="loop"] [style*="padding:0 8px"]{padding:2px 0 !important;justify-content:center !important;transform:rotate(90deg)}
+
+    /* 5-column timelines (S11) -> stack */
+    .timeline-h{grid-template-columns:1fr !important;gap:20px;padding-top:0 !important}
+    .timeline-h:before{display:none}
+    .tl-h-node{padding-top:0}
+    .tl-h-node:before{display:none}
+
+    /* compare mapping table (S08): keep columns, shrink label col + gaps */
+    .slide[data-animate="compare"] [style*="grid-template-columns:140px"]{grid-template-columns:52px repeat(4,1fr) !important;gap:5px !important}
+    .slide[data-animate="compare"] [style*="grid-template-columns:140px"] .h-md{font-size:15px;white-space:nowrap}
+    .slide[data-animate="compare"] [style*="grid-template-columns:140px"] .card-fill,
+    .slide[data-animate="compare"] [style*="grid-template-columns:140px"] .card-ink{padding:14px 4px}
+
+    /* declutter + breathing room */
+    #hint{display:none}
+    .canvas-card{padding-bottom:60px;overflow-y:auto}
+    .half{padding-bottom:52px}
+    .foot{padding-right:62px}
+    #nav{gap:5px}
+    #nav button{width:6px;height:6px}
+
+    /* single-column inline content grids: shrink instead of sizing to max-content (prevents clipping) */
+    .slide [style*="display:grid"]:not([style*="grid-template-columns"]):not([style*="grid-template:"]){grid-template-columns:minmax(0,1fr) !important}
+
+    /* CTA slide (S23): stack into one column, scale media down to fit */
+    .slide[data-animate="cta"] [style*="grid-template-columns:1.05fr"]{grid-template-columns:minmax(0,1fr) !important;gap:20px !important;align-items:stretch !important}
+    .slide[data-animate="cta"] .h-statement{font-size:34px !important}
+    .slide[data-animate="cta"] [style*="gap:3vh"]{gap:14px !important}
+    .slide[data-animate="cta"] [style*="padding:28px"]{padding:18px !important;gap:12px !important}
+    .slide[data-animate="cta"] img{width:128px !important;height:128px !important}
+
+    /* FAB: smaller, tucked into corner, drop the tag */
+    .promo-fab{width:48px;height:48px;right:14px;bottom:50px}
+    .promo-fab svg{width:25px;height:25px}
+    .promo-fab .tag{display:none}
+  }
+
   /* Promo: gold envelope FAB + coupon modal */
   .promo-fab{position:fixed;right:22px;bottom:64px;z-index:70;width:58px;height:58px;border:0;border-radius:50%;cursor:pointer;display:grid;place-items:center;background:linear-gradient(145deg,#fbe8a6 0%,#e7c14b 45%,#c8951f 100%);box-shadow:0 6px 16px rgba(176,128,20,.45),inset 0 0 0 1px rgba(255,255,255,.45);animation:promo-glow 1.5s ease-in-out infinite}
   .promo-fab:hover{transform:translateY(-2px)}

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>내 업무에 루프를 얹는다 — 루프 엔지니어링 실습</title>
+<title>내 업무에 루프를 얹는다 · 루프 엔지니어링 실습</title>
 <meta name="description" content="모두를 위한 루프 엔지니어링 심화 실습. 내 컴퓨터에서 하네스를 돌리고, 게이트의 기각을 보고, 권한 검문까지 실행한다.">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
@@ -152,6 +152,18 @@ hr.rule{border:none;border-top:1px solid var(--hair-soft);margin:60px 0 0}
 .callout p{margin:0;color:var(--ink-2)}
 .callout p b{color:var(--ink)}
 .callout p+p{margin-top:8px}
+
+/* ---------- recall (강의 슬라이드) ---------- */
+.recall{margin:26px 0;background:var(--panel);border-radius:18px;padding:14px}
+.recall img{width:100%;display:block;border-radius:10px;border:1px solid var(--hair-soft);background:#fff}
+.recall figcaption{
+  font-size:12.5px;color:var(--ink-3);margin-top:10px;padding:0 4px;
+  display:flex;gap:9px;align-items:center;
+}
+.recall .rtag{
+  font-family:var(--mono);font-size:10.5px;font-weight:600;color:var(--blue);
+  border:1px solid currentColor;border-radius:5px;padding:1px 7px;flex-shrink:0;
+}
 
 /* ---------- keyline ---------- */
 .keyline{margin:42px 0;text-align:center}
@@ -371,20 +383,20 @@ footer a{color:var(--ink-2)}
   <p class="outlabel">기대 출력</p>
   <pre class="out"><code>Python 3.12.x   <span class="c"># 3.10 이상이면 어떤 숫자든 OK</span></code></pre>
   <details class="stuck" data-os="mac">
-    <summary>막혔을 때 — "command not found"가 나온다</summary>
+    <summary>막혔을 때: "command not found"가 나온다</summary>
     <div class="a">
       <p><a href="https://www.python.org/downloads/">python.org/downloads</a>에서 설치하고 터미널을 닫았다 다시 엽니다. 또는 AI 코딩 도구에게 "이 Mac에 Python 3을 설치해 줘"라고 시켜도 됩니다.</p>
     </div>
   </details>
   <details class="stuck" data-os="win">
-    <summary>막혔을 때 — Microsoft Store가 열리거나 아무것도 안 나온다</summary>
+    <summary>막혔을 때: Microsoft Store가 열리거나 아무것도 안 나온다</summary>
     <div class="a">
       <p>Store가 열렸다면 그 자리에서 Python을 설치하면 됩니다. 설치 후 <b>PowerShell을 닫았다 다시 열고</b> <code>python --version</code>을 다시 칩니다.</p>
     </div>
   </details>
 
   <h3><span class="tick">C</span>AI 코딩 도구를 켠다</h3>
-  <p>Claude Code · Copilot · Codex — 어느 것이든 됩니다. 로그인이 되어 있는지만 확인합니다.</p>
+  <p>Claude Code · Copilot · Codex 어느 것이든 됩니다. 로그인이 되어 있는지만 확인합니다.</p>
 </section>
 
 <hr class="rule">
@@ -409,7 +421,7 @@ footer a{color:var(--ink-2)}
     <pre><code>mkdir $HOME\loop-lab; cd $HOME\loop-lab</code></pre>
   </div>
   <details class="stuck" data-os="win">
-    <summary>막혔을 때 — "이미 존재합니다" 에러가 나온다</summary>
+    <summary>막혔을 때: "이미 존재합니다" 에러가 나온다</summary>
     <div class="a"><p>폴더가 이미 있다는 뜻이므로 무시하고 <code>cd $HOME\loop-lab</code>만 다시 치면 됩니다.</p></div>
   </details>
 
@@ -442,7 +454,12 @@ assignee-first</code></pre>
 
   <p><b>tasks.json</b>은 과거 사례 10개입니다. <code>train</code> 6개는 루프가 보면서 고치는 몫,
   <code>heldout</code> 4개는 <b>고칠 때 절대 안 보는</b> 몫입니다. STEP 3에서 게이트가 이 heldout으로만 채택을 판정합니다.
-  <b>prompt.txt</b>는 지시서 — 규칙 이름 한 줄에 하나, 지금은 세 줄입니다.</p>
+  <b>prompt.txt</b>는 지시서입니다. 규칙 이름 한 줄에 하나, 지금은 세 줄입니다.</p>
+
+  <figure class="recall">
+    <img src="assets/loop-workshop/t4-heldout.png" alt="4강 슬라이드: train만 보면 암기와 학습이 같은 점수다" loading="lazy">
+    <figcaption><span class="rtag">4강</span>train만 보면 암기와 학습이 같은 점수다</figcaption>
+  </figure>
 
   <h3><span class="tick">1-3</span>파일이 제대로 만들어졌는지 확인한다</h3>
   <p>AI 도구는 잠시 두고, 같은 폴더의 터미널에서 칩니다 (AI 도구가 터미널을 차지하고 있으면 새 터미널을 열어 <span data-os="mac"><code>cd ~/loop-lab</code></span><span data-os="win"><code>cd $HOME\loop-lab</code></span> 하면 됩니다).</p>
@@ -462,7 +479,7 @@ strip-checkbox
 collapse-spaces
 assignee-first</code></pre>
   <details class="stuck">
-    <summary>막혔을 때 — 10이 아니거나 에러가 난다</summary>
+    <summary>막혔을 때: 10이 아니거나 에러가 난다</summary>
     <div class="a">
       <p><code>No such file</code>: 지금 있는 폴더가 loop-lab이 아니거나, 에이전트가 다른 폴더에 만든 것입니다. <span data-os="mac"><code>pwd</code>와 <code>ls</code></span><span data-os="win"><code>pwd</code>와 <code>dir</code></span>로 위치와 파일을 확인합니다.</p>
       <p><code>JSONDecodeError</code>: 에이전트가 내용을 바꿔 만든 것입니다. "tasks.json을 지우고 내가 준 내용 그대로 다시 만들어라"라고 시킵니다.</p>
@@ -478,7 +495,7 @@ assignee-first</code></pre>
 
   <div class="checkpoint">
     <input type="checkbox" data-save id="cp-1">
-    <p class="t"><b>체크포인트</b> — <code>10</code>과 세 줄짜리 지시서가 보이면 STEP 1 끝.</p>
+    <p class="t"><b>체크포인트</b>: <code>10</code>과 세 줄짜리 지시서가 보이면 STEP 1 끝.</p>
   </div>
 </section>
 
@@ -491,6 +508,11 @@ assignee-first</code></pre>
   <p class="lede">
     아래 명세를 AI 도구에 붙여넣어 <code>miniloop.py</code>를 받고, 나는 <strong>검수만</strong> 합니다.
   </p>
+
+  <figure class="recall">
+    <img src="assets/loop-workshop/t1-universal-loop.png" alt="1강 슬라이드: RUN, TRACE, JUDGE, EDIT, GATE 다섯 노드의 보편 루프" loading="lazy">
+    <figcaption><span class="rtag">1강</span>자기개선은 전부 이 그림. 지금 이 다섯 노드를 코드로 만듭니다</figcaption>
+  </figure>
 
   <h3><span class="tick">2-1</span>생성 프롬프트를 붙여넣는다</h3>
   <div class="codewrap">
@@ -506,7 +528,7 @@ assignee-first</code></pre>
                split은 "train" 6개, "heldout" 4개.
 - prompt.txt : 같은 폴더에 이미 있다. 지시서. 규칙 이름 한 줄에 하나.
 
-[규칙 사전 — prompt.txt에 나올 수 있는 전체 목록]
+[규칙 사전: prompt.txt에 나올 수 있는 전체 목록]
 지시서에 적힌 규칙만 적용한다. 적용 순서는 파일의 줄 순서와 무관하게 아래 순서로 고정한다.
 1. strip-checkbox : 앞쪽 공백과 "[ ]"/"[x]" 마커를 제거한다. 마커 뒤 공백은 남긴다.
 2. drop-urgency   : "!" 문자를 모두 지우고, "ASAP"/"급함"/"빨리"와 정확히 일치하는
@@ -524,13 +546,13 @@ assignee-first</code></pre>
           점수보다 높을 때만 accept하고 prompt.txt를 그 내용으로 덮어쓴다. 아니면 reject.
           {"verdict": "accept", "current": 0.25, "candidate": 1.0} 형태로 출력.
 
-[불변식 — 어기면 다시 만들게 한다]
+[불변식: 어기면 다시 만들게 한다]
 1. gate는 heldout만 채점한다. train을 쓰지 않고, trace.jsonl에도 쓰지 않는다.
 2. 같은 입력이면 항상 같은 점수. 판정에 타임스탬프·난수·네트워크가 끼면 안 된다.
 3. 모든 파일 입출력은 encoding="utf-8"로 한다. Windows에서 한글이 깨지지 않게.</code></pre>
   </div>
 
-  <h3><span class="tick">2-2</span>인수 검사 — 둘만 본다</h3>
+  <h3><span class="tick">2-2</span>인수 검사: 둘만 본다</h3>
   <p><b>검사 ① 눈으로</b>: <code>miniloop.py</code>를 열어 gate 부분을 봅니다. <code>heldout</code>만 읽으면 통과.
   <code>train</code>이 섞여 있으면 에이전트에게 "불변식 1을 어겼다. gate가 heldout만 채점하게 고쳐라"라고 시킵니다.</p>
   <p><b>검사 ② 명령으로</b>: 같은 명령을 두 번 쳐서 <b>완전히 같은 출력</b>이 나오는지 봅니다.</p>
@@ -544,11 +566,11 @@ python3 miniloop.py run</code></pre>
     <pre><code>python miniloop.py run
 python miniloop.py run</code></pre>
   </div>
-  <p class="outlabel">기대 출력 — 두 번 다 정확히 이 줄</p>
+  <p class="outlabel">기대 출력: 두 번 다 정확히 이 줄</p>
   <pre class="out"><code>{"split": "train", "score": 0.333, "passed": 2, "total": 6}
 {"split": "train", "score": 0.333, "passed": 2, "total": 6}</code></pre>
   <details class="stuck">
-    <summary>막혔을 때 — 0.333이 아니다</summary>
+    <summary>막혔을 때: 0.333이 아니다</summary>
     <div class="a">
       <p>대개 규칙을 파일 줄 순서대로 적용한 구현입니다. 에이전트에게 "규칙 적용 순서를 명세의 고정 순서(strip-checkbox → drop-urgency → assignee-first → collapse-spaces)로 고쳐라"라고 시키고 다시 돌립니다.</p>
       <p>두 번의 출력이 서로 다르면 불변식 2 위반입니다. "판정에서 비결정적 요소를 빼라"라고 시킵니다.</p>
@@ -557,7 +579,7 @@ python miniloop.py run</code></pre>
 
   <div class="checkpoint">
     <input type="checkbox" data-save id="cp-2">
-    <p class="t"><b>체크포인트</b> — 같은 <code>0.333</code>이 두 번 나오면 STEP 2 끝. 과제가 바뀌어도 이 두 검사는 그대로 씁니다.</p>
+    <p class="t"><b>체크포인트</b>: 같은 <code>0.333</code>이 두 번 나오면 STEP 2 끝. 과제가 바뀌어도 이 두 검사는 그대로 씁니다.</p>
   </div>
 </section>
 
@@ -570,6 +592,11 @@ python miniloop.py run</code></pre>
   <p class="lede">
     마지막에 <strong>일부러 나쁜 수정을 넣어 기각당해 보는 것</strong>까지가 한 바퀴입니다.
   </p>
+
+  <figure class="recall">
+    <img src="assets/loop-workshop/t3-prompt-loop.png" alt="3강 슬라이드: 오늘 도는 루프, 바뀌는 것은 지시서 한 파일" loading="lazy">
+    <figcaption><span class="rtag">3강</span>바뀌는 것은 지시서 한 파일, 여기서는 prompt.txt</figcaption>
+  </figure>
 
   <h3><span class="tick">3-1</span><span class="station">RUN</span>기준 점수를 만든다</h3>
   <div class="codewrap" data-os="mac">
@@ -598,7 +625,7 @@ python miniloop.py run
     <button class="copy" data-copy>복사</button>
     <pre><code>python miniloop.py trace</code></pre>
   </div>
-  <p class="outlabel">기대 출력 — 실패 4건 (형식은 구현마다 달라도, 이 4건이면 정상)</p>
+  <p class="outlabel">기대 출력: 실패 4건 (형식은 구현마다 달라도, 이 4건이면 정상)</p>
   <pre class="out"><code>t1  입력='  [ ] 배포 스크립트 고치기 @민수 ASAP  '  기대='@민수 배포 스크립트 고치기'  실제='@민수 배포 스크립트 고치기 ASAP'
 t4  입력='[ ] 급함 서버 로그 확인 @도윤'  기대='@도윤 서버 로그 확인'  실제='@도윤 급함 서버 로그 확인'
 t5  입력='[ ] QA 시나리오 업데이트 @하린!!'  기대='@하린 QA 시나리오 업데이트'  실제='@하린!! QA 시나리오 업데이트'
@@ -628,7 +655,7 @@ Add-Content prompt.better.txt "drop-urgency"</code></pre>
     <button class="copy" data-copy>복사</button>
     <pre><code>python miniloop.py gate --candidate prompt.better.txt</code></pre>
   </div>
-  <p class="outlabel">기대 출력 — 채택</p>
+  <p class="outlabel">기대 출력: 채택</p>
   <pre class="out"><code>{"verdict": "accept", "current": 0.25, "candidate": 1.0}</code></pre>
 
   <h3><span class="tick">3-5</span><span class="station red">GATE</span>일부러 나쁜 수정을 넣어 본다</h3>
@@ -643,12 +670,17 @@ python3 miniloop.py gate --candidate prompt.worse.txt</code></pre>
     <pre><code>Get-Content prompt.txt | Where-Object {$_ -notmatch "collapse-spaces"} | Set-Content prompt.worse.txt
 python miniloop.py gate --candidate prompt.worse.txt</code></pre>
   </div>
-  <p class="outlabel">기대 출력 — 기각</p>
+  <p class="outlabel">기대 출력: 기각</p>
   <pre class="out"><code>{"verdict": "reject", "current": 1.0, "candidate": 0.0}</code></pre>
   <div class="callout red">
     <span class="tag">지금 벌어진 일</span>
     <p>내 지시서에, 나쁜 수정이 들어오는 걸 막는 장치가 붙었습니다. <b>누가(사람이든 LLM이든) 무엇을 제안하든, 한 번도 안 본 heldout 점수가 거부권을 쥡니다.</b> 1강에서 이 검문 하나를 껐더니 0.554가 0.026이 됐던 걸 기억하세요.</p>
   </div>
+
+  <figure class="recall">
+    <img src="assets/loop-workshop/t1-gate-off.png" alt="1강 슬라이드: GATE를 끄면 0.554가 0.026까지 무너지는 곡선" loading="lazy">
+    <figcaption><span class="rtag">1강</span>GATE를 끄면 생기는 일. 방금 그 reject가 이 곡선을 막습니다</figcaption>
+  </figure>
 
   <h3><span class="tick">3-6</span>완주 판정</h3>
   <p>처음 상태로 되돌린 뒤, 채택과 기각이 둘 다 재현되는지 한 번에 확인합니다.</p>
@@ -672,7 +704,7 @@ if ($a -and $r) { "LAB PASSED" } else { "LAB FAILED" }</code></pre>
   <p class="outlabel">기대 출력</p>
   <pre class="out"><code>LAB PASSED</code></pre>
   <details class="stuck">
-    <summary>막혔을 때 — LAB FAILED가 나온다</summary>
+    <summary>막혔을 때: LAB FAILED가 나온다</summary>
     <div class="a">
       <p>3-4와 3-5를 따로 다시 돌려 어느 쪽이 어긋나는지 봅니다. accept가 안 나오면 gate가 train을 채점하는 구현일 가능성이 큽니다 (STEP 2의 검사 ①로 돌아갑니다). reject가 안 나오면 "gate에서 candidate 점수가 현재 점수보다 <b>높을 때만</b> accept하게 고쳐라"라고 시킵니다.</p>
     </div>
@@ -680,7 +712,7 @@ if ($a -and $r) { "LAB PASSED" } else { "LAB FAILED" }</code></pre>
 
   <div class="checkpoint">
     <input type="checkbox" data-save id="cp-3">
-    <p class="t"><b>체크포인트</b> — <code>LAB PASSED</code>가 나오면 루프 한 바퀴 완주. 결과물 ②입니다.</p>
+    <p class="t"><b>체크포인트</b>: <code>LAB PASSED</code>가 나오면 루프 한 바퀴 완주. 결과물 ②입니다.</p>
   </div>
 </section>
 
@@ -699,6 +731,11 @@ if ($a -and $r) { "LAB PASSED" } else { "LAB FAILED" }</code></pre>
     <p class="q">"<span class="mark">검증이 달라지는 자리</span>가 노드를 나눌 자리입니다."</p>
     <p class="src">— 4.1강</p>
   </div>
+
+  <figure class="recall">
+    <img src="assets/loop-workshop/t41-graph.png" alt="4.1강 슬라이드: 보고서가 디자인과 빌드를 거쳐 검문 둘로 나뉘는 그래프와 노드·엣지·상태·권한 표" loading="lazy">
+    <figcaption><span class="rtag">4.1강</span>강의에서 그린 그 그래프. 지금 같은 것을 명령으로 돌립니다</figcaption>
+  </figure>
 
   <h3><span class="tick">4-1</span>보고서와 검문기를 만든다</h3>
   <p>AI 도구에 아래를 붙여넣습니다. 보고서(report.md)는 STEP 3 루프의 출력을 정리한 모양이고, 검문기(body_guard.py)는 본문을 꺼내 줄 단위로 대조하는 짧은 코드입니다.</p>
@@ -767,18 +804,18 @@ def main():
     lines = md_lines(md)
     bad = [ln for ln in lines if ln not in text]
     if bad:
-        print("FAIL — 본문에서 사라지거나 바뀐 줄:")
+        print("FAIL: 본문에서 사라지거나 바뀐 줄")
         for ln in bad:
             print("  " + ln)
         sys.exit(1)
-    print(f"PASS — 본문 {len(lines)}줄 전부 그대로")
+    print(f"PASS: 본문 {len(lines)}줄 전부 그대로")
 
 
 if __name__ == "__main__":
     main()</code></pre>
   </div>
 
-  <h3><span class="tick">4-2</span>디자인 노드에 위임한다 — 계약과 함께</h3>
+  <h3><span class="tick">4-2</span>계약과 함께 디자인 노드에 위임한다</h3>
   <p>같은 AI 도구에 이어서 붙여넣습니다. 파란 줄이 계약입니다.</p>
   <div class="codewrap">
     <button class="copy" data-copy>복사</button>
@@ -803,15 +840,15 @@ PASS가 나오는 것까지 확인한 뒤 끝내라. FAIL이면 계약 위반이
     <pre><code>python body_guard.py report.md report.html</code></pre>
   </div>
   <p class="outlabel">기대 출력</p>
-  <pre class="out"><code>PASS — 본문 12줄 전부 그대로</code></pre>
+  <pre class="out"><code>PASS: 본문 12줄 전부 그대로</code></pre>
   <details class="stuck">
-    <summary>막혔을 때 — FAIL이 나온다</summary>
+    <summary>막혔을 때: FAIL이 나온다</summary>
     <div class="a">
       <p>검문기가 제대로 작동하고 있다는 뜻입니다. FAIL 아래 찍힌 줄을 보고 에이전트에게 "이 줄이 바뀌었다. 계약대로 원문 그대로 되돌려라"라고 시킨 뒤 다시 검문합니다. 눈으로는 같아 보이는데 FAIL이면, 단어 중간에 태그가 들어갔는지 report.html에서 그 줄을 찾아봅니다.</p>
     </div>
   </details>
 
-  <h3><span class="tick">4-4</span>위반을 주입해 본다 — 검문기의 검증</h3>
+  <h3><span class="tick">4-4</span>위반을 주입해 검문기를 시험한다</h3>
   <p>검문기가 정말 잡는지 시험합니다. 본문 숫자 하나를 몰래 바꿔 봅니다.</p>
   <div class="codewrap" data-os="mac">
     <button class="copy" data-copy>복사</button>
@@ -823,10 +860,10 @@ python3 body_guard.py report.md report.html</code></pre>
     <pre><code>(Get-Content report.html) -replace '완료율 43%','완료율 약 40%' | Set-Content report.html
 python body_guard.py report.md report.html</code></pre>
   </div>
-  <p class="outlabel">기대 출력 — 잡힌다</p>
-  <pre class="out"><code>FAIL — 본문에서 사라지거나 바뀐 줄:
+  <p class="outlabel">기대 출력: 잡힌다</p>
+  <pre class="out"><code>FAIL: 본문에서 사라지거나 바뀐 줄
   총 7건 중 완료 3건, 완료율 43%</code></pre>
-  <p>"43%"가 "약 40%"가 되는 것 — 4.1강에서 본 <b>디자인 노드가 숫자를 슬쩍 바꾸는 사고</b>는 정확히 이런 식으로 일어납니다. 악의가 아니라 다듬다가 생기고, 코드가 잡아냅니다. 되돌립니다:</p>
+  <p>4.1강에서 본 <b>디자인 노드가 숫자를 슬쩍 바꾸는 사고</b>는 정확히 이런 식으로 일어납니다. "43%"가 "약 40%"가 되고, 악의가 아니라 다듬다가 생기고, 코드가 잡아냅니다. 되돌립니다:</p>
   <div class="codewrap" data-os="mac">
     <button class="copy" data-copy>복사</button>
     <pre><code>sed -i '' 's/완료율 약 40%/완료율 43%/' report.html
@@ -838,7 +875,7 @@ python3 body_guard.py report.md report.html</code></pre>
 python body_guard.py report.md report.html</code></pre>
   </div>
   <p class="outlabel">기대 출력</p>
-  <pre class="out"><code>PASS — 본문 12줄 전부 그대로</code></pre>
+  <pre class="out"><code>PASS: 본문 12줄 전부 그대로</code></pre>
 
   <p>방금 돌린 것이 그래프입니다. 어휘 넷으로 다시 보면:</p>
   <table>
@@ -847,18 +884,18 @@ python body_guard.py report.md report.html</code></pre>
       <tr><td><b>노드</b></td><td>경계가 있는 작업 하나. 코드일 수도, 에이전트 한 바퀴일 수도 있다</td><td>디자인 노드 = 4-2의 에이전트</td></tr>
       <tr><td><b>엣지</b></td><td>다음에 올 수 있는 것. 실패 시 되돌아가는 조건부 엣지 포함</td><td>FAIL → 디자인 노드로 되돌아감</td></tr>
       <tr><td><b>상태</b></td><td>노드 사이를 흐르는 것</td><td>report.md와 report.html, 파일 둘</td></tr>
-      <tr><td><b>권한</b></td><td>각 노드가 건드려도 되는 것의 경계</td><td>디자인 노드는 서식만 — body_guard가 확인</td></tr>
+      <tr><td><b>권한</b></td><td>각 노드가 건드려도 되는 것의 경계</td><td>디자인 노드는 서식만 (body_guard가 확인)</td></tr>
     </tbody>
   </table>
 
   <div class="callout red">
-    <span class="tag">경고 — 4.1강의 넷째 줄</span>
-    <p><b>대부분의 일은 그래프가 필요 없습니다.</b> 한 가지 일에 검증자 하나면 그건 루프입니다. 노드는 검증 방법이 달라질 때만 나눕니다 — 내용은 데이터와 대조했고(miniloop), 서식은 렌더를 봐야 했습니다(body_guard). 그리고 방금 그래프는 명령 몇 줄이었습니다. <b>먼저 그래프를 그리고, 필요해지면 도구를 붙입니다.</b></p>
+    <span class="tag">경고: 4.1강의 넷째 줄</span>
+    <p><b>대부분의 일은 그래프가 필요 없습니다.</b> 한 가지 일에 검증자 하나면 그건 루프입니다. 노드는 검증 방법이 달라질 때만 나눕니다. 내용은 데이터와 대조했고(miniloop), 서식은 렌더를 봐야 했습니다(body_guard). 그리고 방금 그래프는 명령 몇 줄이었습니다. <b>먼저 그래프를 그리고, 필요해지면 도구를 붙입니다.</b></p>
   </div>
 
   <div class="checkpoint">
     <input type="checkbox" data-save id="cp-4">
-    <p class="t"><b>체크포인트</b> — FAIL로 잡히고 PASS로 돌아오면 STEP 4 끝. 결과물 ③입니다.</p>
+    <p class="t"><b>체크포인트</b>: FAIL로 잡히고 PASS로 돌아오면 STEP 4 끝. 결과물 ③입니다.</p>
   </div>
 </section>
 
@@ -884,13 +921,18 @@ python body_guard.py report.md report.html</code></pre>
   </div>
 
   <h3><span class="tick">5-2</span>내 사례 10개를 모은다</h3>
-  <p>반복해서 하는 업무 하나를 고릅니다 — 주간 보고, 회의록 정리, CS 답변 초안, 릴리스 노트.
+  <p>반복해서 하는 업무 하나를 고릅니다. 주간 보고, 회의록 정리, CS 답변 초안, 릴리스 노트.
   그 업무의 실제 입력과 만족했던 출력을 STEP 1과 같은 형식으로 적습니다:
   <code>train</code> 6개, <code>heldout</code> 4개.</p>
   <div class="callout">
     <span class="tag">expected를 못 적겠다면</span>
-    <p>expected는 정답 전문이 아니어도 됩니다. 판정 규칙이 볼 것만 있으면 됩니다 — 들어가야 할 티켓 ID 목록, 일치해야 할 수치처럼요. 과거에 "이건 아니었다" 싶었던 출력을 세 개 떠올리고, <b>왜 아니었는지</b>를 적어 보세요. 그 답("숫자가 틀렸다", "항목이 빠졌다")이 판정 규칙이 됩니다.</p>
+    <p>expected는 정답 전문이 아니어도 됩니다. 판정 규칙이 볼 것만 있으면 됩니다. 들어가야 할 티켓 ID 목록, 일치해야 할 수치처럼요. 과거에 "이건 아니었다" 싶었던 출력을 세 개 떠올리고, <b>왜 아니었는지</b>를 적어 보세요. 그 답("숫자가 틀렸다", "항목이 빠졌다")이 판정 규칙이 됩니다.</p>
   </div>
+
+  <figure class="recall">
+    <img src="assets/loop-workshop/t1-judge-spectrum.png" alt="1강 슬라이드: JUDGE의 스펙트럼, 어디에 선을 그을 것인가" loading="lazy">
+    <figcaption><span class="rtag">1강</span>내 판정 규칙은 이 스펙트럼 어디에 있는지 보고 적습니다</figcaption>
+  </figure>
 
   <h3><span class="tick">5-3</span>STEP 2의 프롬프트를 고쳐서 다시 시킨다</h3>
   <p>STEP 2 생성 프롬프트를 복사해 세 곳만 바꿉니다.</p>
@@ -921,7 +963,7 @@ python body_guard.py report.md report.html</code></pre>
 
   <div class="checkpoint">
     <input type="checkbox" data-save id="cp-5">
-    <p class="t"><b>체크포인트</b> — 내 업무 데이터에서 <code>reject</code> 한 번을 보면 끝. 내 지시서에 거부권이 생겼습니다.</p>
+    <p class="t"><b>체크포인트</b>: 내 업무 데이터에서 <code>reject</code> 한 번을 보면 끝. 내 지시서에 거부권이 생겼습니다.</p>
   </div>
 </section>
 
@@ -934,7 +976,7 @@ python body_guard.py report.md report.html</code></pre>
 
   <ol class="take">
     <li><span>루프가 되는 업무는 <b>반복되고, 판정할 수 있고, 실패가 모이는</b> 업무다.</span></li>
-    <li><span>하네스는 에이전트가 짜고, 나는 <b>같은 세 가지만 검수한다</b> — heldout만 보는 gate, 결정적 점수, 남는 TRACE.</span></li>
+    <li><span>하네스는 에이전트가 짜고, 나는 <b>같은 세 가지만 검수한다</b>: heldout만 보는 gate, 결정적 점수, 남는 TRACE.</span></li>
     <li><span>지시서는 루프가 고치고, <b>채택은 GATE가</b> 결정한다. STEP 3의 reject가 그 증거다.</span></li>
     <li><span>노드는 <b>검증이 달라지는 자리</b>에서만 나눈다. 권한은 사람이 믿는 게 아니라 코드가 확인한다.</span></li>
     <li><span>대부분의 일은 그래프가 필요 없다. <b>먼저 그래프를 그리고, 필요해지면 도구를 붙인다.</b></span></li>
@@ -954,7 +996,7 @@ python body_guard.py report.md report.html</code></pre>
   </details>
   <details class="faq">
     <summary>견본 과제가 내 업무랑 너무 다른데, 이게 왜 도움이 되나요?</summary>
-    <div class="a">견본에서 배운 건 과제가 아니라 골격입니다 — run/trace/gate 명령 세 개, train/heldout 분리, 인수 검사 세 가지. STEP 5에서 확인했듯 과제를 통째로 바꿔도 이 골격과 검사는 한 글자도 안 바뀝니다. 새 업무를 만날 때마다 이 페이지의 STEP 5만 다시 하면 됩니다.</div>
+    <div class="a">견본에서 배운 건 과제가 아니라 골격입니다. run/trace/gate 명령 세 개, train/heldout 분리, 인수 검사 세 가지. STEP 5에서 확인했듯 과제를 통째로 바꿔도 이 골격과 검사는 한 글자도 안 바뀝니다. 새 업무를 만날 때마다 이 페이지의 STEP 5만 다시 하면 됩니다.</div>
   </details>
   <details class="faq">
     <summary>LangGraph 같은 프레임워크를 배워야 하나요?</summary>
@@ -967,7 +1009,7 @@ python body_guard.py report.md report.html</code></pre>
 </section>
 
 <footer>
-  <span>모두를 위한 루프 엔지니어링 · 심화 실습 — © 2026 Jaegyu Lee</span>
+  <span>모두를 위한 루프 엔지니어링 · 심화 실습 · © 2026 Jaegyu Lee</span>
   <span><a href="https://github.com/Q00/ouroboros">Q00/ouroboros</a> · <a href="https://github.com/Q00/OpenWarden">Q00/OpenWarden</a></span>
 </footer>
 

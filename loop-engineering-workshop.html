@@ -102,26 +102,14 @@ section{padding:80px 0 8px}
   padding:8px 16px;color:var(--ink-2);
 }
 .deliv span b{font-weight:600;color:var(--ink)}
-.hero .eyebrow,.hero h1,.hero .sub,.hero .deliv,.hero .howto{
+.hero .eyebrow,.hero h1,.hero .sub,.hero .deliv{
   opacity:0;transform:translateY(14px);
   animation:rise .7s var(--spring) forwards;
 }
 .hero h1{animation-delay:.06s}
 .hero .sub{animation-delay:.12s}
 .hero .deliv{animation-delay:.18s}
-.hero .howto{animation-delay:.24s}
 @keyframes rise{to{opacity:1;transform:none}}
-.howto{
-  margin-top:36px;background:var(--panel);border-radius:18px;padding:20px 24px;
-  font-size:.95rem;color:var(--ink-2);
-}
-.howto b{color:var(--ink)}
-.howto .k{
-  display:inline-block;font-family:var(--mono);font-size:11.5px;font-weight:600;
-  border-radius:6px;padding:1px 8px;margin:0 2px;vertical-align:1px;
-}
-.k.cmd{background:#e8e8ed;color:var(--ink)}
-.k.out{background:var(--green-tint);color:var(--green)}
 
 /* ---------- section head ---------- */
 .step-tag{font-size:13px;font-weight:700;color:var(--blue);font-family:var(--mono);letter-spacing:.02em}
@@ -309,7 +297,7 @@ footer a{color:var(--ink-2)}
 .rv{opacity:0;transform:translateY(16px);transition:opacity .6s var(--spring),transform .6s var(--spring)}
 .rv.in{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){
-  .rv,.hero .eyebrow,.hero h1,.hero .sub,.hero .deliv,.hero .howto{opacity:1;transform:none;transition:none;animation:none}
+  .rv,.hero .eyebrow,.hero h1,.hero .sub,.hero .deliv{opacity:1;transform:none;transition:none;animation:none}
   html{scroll-behavior:auto}
   .copy,.checkpoint input,.os-seg button{transition:none}
 }
@@ -358,13 +346,6 @@ footer a{color:var(--ink-2)}
     <span>결과물 ① <b>돌아가는 하네스</b></span>
     <span>결과물 ② <b>LAB PASSED</b></span>
     <span>결과물 ③ <b>권한 검문 PASS</b></span>
-  </div>
-  <div class="howto">
-    <b>이 페이지를 쓰는 법</b> — 위에서 아래로, 한 블록씩 따라 합니다.
-    <span class="k cmd">회색 블록</span>은 복사해서 붙여넣는 명령이나 프롬프트,
-    <span class="k out">초록 블록</span>은 그대로 나와야 하는 기대 출력입니다.
-    다르게 나오면 바로 아래 <b>⚠ 막혔을 때</b>를 엽니다.
-    오른쪽 위에서 내 운영체제를 먼저 고르세요 — 명령이 거기에 맞게 바뀝니다.
   </div>
 </header>
 

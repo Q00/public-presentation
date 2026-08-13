@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AWS Kiro와 함께하는 Ouroboros — Kiro CLI 워크숍 · My Day OS</title>
+<title>루프가 Kiro를 만나면 — AWS Kiro와 함께하는 Ouroboros</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -61,7 +61,6 @@ body{
   position:relative;flex:0 0 auto;
   transition:background .25s ease, transform .25s ease, border-color .25s ease;
 }
-#rail .hole.p1{border-color:#B9C6B4}
 #rail .hole.on{background:var(--blue);border-color:var(--blue);transform:scale(1.45)}
 #rail .hole.done{background:var(--hair)}
 #rail .hole.edge::after{
@@ -71,7 +70,7 @@ body{
 /* 슬라이드 */
 .slide{
   position:absolute; inset:0 0 0 52px;
-  padding:46px 64px 44px 46px;
+  padding:42px 60px 40px 46px;
   display:none; flex-direction:column;
 }
 .slide.on{display:flex; animation:feed .38s cubic-bezier(.2,.7,.2,1) both}
@@ -93,25 +92,25 @@ body{
   flex:0 0 auto;
 }
 .head b{color:var(--blue);font-weight:600}
-.body{flex:1 1 auto; display:flex; flex-direction:column; justify-content:center; padding:22px 0 0}
+.body{flex:1 1 auto; display:flex; flex-direction:column; justify-content:center; padding:20px 0 0; min-height:0}
 .body.top{justify-content:flex-start}
 .foot{
-  flex:0 0 auto; padding-top:12px; border-top:1px solid var(--hair-2);
-  font-size:13.5px; color:var(--dim); line-height:1.5;
+  flex:0 0 auto; padding-top:11px; border-top:1px solid var(--hair-2);
+  font-size:13px; color:var(--dim); line-height:1.5;
 }
 .foot b{color:var(--ink);font-weight:600}
 
 /* 타이포 */
 .eyebrow{
-  font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:.22em;
-  color:var(--blue); margin-bottom:12px;
+  font-family:var(--mono); font-size:10.5px; font-weight:600; letter-spacing:.22em;
+  color:var(--blue); margin-bottom:11px;
 }
 h1,h2,.lede{text-wrap:balance}
 h1{font-size:52px; font-weight:700; letter-spacing:-.03em; line-height:1.16}
-h2{font-size:38px; font-weight:700; letter-spacing:-.025em; line-height:1.2}
-h2 .sub{display:block;font-size:16px;font-weight:400;letter-spacing:0;color:var(--dim);margin-top:9px}
-.lede{font-size:18px;color:var(--dim);line-height:1.65;max-width:900px}
-.stmt{font-size:31px;font-weight:600;letter-spacing:-.02em;line-height:1.42}
+h2{font-size:33px; font-weight:700; letter-spacing:-.025em; line-height:1.24}
+h2 .sub{display:block;font-size:15px;font-weight:400;letter-spacing:0;color:var(--dim);margin-top:9px}
+.lede{font-size:16.5px;color:var(--dim);line-height:1.62;max-width:900px}
+.stmt{font-size:28px;font-weight:600;letter-spacing:-.02em;line-height:1.42}
 .stmt em{font-style:normal;color:var(--blue);border-bottom:2px solid var(--blue)}
 .stmt .x{color:var(--red)}
 .mark{background:linear-gradient(transparent 62%, var(--bar) 62%);padding:0 1px}
@@ -119,111 +118,111 @@ h2 .sub{display:block;font-size:16px;font-weight:400;letter-spacing:0;color:var(
 
 /* 표지 */
 .cover{height:100%;display:flex;flex-direction:column;justify-content:center;gap:0}
-.cover .rule{height:3px;background:var(--ink);width:132px;margin:26px 0 24px}
-.cover h1{font-size:82px;letter-spacing:-.045em;line-height:1.02}
+.cover .rule{height:3px;background:var(--ink);width:132px;margin:24px 0 22px}
+.cover h1{font-size:64px;letter-spacing:-.04em;line-height:1.1}
 .cover .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.3em;color:var(--blue);font-weight:600}
-.cover .tagline{font-size:25px;font-weight:400;color:var(--dim);letter-spacing:-.01em}
-.cover .meta{margin-top:38px;font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;color:var(--faint);display:flex;gap:20px}
+.cover .tagline{font-size:19px;font-weight:400;color:var(--dim);letter-spacing:-.005em;line-height:1.5}
+.cover .meta{margin-top:34px;font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;color:var(--faint);display:flex;gap:20px;flex-wrap:wrap}
 .cover .meta span{border-left:1px solid var(--hair);padding-left:20px}
 .cover .meta span:first-child{border:0;padding:0}
 
 /* 간지 */
 .divider{height:100%;display:flex;flex-direction:column;justify-content:center}
 .divider .num{font-family:var(--mono);font-size:120px;font-weight:600;line-height:.9;color:var(--bar);letter-spacing:-.04em}
-.divider h2{font-size:50px;margin-top:-18px}
-.divider .list{margin-top:30px;display:flex;flex-direction:column;gap:9px;font-size:15.5px;color:var(--dim)}
-.divider .list i{font-style:normal;font-family:var(--mono);color:var(--blue);margin-right:12px;font-size:12px}
+.divider h2{font-size:44px;margin-top:-16px}
+.divider .lede{margin-top:20px;font-size:17px}
 
 /* 목차 */
 .toc{display:flex;flex-direction:column;gap:0;margin-top:6px}
-.toc .row{display:grid;grid-template-columns:56px 1fr 78px;gap:20px;align-items:baseline;padding:19px 0;border-bottom:1px solid var(--hair-2)}
+.toc .row{display:grid;grid-template-columns:56px 1fr 78px;gap:20px;align-items:baseline;padding:20px 0;border-bottom:1px solid var(--hair-2)}
 .toc .row:first-child{border-top:1px solid var(--hair-2)}
 .toc .n{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--blue);letter-spacing:.1em}
-.toc .t{font-size:26px;font-weight:600;letter-spacing:-.02em}
-.toc .t span{display:block;font-size:14px;font-weight:400;color:var(--dim);margin-top:5px;letter-spacing:0}
-.toc .d{font-family:var(--mono);font-size:12px;color:var(--faint);text-align:right}
+.toc .t{font-size:24px;font-weight:600;letter-spacing:-.02em}
+.toc .t span{display:block;font-size:13.5px;font-weight:400;color:var(--dim);margin-top:5px;letter-spacing:0}
+.toc .d{font-family:var(--mono);font-size:11.5px;color:var(--faint);text-align:right}
 
 /* 카드 그리드 */
 .grid{display:grid;gap:14px}
 .g2{grid-template-columns:1fr 1fr}
 .g3{grid-template-columns:repeat(3,1fr)}
 .g4{grid-template-columns:repeat(4,1fr)}
-.card{border:1px solid var(--hair);background:#FAFBF7;padding:16px 17px;border-radius:2px}
-.card .k{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.18em;color:var(--blue);margin-bottom:9px}
-.card .h{font-size:17px;font-weight:600;letter-spacing:-.015em;margin-bottom:7px}
-.card p{font-size:13.5px;color:var(--dim);line-height:1.6}
-.card ul{list-style:none;font-size:13.5px;color:var(--dim);line-height:1.66}
+.card{border:1px solid var(--hair);background:#FAFBF7;padding:15px 16px;border-radius:2px}
+.card .k{font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.18em;color:var(--blue);margin-bottom:8px}
+.card .h{font-size:16px;font-weight:600;letter-spacing:-.015em;margin-bottom:6px}
+.card p{font-size:12.5px;color:var(--dim);line-height:1.58}
+.card ul{list-style:none;font-size:12.5px;color:var(--dim);line-height:1.6}
 .card ul li{padding-left:13px;position:relative}
 .card ul li::before{content:'';position:absolute;left:0;top:.62em;width:5px;height:1px;background:var(--faint)}
 .card.hot{border-color:var(--blue);background:var(--blue-soft)}
 .card.hot .k{color:var(--blue)}
 .card.warn{border-color:var(--red);background:var(--red-soft)}
 .card.warn .k{color:var(--red)}
+.card code{font-family:var(--mono);font-size:11.5px}
+.card .mono{font-family:var(--mono);font-size:11px;line-height:1.7;color:var(--ink)}
+.card .mono .arr{color:var(--blue)}
 
 /* 파이프라인 */
 .flow{display:flex;align-items:stretch;gap:0;margin:4px 0}
 .flow .node{
   flex:1;border:1px solid var(--hair);background:#FAFBF7;border-radius:2px;
-  padding:14px 12px;text-align:center;
+  padding:13px 10px;text-align:center;
 }
-.flow .node .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;color:var(--faint);margin-bottom:6px}
-.flow .node .h{font-size:14.5px;font-weight:600;letter-spacing:-.01em}
+.flow .node .k{font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--faint);margin-bottom:6px}
+.flow .node .h{font-size:13px;font-weight:600;letter-spacing:-.01em}
 .flow .node.model{background:var(--blue);border-color:var(--blue)}
 .flow .node.model .h{color:#fff}
 .flow .node.model .k{color:#A9BCF0}
-.flow .arr{flex:0 0 30px;display:flex;align-items:center;justify-content:center;color:var(--faint);font-family:var(--mono);font-size:14px}
+.flow .arr{flex:0 0 24px;display:flex;align-items:center;justify-content:center;color:var(--faint);font-family:var(--mono);font-size:13px}
+.flow .loop{font-family:var(--mono);font-size:11px;color:var(--red);text-align:center;margin-top:6px}
 
 /* 키-값 목록 */
 .kv{display:flex;flex-direction:column}
-.kv .row{display:grid;grid-template-columns:186px 1fr;gap:22px;padding:12px 0;border-bottom:1px solid var(--hair-2);align-items:baseline}
+.kv .row{display:grid;grid-template-columns:186px 1fr;gap:22px;padding:11px 0;border-bottom:1px solid var(--hair-2);align-items:baseline}
 .kv .row:first-child{border-top:1px solid var(--hair-2)}
-.kv .k{font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.1em;color:var(--blue)}
-.kv .v{font-size:15px;color:var(--dim);line-height:1.55}
+.kv .k{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.1em;color:var(--blue)}
+.kv .v{font-size:14px;color:var(--dim);line-height:1.55}
 .kv .v b{color:var(--ink);font-weight:600}
 
-/* 그린바 테이블 */
-.tbl{width:100%;border-collapse:collapse;font-size:14px}
-.tbl th{
-  font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.16em;color:var(--blue);
-  text-align:left;padding:9px 12px;border-bottom:1.5px solid var(--ink);white-space:nowrap;
-}
-.tbl td{padding:9px 12px;color:var(--dim);line-height:1.45;vertical-align:top}
-.tbl tbody tr:nth-child(odd){background:var(--bar)}
-.tbl td:first-child{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--ink);letter-spacing:.04em;white-space:nowrap}
-.tbl td b{color:var(--ink);font-weight:600}
-.tbl .hi{color:var(--blue);font-weight:600}
+/* 리스트 (화살표 불릿) */
+.arrl{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+.arrl li{list-style:none;font-size:14px;color:var(--dim);line-height:1.55;padding-left:16px;position:relative}
+.arrl li::before{content:'—';position:absolute;left:0;color:var(--blue)}
+.arrl li b{color:var(--ink);font-weight:600}
 
 /* 타임라인 */
-.tl{margin:30px 0 6px}
+.tl{margin:26px 0 6px}
 .tl .row{display:grid;grid-template-columns:repeat(4,1fr);gap:0 20px}
 .tl .cell{position:relative;padding:0 4px}
-.tl .row.top .cell{display:flex;flex-direction:column;justify-content:flex-end;min-height:118px;padding-bottom:20px}
-.tl .row.bot .cell{min-height:118px;padding-top:20px}
+.tl .row.top .cell{display:flex;flex-direction:column;justify-content:flex-end;min-height:104px;padding-bottom:20px}
+.tl .row.bot .cell{min-height:104px;padding-top:20px}
 .tl .cell .tick{position:absolute;left:9px;bottom:0;width:1.5px;height:16px;background:var(--faint)}
 .tl .row.bot .cell .tick{bottom:auto;top:0}
 .tl .axis{height:2px;background:var(--ink)}
-.tl .t{font-size:17px;font-weight:700;letter-spacing:-.015em;margin-bottom:6px}
-.tl .f{font-family:var(--mono);font-size:12.5px;color:var(--ink);line-height:1.65}
-.tl .d{font-size:12.5px;color:var(--dim);margin-top:6px}
+.tl .t{font-size:16px;font-weight:700;letter-spacing:-.015em;margin-bottom:6px}
+.tl .f{font-family:var(--mono);font-size:12px;color:var(--ink);line-height:1.6}
+.tl .d{font-size:12px;color:var(--dim);margin-top:6px}
 
 /* 인용 */
 .pull{border-left:3px solid var(--blue);padding:4px 0 4px 24px;margin:8px 0}
-.pull p{font-size:26px;font-weight:500;letter-spacing:-.02em;line-height:1.5}
+.pull p{font-size:24px;font-weight:500;letter-spacing:-.02em;line-height:1.5}
 .pull .by{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--faint);margin-top:12px}
 
-/* 스크린샷 placeholder — 이미지 교체 시 .ph 전체를 <img>로 바꾼다 */
-.ph{
-  border:1.5px dashed var(--blue);background:var(--blue-soft);border-radius:2px;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;
-  min-height:120px;text-align:center;padding:16px;
+/* 터미널 / 코드 블록 */
+.term{
+  background:#1C1F1B;border:1px solid #2C3128;border-radius:3px;
+  padding:16px 20px;font-family:var(--mono);font-size:12.5px;line-height:1.85;color:#E6EBE2;
 }
-.ph .icon{font-size:22px;line-height:1;color:var(--blue)}
-.ph .tag{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.2em;color:var(--blue)}
-.ph .desc{font-size:12.5px;color:var(--dim);line-height:1.55;max-width:340px}
+.term .c{color:#7E8A80}
+.term .hl{color:#8FD48A}
+.term .arr{color:#E0492E}
 
 /* 실제 스크린샷 */
 .shotbox{position:relative;min-height:100%;border:1px solid var(--hair);border-radius:2px;background:#FAFBF7;overflow:hidden}
 .shotbox img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:6px}
+.shotbox.dark{background:#1C1F1B;border-color:#2C3128}
+
+/* 출처 */
+.src{font-family:var(--mono);font-size:10.5px;color:var(--faint);margin-top:10px;letter-spacing:.02em}
 
 /* HUD */
 #hud{
@@ -281,159 +280,305 @@ h2 .sub{display:block;font-size:16px;font-weight:400;letter-spacing:0;color:var(
   <div id="rail"><div class="holes"></div></div>
 
 <!-- 01 표지 -->
-<section class="slide" data-p="0" data-t="표지" data-notes="오프닝. 오늘 이야기는 도구 소개가 아니라, 루프 하나가 새 무대를 만나는 이야기라고 예고하세요.">
+<section class="slide" data-p="0" data-t="표지" data-notes="오프닝. 오늘 이야기는 도구 소개가 아니라, 루프 하나가 Kiro라는 새 무대를 만나는 이야기라고 예고하세요. 커뮤니티 오픈소스이고 AWS가 공식 지원·보증하는 서비스는 아니라는 점을 짧게 짚습니다.">
   <div class="body">
     <div class="cover">
-      <div class="kicker">KIRO CLI WORKSHOP × OUROBOROS</div>
+      <div class="kicker">KIRO CLI WORKSHOP · OUROBOROS</div>
       <div class="rule"></div>
-      <h1>My Day OS</h1>
-      <div class="tagline" style="margin-top:16px">루프가 Kiro를 만나면<br>AWS Kiro와 함께하는 Ouroboros</div>
+      <h1>루프가<br>Kiro를 만나면</h1>
+      <div class="tagline" style="margin-top:16px">AWS Kiro와 함께하는 Ouroboros — 철학, 통합, 그리고 한 바퀴</div>
       <div class="meta">
-        <span>발표 · 이재규 (ZEP Tech Lead, Ouroboros 메인테이너)</span>
+        <span>이재규 (JQ Lee)</span>
+        <span>ZEP Tech Lead · Ouroboros maintainer</span>
+        <span>github.com/Q00/ouroboros</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 02 Ouroboros 철학 -->
-<section class="slide" data-p="1" data-t="Ouroboros · 철학" data-notes="오늘 이 덱의 실제 훅입니다. Kiro 이야기를 꺼내기 전에, Ouroboros라는 이름이 왜 뱀인지부터 보여주세요. '루프는 반복이 아니라 정제다' — 이 한 줄이 오늘 전체를 관통합니다. 이미지 아래 작은 줄로 AWS 비공식 고지를 짧게 짚고 바로 넘어가세요.">
-  <div class="head"><span>OUROBOROS · 철학</span><span class="pos"></span></div>
+<!-- 02 목차 -->
+<section class="slide" data-p="1" data-t="목차" data-notes="세 장 구조를 미리 보여줍니다. 01 철학은 왜 존재하는지, 02 통합은 코드로 증명, 03 만남은 실제로 도는 모습과 AWS에의 제안입니다.">
+  <div class="head"><span>CONTENTS</span><span class="pos"></span></div>
   <div class="body">
-    <div class="eyebrow">OUROBOROS · THE PHILOSOPHY</div>
-    <h2 style="margin-bottom:18px">반복이 아니라, 정제<span class="sub">자기 꼬리를 삼키는 뱀 — 결과가, 다음의 입력으로.</span></h2>
-    <div class="shotbox" style="min-height:280px"><img src="assets/ouroboros-dragon-philosophy.png" alt="자기 꼬리를 삼키는 우로보로스 용 — 루프는 반복이 아니라 정제라는 철학을 담은 일러스트"></div>
-    <div class="kv" style="margin-top:10px">
-      <div class="row"><div class="k" style="color:var(--red)">AWS 아님</div><div class="v">커뮤니티 오픈소스 · MIT · <b>github.com/Q00/ouroboros</b></div></div>
+    <div class="eyebrow">THREE CHAPTERS</div>
+    <h2 style="margin-bottom:6px">목차</h2>
+    <div class="toc">
+      <div class="row">
+        <div class="n">01</div>
+        <div class="t">철학 — 루프는 반복이 아니라 정제<span>Ouroboros가 왜 존재하는지. 인터뷰에서 계약까지, Agent OS가 지키는 것.</span></div>
+        <div class="d">P.03–05</div>
+      </div>
+      <div class="row">
+        <div class="n">02</div>
+        <div class="t">통합 — Kiro는 어떻게 들어가 있나<span>어댑터 코드와 이슈 번호로 보는 5개월. 되는 것과 안 되는 것을 코드로 선언합니다.</span></div>
+        <div class="d">P.06–09</div>
+      </div>
+      <div class="row">
+        <div class="n">03</div>
+        <div class="t">만남 — 한 바퀴, 그리고 다음<span>Kiro 위에서 루프가 실제로 도는 방식, 설치 두 줄, 그리고 원을 닫기 위한 제안.</span></div>
+        <div class="d">P.10–14</div>
+      </div>
     </div>
   </div>
-  <div class="foot">오늘 볼 건 이 철학이, <b>Kiro라는 무대</b>를 만났을 때.</div>
+  <div class="foot">커뮤니티 오픈소스 · MIT · <b>AWS가 공식 지원·보증하는 서비스는 아닙니다.</b></div>
 </section>
 
-<!-- 03 타임라인 -->
-<section class="slide" data-p="1" data-t="타임라인 · #98 → #606 → #1916/#1917" data-notes="실제 이슈 번호와 날짜입니다. #98에서 OctopusGarden과 주고받기 시작 → #303이 반려되고 #606으로 Kiro가 러너로 들어옴 → #1916/#1917에서 그 대화가 원을 닫습니다. RFC 원문 그대로 'This RFC closes the circle.'를 읽어주세요.">
-  <div class="head"><span>TIMELINE</span><span class="pos"></span></div>
+<!-- 03 간지 01 철학 -->
+<section class="slide" data-p="2" data-t="01 철학" data-notes="1장 시작. 우로보로스라는 이름의 의미 — 모든 실행은 평가를 남기고, 모든 평가는 다음 세대의 입력이 됩니다.">
   <div class="body">
-    <div class="eyebrow">GITHUB.COM/Q00/OUROBOROS</div>
-    <h2 style="margin-bottom:4px">이 루프, 실은 5개월째</h2>
+    <div class="divider">
+      <div class="num">01</div>
+      <div class="eyebrow" style="margin-top:4px">THE PHILOSOPHY</div>
+      <h2>루프는 반복이 아니라,<br>정제입니다</h2>
+      <div class="lede">자기 꼬리를 삼키는 뱀, 우로보로스.<br>모든 실행은 평가를 남기고, 모든 평가는 다음 세대의 입력이 됩니다.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 철학1 — 입력에서 실패한다 -->
+<section class="slide" data-p="2" data-t="Ch1 · 입력에서 실패한다" data-notes="AI 코딩이 실패하는 지점은 출력이 아니라 입력입니다. 모호도가 0.2 이하로 떨어져야 Seed가 되고, 그때부터 실행이 허락됩니다. README의 'interview, crystallize, execute, evaluate, evolve'를 인용하세요.">
+  <div class="head"><span>CH1 — INPUT</span><span class="pos"></span></div>
+  <div class="body">
+    <div style="display:flex;gap:30px;align-items:center">
+      <div class="shotbox" style="flex:0 0 38%;min-height:260px"><img src="assets/ouroboros-dragon-philosophy.png" alt="자기 꼬리를 삼키는 우로보로스 용 일러스트"></div>
+      <div style="flex:1">
+        <div class="eyebrow">WHY OUROBOROS EXISTS</div>
+        <h2 style="margin-bottom:14px">AI 코딩은 출력이 아니라 <span style="color:var(--blue)">입력</span>에서 실패합니다</h2>
+        <p class="lede">모호한 한 줄 요구를 그대로 실행하면, 모델이 좋아져도 결과는 복권입니다. 그래서 Ouroboros는 실행 전에 소크라테스식 인터뷰로 모호함을 깎습니다.</p>
+        <p class="lede" style="color:var(--ink);margin-top:12px">모호도가 <b>0.2 이하</b>로 떨어져야 요구는 <b style="color:var(--blue)">Seed</b> — 불변의 명세가 되고, 그때부터 실행이 허락됩니다.</p>
+        <div class="src">README · "interview, crystallize, execute, evaluate, evolve"</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 철학2 — Agent OS 계약 -->
+<section class="slide" data-p="2" data-t="Ch1 · Agent OS 계약" data-notes="OS가 시스템콜을 추상화하듯, Ouroboros는 에이전트의 모든 행동을 하나의 실행 계약으로 추상화합니다. 그래서 Kiro는 지원 목록의 한 줄이 아니라, 이 계약을 실행하는 동등한 커널 백엔드입니다.">
+  <div class="head"><span>CH1 — THE CONTRACT</span><span class="pos"></span></div>
+  <div class="body">
+    <div class="eyebrow">THE AGENT OS CONTRACT</div>
+    <h2 style="margin-bottom:12px">어떤 LLM이 실행해도, 계약은 하나<span class="sub">OS가 시스템콜을 추상화하듯, Ouroboros는 에이전트의 모든 행동을 하나의 실행 계약으로 추상화합니다.</span></h2>
+    <div class="grid g3" style="margin-top:12px">
+      <div class="card"><div class="k">SEED</div><div class="h">명세가 곧 계약</div><p>인터뷰로 굳힌 목표와 인수 기준. 실행 중엔 아무도 못 바꿉니다.</p></div>
+      <div class="card"><div class="k">LEDGER</div><div class="h">모든 행동이 장부에</div><p>이벤트 소싱. 모든 실행은 기록되고, 재생되고, 감사됩니다.</p></div>
+      <div class="card"><div class="k">RUNTIME</div><div class="h">실행자는 갈아 끼운다</div><p>Claude · Codex · Gemini · <b style="color:var(--blue)">Kiro</b> — 13개 런타임, 같은 워크플로.</p></div>
+    </div>
+  </div>
+  <div class="foot">그래서 <b>Kiro는 "지원 목록의 한 줄"이 아니라</b>, 이 계약을 실행하는 동등한 커널 백엔드입니다.</div>
+</section>
+
+<!-- 06 간지 02 통합 -->
+<section class="slide" data-p="3" data-t="02 통합" data-notes="2장 시작. 추측이 아니라 코드로 답합니다 — 어댑터 파일, 이슈 번호, capability 선언.">
+  <div class="body">
+    <div class="divider">
+      <div class="num">02</div>
+      <div class="eyebrow" style="margin-top:4px">THE INTEGRATION</div>
+      <h2>Kiro는 어떻게<br>들어가 있나</h2>
+      <div class="lede">추측이 아니라 코드로 답합니다.<br>어댑터 파일, 이슈 번호, 그리고 capability 선언.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 타임라인 -->
+<section class="slide" data-p="3" data-t="Ch2 · 5개월의 타임라인" data-notes="메인테이너가 넣은 게 아니라, Kiro를 쓰던 사용자가 어댑터를 써서 보냈습니다. #98 OctopusGarden에서 영감 → #303 커뮤니티 PR로 어댑터 착륙 → #606 반려 한 번 뒤 러너로 승격 → #1916/#1917 RFC로 원이 닫힙니다.">
+  <div class="head"><span>CH2 — THE TIMELINE</span><span class="pos"></span></div>
+  <div class="body">
+    <div class="eyebrow">GITHUB.COM/Q00/OUROBOROS · VERIFIED ISSUES</div>
+    <h2 style="margin-bottom:4px">Kiro 지원은 커뮤니티가 가져왔습니다</h2>
     <div class="tl">
       <div class="row top">
         <div class="cell">
           <div class="t">#98</div>
           <div class="f">2026-03-08</div>
-          <div class="d">OctopusGarden과 루프를 주고받기 시작</div>
+          <div class="d">OctopusGarden — 루프를 주고받기 시작한 첫 영감</div>
+          <div class="tick"></div>
+        </div>
+        <div class="cell">
+          <div class="t">#606</div>
+          <div class="f">2026-05-04</div>
+          <div class="d">런타임 백엔드 승격 — 한 번의 반려를 거쳐, 하루 만에 v0.34.0 릴리스</div>
           <div class="tick"></div>
         </div>
         <div class="cell"></div>
-        <div class="cell">
-          <div class="t">#1600</div>
-          <div class="f">2026-07-11</div>
-          <div class="d">frugality: 모델 티어 라우팅</div>
-          <div class="tick"></div>
-        </div>
         <div class="cell"></div>
       </div>
       <div class="axis"></div>
       <div class="row bot">
         <div class="cell"></div>
         <div class="cell">
-          <div class="t">#303 → #606</div>
-          <div class="f">2026-04 – 05</div>
-          <div class="d">Kiro, 반려 한 번 뒤 러너로 합류</div>
+          <div class="t">#303</div>
+          <div class="f">2026-04-02</div>
+          <div class="d">Kiro 어댑터 착륙 — 커뮤니티 기여자의 PR로 LLM·러너 어댑터가 들어옴</div>
           <div class="tick"></div>
         </div>
         <div class="cell"></div>
         <div class="cell">
           <div class="t">#1916 / #1917</div>
           <div class="f">2026-08-07</div>
-          <div class="d">"This RFC closes the circle."</div>
+          <div class="d">원이 닫히다 — run → eval → evolve를 한 번의 <code class="kbd">ooo run</code>으로 잇는 RFC</div>
           <div class="tick"></div>
         </div>
       </div>
     </div>
   </div>
-  <div class="foot">오늘 보는 건, 이 5개월의 지금 이 순간.</div>
+  <div class="foot">메인테이너가 넣은 게 아니라, Kiro를 쓰던 사용자가 어댑터를 써서 보냈습니다. 그게 이 프로젝트가 커지는 방식입니다.</div>
 </section>
 
-<!-- 04 루프 -->
-<section class="slide" data-p="2" data-t="루프 · 정의→명세→구현→검증" data-notes="이 슬라이드가 오늘의 클라이맥스입니다. 실습 마지막 30분에 이 사이클이 실제로 도는 화면을 보여주세요. 떨어진 항목이 다시 앞 단계로 돌아가는 순간을 놓치지 마세요 — 이름이 왜 우로보로스인지 여기서 통합니다.">
-  <div class="head"><span>THE LOOP</span><span class="pos"></span></div>
+<!-- 08 어댑터 -->
+<section class="slide" data-p="3" data-t="Ch2 · 어댑터, 번역 계층" data-notes="어댑터는 껍데기가 아니라 번역 계층입니다. 실행은 kiro-cli chat --no-interactive, headless 모드. MCP 툴 이름은 위조 전달하지 않고, 번역이 안 되는 건 프롬프트 레벨에 남깁니다.">
+  <div class="head"><span>CH2 — THE ADAPTER</span><span class="pos"></span></div>
   <div class="body">
-    <div class="eyebrow">DEFINE → SPEC → BUILD → VERIFY</div>
-    <h2 style="margin-bottom:16px">한 줄 요구가, 검증된 코드가 되는 한 바퀴<span class="sub">Kiro headless가 구현, 실패하면 다시 명세로.</span></h2>
-    <div class="flow" style="margin:20px 0 20px">
-      <div class="node"><div class="k">DEFINE</div><div class="h">정의<br>한 줄 요구</div></div>
-      <div class="arr">→</div>
-      <div class="node"><div class="k">SPEC</div><div class="h">명세화<br>Seed로 굳힌다</div></div>
-      <div class="arr">→</div>
-      <div class="node model"><div class="k">BUILD</div><div class="h">구현<br>Kiro headless</div></div>
-      <div class="arr">→</div>
-      <div class="node"><div class="k">VERIFY</div><div class="h">검증<br>정답지와 대조</div></div>
-      <div class="arr">↻</div>
+    <div class="eyebrow">CODE CHECK · providers/kiro_adapter.py + kiro/cli_policy.py</div>
+    <h2 style="margin-bottom:10px">어댑터는 껍데기가 아니라 <span style="color:var(--blue)">번역 계층</span>입니다<span class="sub">Ouroboros의 실행 계약을 Kiro의 모국어로 번역합니다. 실행은 <code class="kbd">kiro-cli chat --no-interactive</code>, headless 모드입니다.</span></h2>
+    <div class="grid g3" style="margin-top:14px">
+      <div class="card"><div class="k">모델 이름</div><div class="mono">claude-sonnet-4-6<br><span class="arr">→</span> claude-sonnet-4.6</div><p style="margin-top:8px">Ouroboros 표기를 Kiro의 점 표기로 매핑</p></div>
+      <div class="card"><div class="k">권한 경계</div><div class="mono">bypassPermissions<br><span class="arr">→</span> --trust-all-tools</div><p style="margin-top:8px">툴 신뢰도 번역: bash→shell, edit→write, glob→read</p></div>
+      <div class="card"><div class="k">출력 정화</div><div class="mono">"&gt; " + ANSI escapes<br><span class="arr">→</span> clean text</div><p style="margin-top:8px">headless stdout의 프롬프트 마커·색 이스케이프를 어댑터가 제거</p></div>
     </div>
-    <div class="grid g2" style="gap:24px;align-items:stretch">
-      <div class="stmt" style="font-size:20px">탈락 → 되돌아감.<br>조용한 통과, 없음.</div>
-      <div class="shotbox"><img src="assets/ooo-live-kanban.png" alt="Ouroboros 실행 화면: 정의된 항목이 카드로 흘러가며 구현·검증되는 실행 중 화면"></div>
+  </div>
+  <div class="foot">MCP 툴 이름은 Kiro의 <code class="kbd">--trust-tools</code>로 위조 전달하지 않습니다. 번역이 안 되는 건, 안 되는 채로 프롬프트 레벨에 남깁니다.</div>
+</section>
+
+<!-- 09 Capability 정직성 -->
+<section class="slide" data-p="3" data-t="Ch2 · Capability 정직성" data-notes="못 하는 것도 코드로 선언합니다. --resume-id는 이해하지만, 스스로 얻을 수 없는 id는 할 수 있다고 광고하지 않습니다. 호출자는 백엔드 이름이 아니라 capability로 분기합니다.">
+  <div class="head"><span>CH2 — HONESTY</span><span class="pos"></span></div>
+  <div class="body">
+    <div class="eyebrow">CODE CHECK · KiroAgentAdapter.capabilities</div>
+    <h2 style="margin-bottom:14px">못 하는 것도, 코드로 선언합니다</h2>
+    <div class="term">
+RuntimeCapabilities(<br>
+&nbsp;&nbsp;skill_dispatch&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;<span class="hl">True</span>,&nbsp;&nbsp;&nbsp;<span class="c"># ooo &lt;skill&gt;이 Kiro 안에서 그대로 동작</span><br>
+&nbsp;&nbsp;targeted_resume&nbsp;&nbsp;=&nbsp;<span class="arr">False</span>,&nbsp;&nbsp;<span class="c"># headless가 session id를 stdout에 안 내보냄</span><br>
+&nbsp;&nbsp;structured_output&nbsp;=&nbsp;<span class="arr">False</span>,&nbsp;&nbsp;<span class="c"># JSONL 스트림 대신 plain text</span><br>
+)
+    </div>
+    <ul class="arrl" style="margin-top:14px">
+      <li><code class="kbd">--resume-id</code>는 이해하지만, 스스로 얻을 수 없는 id는 <b>할 수 있다고 광고하지 않습니다.</b> 끝까지 책임질 수 있는 능력만 선언합니다.</li>
+      <li>호출자는 백엔드 이름이 아니라 capability로 분기합니다 — 미래의 ACP 어댑터가 플래그만 뒤집으면, 아무도 코드를 안 고칩니다.</li>
+    </ul>
+    <div class="src">docs/runtime-guides/kiro.md · "does not advertise native resume capability it cannot honor end-to-end"</div>
+  </div>
+</section>
+
+<!-- 10 간지 03 만남 -->
+<section class="slide" data-p="4" data-t="03 만남" data-notes="3장 시작. 인터뷰부터 진화까지 — Kiro 세션 안에서, 그리고 터미널에서.">
+  <div class="body">
+    <div class="divider">
+      <div class="num">03</div>
+      <div class="eyebrow" style="margin-top:4px">THE MEETING</div>
+      <h2>둘이 만나면,<br>한 바퀴가 이렇게 돕니다</h2>
+      <div class="lede">인터뷰부터 진화까지.<br>Kiro 세션 안에서, 그리고 터미널에서.</div>
     </div>
   </div>
 </section>
 
-<!-- 05 Frugality -->
-<section class="slide" data-p="2" data-t="Frugality · 모델 티어 라우팅" data-notes="#1600 PR 내용입니다. 기본은 제일 싼 티어, 실패하면 한 칸씩만 승급, 증거 없는 절약 주장은 안 받습니다(fail-closed proof). 킬 스위치로 언제든 끌 수 있다는 것도 짚어주세요.">
-  <div class="head"><span>FRUGALITY</span><span class="pos"></span></div>
+<!-- 11 한 바퀴 -->
+<section class="slide" data-p="4" data-t="Ch3 · 한 바퀴" data-notes="Kiro 세션 안: ooo interview → ooo seed → ooo run. Kiro는 채점 답안지를 받지 않습니다 — 검증 명령은 의도적으로 숨겨지고, 채점은 워커가 아니라 orchestrator가 합니다.">
+  <div class="head"><span>CH3 — ONE REVOLUTION</span><span class="pos"></span></div>
   <div class="body">
-    <div class="eyebrow">#1600 · MODEL-TIER ROUTING</div>
-    <h2 style="margin-bottom:20px">제일 싼 모델부터</h2>
-    <div class="flow" style="margin:8px 0 18px">
-      <div class="node model"><div class="k">기본</div><div class="h">FRUGAL</div></div>
+    <div class="eyebrow">ONE REVOLUTION · INSIDE A KIRO SESSION</div>
+    <h2 style="margin-bottom:14px">한 줄 요구가, 검증된 코드가 되는 한 바퀴</h2>
+    <div class="flow">
+      <div class="node"><div class="k">모호도 ≤ 0.2</div><div class="h">INTERVIEW</div></div>
       <div class="arr">→</div>
-      <div class="node"><div class="k">실패 시</div><div class="h">STANDARD</div></div>
+      <div class="node"><div class="k">불변 명세</div><div class="h">SEED</div></div>
       <div class="arr">→</div>
-      <div class="node"><div class="k">그래도 안 되면</div><div class="h">FRONTIER</div></div>
+      <div class="node model"><div class="k">Kiro headless</div><div class="h">RUN</div></div>
+      <div class="arr">→</div>
+      <div class="node"><div class="k">인수 기준과 대조</div><div class="h">EVALUATE</div></div>
+      <div class="arr">→</div>
+      <div class="node"><div class="k">다음 입력으로</div><div class="h">EVOLVE</div></div>
     </div>
-    <div class="stmt" style="font-size:20px">증거 없는 절약은, 주장 아님.<br><em>Fail-closed proof.</em></div>
+    <div class="flow .loop" style="text-align:center;margin-top:2px;font-family:var(--mono);font-size:11px;color:var(--red)">↻ 탈락 → 되돌아감. 조용한 통과, 없음.</div>
+    <div style="display:flex;gap:26px;align-items:stretch;margin-top:16px">
+      <ul class="arrl" style="flex:1.1">
+        <li>Kiro 세션 안: <code class="kbd">ooo interview</code> → <code class="kbd">ooo seed</code> → <code class="kbd">ooo run</code>. Claude Code·Codex에서 쓰던 명령 그대로입니다.</li>
+        <li>Kiro는 <b>채점 답안지를 받지 않습니다.</b> 검증 명령은 의도적으로 숨겨지고, 채점은 워커가 아니라 orchestrator가 합니다 — 실패를 스스로 보고해서 지울 수 없습니다.</li>
+      </ul>
+      <div class="shotbox dark" style="flex:0.9;min-height:150px"><img src="assets/ooo-live-kanban.png" alt="Ouroboros 실행 화면: 정의된 항목이 카드로 흘러가며 구현·검증되는 실행 중 화면"></div>
+    </div>
   </div>
-  <div class="foot">언제든 끌 수 있는 <b>킬 스위치</b>.</div>
 </section>
 
-<!-- 06 Kiro 무대 -->
-<section class="slide" data-p="3" data-t="Kiro · 무대를 준비하는 법" data-notes="여기서부터는 시연 중심으로 가세요. 슬라이드는 이정표 역할만 하고, 실제 내용은 화면 공유로 보여줍니다. 네 걸음의 방향만 짚고 바로 실습으로 넘어가세요.">
-  <div class="head"><span>Kiro · 무대 준비</span><span class="pos"></span></div>
+<!-- 12 조합의 산출물 -->
+<section class="slide" data-p="4" data-t="Ch3 · 조합의 산출물" data-notes="한 바퀴가 끝나면 손에 남는 건 네 가지 — 인수 기준을 통과한 코드, seed.yaml, 이벤트 장부, AC 트리와 칸반. 관측 화면들은 Kiro를 모르고 장부만 읽습니다.">
+  <div class="head"><span>CH3 — THE OUTPUT</span><span class="pos"></span></div>
   <div class="body">
-    <div class="eyebrow">THE STAGE, BUILT IN FOUR STEPS</div>
-    <h2 style="margin-bottom:22px">무대, 네 걸음으로</h2>
-    <div class="kv">
-      <div class="row"><div class="k">[1] Steering</div><div class="v"><b>기준 3장</b>, 제일 먼저</div></div>
-      <div class="row"><div class="k">[2] Skills</div><div class="v">절차를 <b>명령 하나</b>로</div></div>
-      <div class="row"><div class="k">[3] MCP</div><div class="v"><b>화면을 직접 보고</b> 확인</div></div>
-      <div class="row"><div class="k">[4] Custom Agent</div><div class="v">전부를 <b>폴더 하나</b>로</div></div>
+    <div style="display:flex;gap:30px;align-items:center">
+      <div style="flex:1.15">
+        <div class="eyebrow">KIRO × OUROBOROS · WHAT COMES OUT</div>
+        <h2 style="margin-bottom:12px">한 바퀴가 끝나면,<br>손에 남는 건 네 가지입니다</h2>
+        <ul class="arrl">
+          <li><b>인수 기준을 통과한 코드</b> — Kiro가 구현하고, orchestrator가 채점을 마친 것만 통과합니다.</li>
+          <li><b>seed_&lt;id&gt;.yaml</b> — 불변 명세. 같은 시드를 Claude·Codex에서 다시 돌려도 <b style="color:var(--blue)">같은 계약</b>으로 실행됩니다. Kiro에 잠기지 않습니다.</li>
+          <li><b>이벤트 장부</b> — Kiro의 모든 행동이 <code class="kbd">~/.ouroboros/ouroboros.db</code>에 남아 재생·감사가 됩니다.</li>
+          <li><b>AC 트리와 칸반</b> — 어느 기준이 통과했고 어디서 탈락했는지, 도는 동안 실시간으로 보입니다.</li>
+        </ul>
+      </div>
+      <div style="flex:0.85;display:flex;flex-direction:column;gap:10px">
+        <div class="shotbox" style="min-height:120px"><img src="assets/ooo-seed-spec.png" alt="시드 명세 화면"></div>
+        <div class="shotbox dark" style="min-height:120px"><img src="assets/ooo-tui-ac-tree.png" alt="AC 트리 실제 실행 화면"></div>
+      </div>
     </div>
   </div>
+  <div class="foot">이 관측 화면들은 <b>Kiro를 모릅니다.</b> 장부만 읽습니다 — 그래서 런타임을 바꿔도 화면은 그대로입니다.</div>
 </section>
 
-<!-- 07 사전 준비물 -->
-<section class="slide" data-p="3" data-t="사전 준비물" data-notes="워크숍 전날까지 끝내야 하는 목록입니다. 자세한 설치 커맨드는 화면에 QR·링크로만 띄우고, 말로는 '전날까지 5가지, 그중 Ouroboros는 따로'만 강조하세요.">
-  <div class="head"><span>사전 준비물</span><span class="pos"></span></div>
+<!-- 13 설치 -->
+<section class="slide" data-p="4" data-t="Ch3 · 설치" data-notes="설치는 두 줄, 나머지는 setup이 합니다. 도중에 실패하면 건드린 파일 세 개를 전부 원복하는 트랜잭션이라 반쪽 설정 상태가 없습니다.">
+  <div class="head"><span>CH3 — INSTALL</span><span class="pos"></span></div>
   <div class="body">
-    <div class="eyebrow">BEFORE YOU ARRIVE</div>
-    <h2 style="margin-bottom:22px">전날까지, 다섯 가지<span class="sub">당일은 설치 말고, 실습만.</span></h2>
-    <div class="grid g3" style="gap:14px">
-      <div class="card"><div class="k">필수</div><div class="h">Kiro CLI</div></div>
-      <div class="card"><div class="k">필수</div><div class="h">Python · Node.js</div></div>
-      <div class="card"><div class="k">필수</div><div class="h">Playwright MCP</div></div>
-      <div class="card hot"><div class="k">별도 설치</div><div class="h">Ouroboros</div></div>
-      <div class="card"><div class="k">필수</div><div class="h">빈 폴더 하나</div></div>
+    <div class="eyebrow">INSTALL · TWO COMMANDS</div>
+    <h2 style="margin-bottom:14px">설치는 두 줄, 나머지는 setup이 합니다</h2>
+    <div class="term">
+$ pipx install 'ouroboros-ai[mcp]'&nbsp;&nbsp;<span class="c"># 또는: uv tool install</span><br>
+$ ouroboros setup --runtime kiro<br><br>
+<span class="c"># 이후, 평소처럼:</span><br>
+$ kiro-cli chat<br>
+<span class="hl">&gt; ooo interview "I want to build a todo list CLI"</span>
     </div>
+    <ul class="arrl" style="margin-top:14px">
+      <li>setup이 <code class="kbd">kiro-cli</code>를 탐지하고, <code class="kbd">~/.kiro/settings/mcp.json</code>에 MCP 서버를 등록합니다 — 도중에 실패하면 건드린 파일 세 개를 전부 원복하는 <b>트랜잭션</b>이라, 반쪽 설정 상태가 없습니다.</li>
+      <li>선행 조건은 Kiro CLI 2.2.0+ 로그인과 Python 3.12+ 뿐입니다. 커스텀 MCP 항목(docker·nix 등)은 건드리지 않고 보존합니다.</li>
+    </ul>
+    <div class="src">docs/runtime-guides/kiro.md · 한국어 가이드: kiro.ko.md</div>
   </div>
-  <div class="foot">목록은 QR로. 기억할 건 하나 — <b>Ouroboros는 별도 설치</b>.</div>
 </section>
 
-<!-- 08 마무리 -->
-<section class="slide" data-p="4" data-t="마무리" data-notes="첫 문장을 다시 소리 내어 읽고 닫으세요 — 오늘 본 건 도구 하나가 아니라, 루프가 새 무대를 만나는 장면이었습니다. 저장소 링크를 화면에 띄운 채로 Q&A를 받으세요.">
+<!-- 14 AWS에의 제안 -->
+<section class="slide" data-p="4" data-t="Ch3 · AWS에의 제안" data-notes="원을 닫는 데 플래그 두 개가 남았습니다 — headless의 session id, kiro-cli acp. 평문 stdout의 비용은 실측입니다: 인증 실패를 문자열로 분류하는 데만 수정 커밋 다섯 개가 들었습니다.">
+  <div class="head"><span>CH3 — THE ASK</span><span class="pos"></span></div>
+  <div class="body">
+    <div class="eyebrow">TO THE KIRO TEAM · AN EARNEST ASK</div>
+    <h2 style="margin-bottom:14px">원을 닫는 데, 플래그 두 개가 남았습니다</h2>
+    <div class="grid g2">
+      <div class="card hot"><div class="k">01</div><div class="h">headless가 session id를 돌려주면</div><p><code class="kbd">targeted_resume=True</code> — 체크포인트·재개가 자동이 됩니다. 지금은 <code class="kbd">--list-sessions</code>로 밖에서 캐와야 합니다.</p></div>
+      <div class="card hot"><div class="k">02</div><div class="h"><code class="kbd">kiro-cli acp</code>를 어댑터가 먹으면</div><p><code class="kbd">structured_output=True</code> — plain text 파싱 대신 JSON-RPC 이벤트. 추상화는 이미 이걸 위해 설계돼 있습니다.</p></div>
+    </div>
+  </div>
+  <div class="foot">평문 stdout의 비용은 실측입니다 — Kiro 인증 실패를 문자열로 분류하는 데만 수정 커밋 다섯 개가 들었습니다. 호출자는 전부 capability로 분기하고 있어서, KiroACPAdapter 하나 추가로 끝납니다. 이 대화를 하러 왔습니다.</div>
+</section>
+
+<!-- 15 클로징 -->
+<section class="slide" data-p="5" data-t="마무리" data-notes="첫 문장을 다시 소리 내어 읽고 닫으세요 — 루프는 끝나지 않습니다. 오늘, 무대 하나가 더 늘었을 뿐입니다. 저장소 QR을 띄운 채로 Q&A를 받으세요.">
   <div class="head"><span>마무리</span><span class="pos"></span></div>
   <div class="body">
-    <div class="pull">
-      <p>루프는 끝나지 않는다.<br>오늘, <span style="color:var(--blue)">Kiro라는 무대</span> 하나 더.</p>
-      <div class="by">Q &amp; A · GITHUB.COM/Q00/OUROBOROS · MIT LICENSE</div>
+    <div style="display:flex;gap:40px;align-items:center">
+      <div style="flex:1.2">
+        <div class="pull">
+          <p>루프는 끝나지 않습니다.<br>오늘, 무대 하나가<br>더 늘었을 뿐입니다.</p>
+          <div class="by">Q &amp; A · GITHUB.COM/Q00/OUROBOROS · MIT LICENSE</div>
+        </div>
+        <div class="term" style="margin-top:16px">
+$ pipx install 'ouroboros-ai[mcp]'<br>
+$ ouroboros setup --runtime kiro
+        </div>
+      </div>
+      <div class="card" style="flex:0 0 200px;text-align:center;padding:22px 18px">
+        <img src="assets/ouroboros-repo-qr.png" alt="Ouroboros 저장소 QR 코드" style="width:110px;height:110px;margin-bottom:12px">
+        <div class="k" style="margin-bottom:2px">OUROBOROS</div>
+        <div style="font-family:var(--mono);font-size:10.5px;color:var(--dim);line-height:1.6">github.com/Q00/ouroboros<br>MIT LICENSE</div>
+      </div>
     </div>
   </div>
 </section>
@@ -441,7 +586,7 @@ h2 .sub{display:block;font-size:16px;font-weight:400;letter-spacing:0;color:var(
 </div>
 
 <div id="hud">
-  <span class="pg"><b>01</b> / 08</span>
+  <span class="pg"><b>01</b> / 15</span>
   <span class="rg">표지</span>
   <span class="t">00:00</span>
   <span class="help">← → 이동 · O 목차 · T 타이머 · N 노트 · F 전체화면</span>
@@ -463,7 +608,7 @@ h2 .sub{display:block;font-size:16px;font-weight:400;letter-spacing:0;color:var(
   var notesEl = document.getElementById('notes');
   var cur = 0, N = slides.length;
 
-  var PART = {'0':'표지','1':'철학','2':'루프','3':'Kiro 무대','4':'마무리'};
+  var PART = {'0':'표지','1':'목차','2':'철학','3':'통합','4':'만남','5':'마무리'};
   /* ── 스프로킷 레일 ─────────────────────────── */
   slides.forEach(function(s, i){
     var h = document.createElement('div');

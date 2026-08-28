@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>오라클 클라우드로 400만 MAU를 받아내는 WebRTC 클러스터 만들기</title>
+<meta name="description" content="ZEP · LiveKit self-hosting on OCI — LiveKit Cloud에서 OCI 내재화로 넘어가며 bandwidth 비용을 60% 줄인 과정." />
+<script>
+  // Apply theme before paint (shared with wpti.dev blog: key q00-blog-theme).
+  (function(){
+    try{
+      var t = localStorage.getItem('q00-blog-theme') || 'system';
+      var dark = t === 'dark' || (t === 'system' &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches);
+      if(dark) document.documentElement.classList.add('dark');
+    }catch(e){}
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --paper:#faf9f5; --ink:#1c1917; --muted:#78716c; --faint:#a8a29e;
+    --rule:#e7e5e4; --tint:#f5f4f0;
+    --display:'Fraunces','Noto Serif KR',Georgia,serif;
+    --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,monospace;
+  }
+  html.dark{
+    --paper:#0c0a09; --ink:#e7e5e4; --muted:#a8a29e; --faint:#57534e;
+    --rule:#292524; --tint:#141210;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{ height:100%; background:var(--paper) }
+  body{
+    color:var(--ink); font-family:var(--display);
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    display:flex; flex-direction:column;
+  }
+  a{ color:inherit; text-decoration:none }
+
+  .top{
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    padding:16px 24px; font-family:var(--mono); font-size:11px;
+    text-transform:uppercase; letter-spacing:.16em; color:var(--muted);
+    border-bottom:1px solid var(--rule); flex:0 0 auto;
+  }
+  .top a:hover{ color:var(--ink) }
+  .top-left{ display:flex; align-items:center; gap:18px; min-width:0 }
+  .top-title{
+    font-family:var(--display); text-transform:none; letter-spacing:0;
+    font-size:14px; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .top-right{ display:flex; align-items:center; gap:18px; flex:0 0 auto }
+  .toggle{
+    background:none; border:0; cursor:pointer; padding:2px;
+    font-family:var(--mono); font-size:13px; color:var(--muted); line-height:1;
+  }
+  .toggle:hover{ color:var(--ink) }
+
+  .stage{
+    flex:1 1 auto; min-height:0; background:var(--tint);
+    display:flex; align-items:center; justify-content:center; padding:24px;
+  }
+  .slide{
+    width:100%; max-width:min(100%, calc((100vh - 132px) * 1.7778));
+    aspect-ratio:16 / 9; background:#fff;
+    border:1px solid var(--rule); box-shadow:0 1px 3px rgba(0,0,0,.06);
+    display:block;
+  }
+  .slide img{ width:100%; height:100%; display:block }
+
+  .bar{
+    flex:0 0 auto; border-top:1px solid var(--rule);
+    padding:14px 24px; display:flex; align-items:center; justify-content:center; gap:20px;
+    font-family:var(--mono); font-size:11px; letter-spacing:.16em; color:var(--muted);
+  }
+  .nav{
+    background:none; border:1px solid var(--rule); border-radius:2px;
+    cursor:pointer; padding:6px 14px; color:var(--muted);
+    font-family:var(--mono); font-size:12px; line-height:1;
+  }
+  .nav:hover:not(:disabled){ color:var(--ink); border-color:var(--faint) }
+  .nav:disabled{ opacity:.35; cursor:default }
+  .count{ min-width:6em; text-align:center }
+
+  @media (max-width:640px){
+    .top{ flex-wrap:wrap; gap:10px }
+    .stage{ padding:12px }
+  }
+</style>
+</head>
+<body>
+  <div class="top">
+    <div class="top-left">
+      <a href="./index.html">← Talks</a>
+      <span class="top-title">오라클 클라우드로 400만 MAU를 받아내는 WebRTC 클러스터 만들기</span>
+    </div>
+    <div class="top-right">
+      <a href="https://eventreg.oracle.com/profile/web/index.cfm?PKwebID=0x977627abcd" target="_blank" rel="noreferrer">Oracle 세션 ↗</a>
+      <a href="./oci-livekit-webrtc.pdf" target="_blank" rel="noreferrer">PDF ↗</a>
+      <button class="toggle" id="themeToggle" type="button" aria-label="Toggle light or dark theme"></button>
+    </div>
+  </div>
+
+  <div class="stage">
+    <figure class="slide">
+      <img id="slide" src="./assets/oci-livekit-webrtc/p01.svg" alt="슬라이드 1" />
+    </figure>
+  </div>
+
+  <div class="bar">
+    <button class="nav" id="prev" type="button" aria-label="이전 슬라이드">←</button>
+    <span class="count" id="count">1 / 28</span>
+    <button class="nav" id="next" type="button" aria-label="다음 슬라이드">→</button>
+  </div>
+
+  <script>
+    (function(){
+      var TOTAL = 28;
+      var img = document.getElementById('slide');
+      var count = document.getElementById('count');
+      var prev = document.getElementById('prev');
+      var next = document.getElementById('next');
+      var i = 1;
+
+      function src(n){
+        return './assets/oci-livekit-webrtc/p' + String(n).padStart(2,'0') + '.svg';
+      }
+      function preload(n){
+        if(n < 1 || n > TOTAL) return;
+        var p = new Image(); p.src = src(n);
+      }
+      function paint(){
+        img.src = src(i);
+        img.alt = '슬라이드 ' + i;
+        count.textContent = i + ' / ' + TOTAL;
+        prev.disabled = i === 1;
+        next.disabled = i === TOTAL;
+        if(location.hash !== '#' + i) history.replaceState(null,'','#' + i);
+        preload(i+1); preload(i-1);
+      }
+      function go(n){
+        if(n < 1 || n > TOTAL) return;
+        i = n; paint();
+      }
+
+      prev.addEventListener('click', function(){ go(i-1); });
+      next.addEventListener('click', function(){ go(i+1); });
+      document.addEventListener('keydown', function(e){
+        if(e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { go(i+1); e.preventDefault(); }
+        else if(e.key === 'ArrowLeft' || e.key === 'PageUp') { go(i-1); e.preventDefault(); }
+        else if(e.key === 'Home') { go(1); }
+        else if(e.key === 'End') { go(TOTAL); }
+      });
+      window.addEventListener('hashchange', function(){
+        var n = parseInt(location.hash.slice(1), 10);
+        if(n && n !== i) go(n);
+      });
+
+      var start = parseInt(location.hash.slice(1), 10);
+      go(start && start >= 1 && start <= TOTAL ? start : 1);
+    })();
+
+    (function(){
+      var btn = document.getElementById('themeToggle');
+      var root = document.documentElement;
+      function paint(){ btn.textContent = root.classList.contains('dark') ? '☀' : '☾'; }
+      paint();
+      btn.addEventListener('click', function(){
+        var dark = root.classList.toggle('dark');
+        try{ localStorage.setItem('q00-blog-theme', dark ? 'dark' : 'light'); }catch(e){}
+        paint();
+      });
+    })();
+  </script>
+</body>
+</html>
